@@ -1,8 +1,16 @@
+/*
+ * @Author: yzy
+ * @Date: 2025-08-16 10:23:53
+ * @LastEditors: yzy
+ * @LastEditTime: 2025-08-16 11:58:35
+ */
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
+
+import './assets/styles/main.css'
 
 const app = createApp(App)
 

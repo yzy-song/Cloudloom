@@ -1,0 +1,93 @@
+/* src/assets/styles/main.css */
+@import 'tailwindcss';
+
+@theme {
+  /* 字体 */
+  --font-body: Inter, Helvetica, Arial, sans-serif;
+  --font-display: Georgia, 'Times New Roman', serif;
+
+  /* 汉服主题色（去掉引号，否则 v4 不识别） */
+  --color-hanfu-red: #c03a2b;
+  --color-hanfu-blue: #3a5f8d;
+  --color-hanfu-gold: #d4b483;
+  --color-hanfu-green: #5c8d89;
+  --color-hanfu-dark: #2c3e50;
+
+  --shadow-hanfu: 0 10px 30px -15px rgba(0, 0, 0, 0.1);
+  --shadow-hanfu-lg: 0 15px 50px -20px rgba(0, 0, 0, 0.15);
+
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+  --spacing-26: 6.5rem;
+
+  --border-6: 6px;
+}
+
+@layer base {
+  body {
+    @apply font-body text-gray-700 bg-white antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    @apply font-display text-gray-900;
+  }
+
+  a {
+    @apply text-hanfu-blue hover:text-hanfu-red transition-colors;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    /* 注意：v4 删除了 hover:bg-opacity-90，需要直接写一个 hover:bg-[color]/[alpha] */
+    @apply bg-hanfu-red text-white px-6 py-3 rounded-full transition shadow-md font-medium hover:bg-hanfu-red/90;
+  }
+
+  .btn-outline {
+    @apply border border-hanfu-red text-hanfu-red px-6 py-3 rounded-full transition font-medium hover:bg-red-50;
+  }
+
+  .hanfu-section-title {
+    @apply text-3xl md:text-4xl font-display text-center mb-12 relative;
+
+    &::after {
+      content: '';
+      @apply w-24 h-1 bg-hanfu-gold rounded-full absolute bottom-0 left-1/2 -translate-x-1/2;
+      bottom: -1rem;
+    }
+  }
+
+  .hanfu-card {
+    @apply bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300;
+  }
+  .hanfu-card-title {
+    @apply font-display text-xl font-medium text-hanfu-dark mb-2;
+  }
+}
+
+@layer utilities {
+  .bg-hanfu-gradient {
+    background: linear-gradient(135deg, var(--color-hanfu-blue) 0%, var(--color-hanfu-red) 100%);
+  }
+  .text-stroke {
+    -webkit-text-stroke: 1px currentColor;
+    text-stroke: 1px currentColor;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+
+  /* 渐变文本（需要你在 @theme 定义 --color-hanfu-gradient，否则报错） */
+  .text-hanfu-gradient {
+    @apply bg-gradient-to-r from-hanfu-blue to-hanfu-red bg-clip-text text-transparent;
+  }
+}
