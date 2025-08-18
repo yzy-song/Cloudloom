@@ -2,18 +2,25 @@
  * @Author: yzy
  * @Date: 2025-08-16 11:15:06
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-16 11:26:43
+ * @LastEditTime: 2025-08-18 11:45:18
 -->
 <template>
   <div
-    class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col"
+    class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col group cursor-pointer"
+    @click="navigateToDetail"
   >
-    <div class="aspect-[3/4] bg-gray-200 border-2 border-dashed rounded-t-2xl w-full"></div>
+    <div
+      class="aspect-[3/4] bg-gray-200 border-2 border-dashed rounded-t-2xl w-full transform group-hover:scale-105 transition-transform duration-300"
+    ></div>
     <div class="p-5 flex-grow flex flex-col">
       <div class="flex-grow">
         <div class="flex justify-between items-start">
           <div>
-            <h3 class="font-display text-lg font-medium text-gray-900">{{ title }}</h3>
+            <h3
+              class="font-display text-lg font-medium text-gray-900 group-hover:text-hanfu-red transition-colors"
+            >
+              {{ title }}
+            </h3>
             <p class="text-sm text-gray-500 mt-1">{{ category }}</p>
           </div>
           <span class="px-2 py-1 bg-hanfu-blue/10 text-hanfu-blue text-xs rounded-full">
@@ -28,7 +35,7 @@
         <span class="text-hanfu-red font-medium">€{{ price.toFixed(2) }}</span>
         <button
           class="text-hanfu-red hover:text-hanfu-red/80 transition-colors"
-          @click="$emit('view-detail')"
+          @click.stop="navigateToDetail"
         >
           查看详情
         </button>
@@ -39,8 +46,12 @@
 
 <script setup lang="ts">
 import { defineProps, withDefaults } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 interface Props {
+  id: number
   title: string
   category: string
   dynasty: string
@@ -52,5 +63,7 @@ const props = withDefaults(defineProps<Props>(), {
   description: '',
 })
 
-defineEmits(['view-detail'])
+function navigateToDetail() {
+  router.push({ name: 'ProductDetail', params: { id: props.id } })
+}
 </script>
