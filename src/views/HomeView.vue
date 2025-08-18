@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-hidden">
-    <!-- 英雄区域 -->
+    <!-- 英雄区域 - 替换为轮播图 -->
     <section class="relative bg-gradient-to-r from-hanfu-blue/10 to-hanfu-red/10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -17,6 +17,8 @@
               <router-link to="/gallery" class="btn-outline"> 查看汉服 </router-link>
             </div>
           </div>
+
+          <!-- 轮播图区域 -->
           <div class="relative">
             <!-- 装饰性元素 -->
             <div
@@ -26,13 +28,66 @@
               class="absolute -bottom-6 -left-6 w-48 h-48 bg-hanfu-blue rounded-full opacity-10"
             ></div>
 
-            <!-- 主图 -->
+            <!-- Swiper轮播图 -->
             <div class="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-2xl">
-              <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-full" />
+              <Swiper
+                :modules="[SwiperAutoplay, SwiperNavigation, SwiperPagination]"
+                :slides-per-view="1"
+                :loop="true"
+                :autoplay="{
+                  delay: 5000,
+                  disableOnInteraction: false,
+                }"
+                :pagination="{
+                  clickable: true,
+                  el: '.swiper-pagination',
+                  type: 'bullets',
+                }"
+                :navigation="{
+                  prevEl: '.swiper-button-prev',
+                  nextEl: '.swiper-button-next',
+                }"
+                class="w-full h-full"
+              >
+                <SwiperSlide v-for="(slide, index) in heroSlides" :key="index">
+                  <div class="relative w-full h-full">
+                    <!-- 占位图片 -->
+                    <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-full" />
+
+                    <!-- 轮播内容 -->
+                    <div class="absolute inset-0 flex items-center justify-center p-6">
+                      <div
+                        class="text-center text-white bg-black/30 backdrop-blur-sm rounded-xl p-6 max-w-xs"
+                      >
+                        <h3 class="text-xl font-display font-bold">{{ slide.title }}</h3>
+                        <p class="mt-2 text-sm">{{ slide.description }}</p>
+                        <button
+                          v-if="slide.buttonText"
+                          class="mt-4 btn-outline bg-white/10 hover:bg-white/20"
+                          @click="handleSlideAction(slide.action)"
+                        >
+                          {{ slide.buttonText }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              </Swiper>
+
+              <!-- 自定义分页器 -->
+              <div class="swiper-pagination !bottom-4 !left-1/2 !-translate-x-1/2"></div>
+
+              <!-- 自定义导航按钮 -->
+              <div
+                class="swiper-button-prev !left-2 !text-white !bg-black/30 !w-10 !h-10 !rounded-full after:!text-sm"
+              ></div>
+              <div
+                class="swiper-button-next !right-2 !text-white !bg-black/30 !w-10 !h-10 !rounded-full after:!text-sm"
+              ></div>
             </div>
 
             <!-- 装饰性标签 -->
-            <div class="absolute -bottom-4 -right-4 bg-white px-6 py-3 rounded-full shadow-lg">
+            <div class="absolute -bottom-4 -right-4 bg-white px-6 py-3 rounded-full shadow-lg z-10">
               <span class="font-medium text-hanfu-blue">始于衣冠 · 达于博远</span>
             </div>
           </div>
@@ -54,7 +109,8 @@
             :key="index"
             :title="category.title"
             :count="category.count"
-            :image="category.image"
+            :routePath="category.routePath"
+            :filterKey="category.filterKey"
           />
         </div>
       </div>
@@ -162,6 +218,20 @@
 import CategoryCard from '@/components/ui/card/CategoryCard.vue'
 import ProductCard from '@/components/ui/card/ProductCard.vue'
 import { CheckCircleIcon } from '@heroicons/vue/24/outline'
+import { ref, onMounted } from 'vue'
+import DevAccessInfo from '@/components/DevAccessInfo.vue'
+
+// 导入Swiper组件
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import {
+  Autoplay as SwiperAutoplay,
+  Navigation as SwiperNavigation,
+  Pagination as SwiperPagination,
+} from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/autoplay'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
 
 interface Category {
   title: string
@@ -176,21 +246,99 @@ interface Product {
   price: number
 }
 
-const categories: Category[] = [
-  { title: '唐制汉服', count: 28 },
-  { title: '宋制汉服', count: 22 },
-  { title: '明制汉服', count: 35 },
-  { title: '婚服系列', count: 12 },
-]
+interface HeroSlide {
+  title: string
+  description: string
+  buttonText?: string
+  action?: string
+}
+
+const categories = ref([
+  {
+    title: '唐制汉服',
+    count: 28,
+    routePath: '/gallery?dynasty=tang',
+    filterKey: 'tang',
+  },
+  {
+    title: '宋制汉服',
+    count: 22,
+    routePath: '/gallery?dynasty=song',
+    filterKey: 'song',
+  },
+  {
+    title: '明制汉服',
+    count: 35,
+    routePath: '/gallery?dynasty=ming',
+    filterKey: 'ming',
+  },
+  {
+    title: '男装',
+    count: 35,
+    routePath: '/gallery?dynasty=male',
+    filterKey: 'male',
+  },
+  {
+    title: '女装',
+    count: 35,
+    routePath: '/gallery?dynasty=female',
+    filterKey: 'female',
+  },
+  {
+    title: '婚服系列',
+    count: 12,
+    routePath: '/gallery?category=wedding',
+    filterKey: 'wedding',
+  },
+  {
+    title: '汉服周边',
+    count: 15,
+    routePath: '/gallery?category=accessories',
+    filterKey: 'accessories',
+  },
+  {
+    title: '文创产品',
+    count: 18,
+    routePath: '/gallery?category=cultural',
+    filterKey: 'cultural',
+  },
+])
 
 const featuredProducts: Product[] = [
   { title: '唐风齐胸襦裙', category: '盛唐风华', dynasty: '唐', price: 89.99 },
   { title: '宋制百迭裙', category: '雅致宋韵', dynasty: '宋', price: 79.99 },
   { title: '明制马面裙', category: '端庄明风', dynasty: '明', price: 99.99 },
+  { title: '汉服刺绣团扇', category: '汉服配饰', dynasty: '通用', price: 24.99 }, // 新增周边
+  { title: '传统纹样笔记本', category: '文创产品', dynasty: '通用', price: 12.99 }, // 新增文创
 ]
 
-import { ref, onMounted } from 'vue'
-import DevAccessInfo from '@/components/DevAccessInfo.vue'
+// 轮播图数据 - 包含汉服、周边和文创产品
+const heroSlides: HeroSlide[] = [
+  {
+    title: '盛唐风华系列',
+    description: '体验大唐盛世服饰，感受千年文化魅力',
+    buttonText: '查看详情',
+    action: '/gallery?dynasty=tang',
+  },
+  {
+    title: '汉服配饰精选',
+    description: '团扇、发簪、荷包等传统配饰',
+    buttonText: '探索周边',
+    action: '/gallery?category=accessories',
+  },
+  {
+    title: '文创产品上新',
+    description: '传统纹样设计的日常用品与艺术品',
+    buttonText: '浏览文创',
+    action: '/gallery?category=cultural',
+  },
+  {
+    title: '儿童汉服特惠',
+    description: '专为儿童设计的传统服饰，传承从小开始',
+    buttonText: '查看系列',
+    action: '/gallery?tag=kids',
+  },
+]
 
 const isDev = ref(false)
 const devPanel = ref<InstanceType<typeof DevAccessInfo> | null>(null)
@@ -210,4 +358,16 @@ function toggleDevPanel() {
     localStorage.setItem('devPanelVisible', panel.isVisible.toString())
   }
 }
+
+// 处理轮播图按钮点击
+function handleSlideAction(action?: string) {
+  if (action) {
+    // 这里可以添加路由跳转或其他操作
+    console.log('Slide action triggered:', action)
+    // 实际项目中可以这样跳转：
+    // router.push(action)
+  }
+}
 </script>
+
+<style></style>

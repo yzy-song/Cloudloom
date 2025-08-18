@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-16 15:48:13
+ * @LastEditTime: 2025-08-18 08:51:28
  */
 
 import { createRouter, createWebHistory } from 'vue-router'
@@ -71,6 +71,14 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(to, from, savedPosition) {
+    if (to.query.filter !== from.query.filter) {
+      // 当筛选参数变化时，滚动到筛选区域
+      return {
+        el: '.sticky-filter-bar',
+        behavior: 'smooth',
+        top: 80, // 距离顶部偏移量
+      }
+    }
     return savedPosition || { top: 0 }
   },
 })

@@ -67,6 +67,19 @@
   .hanfu-card-title {
     @apply font-display text-xl font-medium text-hanfu-dark mb-2;
   }
+
+  /* 自定义Swiper样式 */
+  .swiper-pagination-bullet {
+    @apply w-3 h-3 bg-white opacity-50;
+  }
+  .swiper-pagination-bullet-active {
+    @apply opacity-100 bg-hanfu-red;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    @apply transition-opacity hover:opacity-100;
+  }
 }
 
 @layer utilities {

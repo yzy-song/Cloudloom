@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 13:26:27
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-16 14:26:10
+ * @LastEditTime: 2025-08-17 14:43:19
  * @Description: 增强版移动访问助手，解决IP获取问题（ES模块版本）
  */
 
@@ -11,8 +11,14 @@ import qrcode from 'qrcode-terminal'
 import os from 'os'
 import { exec } from 'child_process'
 
+// 判断当前环境
+const isProduction = process.env.NODE_ENV === 'production'
+const DOMAIN = 'cloudloom.yzysong.com' // 生产环境域名
+
 // 获取有效本地 IP 地址（修复版本）
 function getLocalIP() {
+  if (isProduction) return DOMAIN // 生产环境直接返回域名
+
   const interfaces = os.networkInterfaces()
   const validIPs = []
 
@@ -51,6 +57,9 @@ function getLocalIP() {
 
 // 获取当前端口号（从环境变量或进程参数中）
 function getPort() {
+  // 生产环境使用标准端口
+  if (isProduction) return 443 // HTTPS 默认端口
+
   // 尝试从环境变量获取
   if (process.env.PORT) return parseInt(process.env.PORT)
 
@@ -64,6 +73,9 @@ function getPort() {
 
 // 检测 IP 是否可访问
 function checkIPAccess(ip, callback) {
+  // 生产环境不需要检测
+  if (isProduction) return callback(true)
+
   const pingCommand = process.platform === 'win32' ? `ping -n 1 ${ip}` : `ping -c 1 ${ip}`
 
   exec(pingCommand, (error) => {
@@ -73,6 +85,9 @@ function checkIPAccess(ip, callback) {
 
 // 显示网络诊断信息
 function showNetworkDiagnostics(ip) {
+  // 生产环境跳过诊断
+  if (isProduction) return
+
   console.log('\n🔧 网络诊断:')
 
   // 显示所有网络接口
@@ -130,16 +145,20 @@ function showNetworkDiagnostics(ip) {
 
 const ip = getLocalIP()
 const port = getPort()
-const url = `http://${ip}:${port}`
+const protocol = isProduction ? 'https' : 'http'
+const url = `${protocol}://${isProduction ? ip : `${ip}:${port}`}`
 
-console.log('\n📱 手机访问地址:')
+console.log(`\n📱 ${isProduction ? '生产环境访问地址' : '手机访问地址'}:`)
 console.log(`\x1b[32m${url}\x1b[0m`) // 绿色显示URL
-console.log(`\x1b[33m确保手机和电脑连接同一Wi-Fi网络\x1b[0m`)
 
-console.log('\n🔍 扫描二维码在手机访问:')
+if (!isProduction) {
+  console.log(`\x1b[33m确保手机和电脑连接同一Wi-Fi网络\x1b[0m`)
+}
+
+console.log('\n🔍 扫描二维码访问:')
 qrcode.generate(url, { small: true })
 
-// 显示网络诊断信息
+// 开发环境显示网络诊断信息
 showNetworkDiagnostics(ip)
 
 // 添加退出提示

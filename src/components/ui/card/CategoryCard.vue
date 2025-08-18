@@ -2,11 +2,12 @@
  * @Author: yzy
  * @Date: 2025-08-16 11:39:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-16 11:55:53
+ * @LastEditTime: 2025-08-18 08:22:37
 -->
 <template>
-  <div
-    class="group relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300"
+  <router-link
+    :to="{ path: '/gallery', query: { filter: filterKey } }"
+    class="group relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 block"
   >
     <!-- 背景图片 -->
     <div class="bg-gray-200 border-2 border-dashed rounded-2xl aspect-[4/3] w-full"></div>
@@ -20,7 +21,7 @@
       <p class="mt-1 text-white/90">{{ count }} 件汉服</p>
       <button
         class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white border border-white px-4 py-2 rounded-full hover:bg-white/10"
-        @click="$emit('view-category')"
+        @click.prevent="$emit('view-category')"
       >
         查看系列
       </button>
@@ -32,13 +33,15 @@
         精选系列
       </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script setup lang="ts">
 defineProps<{
   title: string
   count: number
+  routePath: string // 新增路由路径属性
+  filterKey: string
 }>()
 
 defineEmits(['view-category'])

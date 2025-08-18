@@ -13,7 +13,9 @@
     </div>
 
     <!-- 筛选与排序 -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sticky top-16 bg-white z-10 border-b">
+    <div
+      class="sticky-filter-bar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sticky top-16 bg-white z-10 border-b"
+    >
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div class="flex flex-wrap gap-2">
           <button
@@ -25,7 +27,7 @@
                 ? 'bg-hanfu-red text-white shadow-md'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
             ]"
-            @click="activeFilter = filter.key"
+            @click="setFilter(filter.key)"
           >
             {{ filter.label }}
           </button>
@@ -130,11 +132,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { type Product } from '@/types'
 
+const route = useRoute()
+
 // 筛选条件
-const activeFilter = ref('all')
 const filters = [
   { label: '全部汉服', key: 'all' },
   { label: '唐制', key: 'tang' },
@@ -142,7 +146,9 @@ const filters = [
   { label: '明制', key: 'ming' },
   { label: '男装', key: 'male' },
   { label: '女装', key: 'female' },
-  { label: '儿童装', key: 'kids' },
+  { label: '婚服系列', key: 'wedding' },
+  { label: '汉服周边', key: 'accessories' },
+  { label: '文创产品', key: 'cultural' },
 ]
 
 // 排序选项
@@ -153,6 +159,52 @@ const sortOptions = [
   { label: '价格从低到高', value: 'price-asc' },
   { label: '价格从高到低', value: 'price-desc' },
 ]
+
+// 当前激活的筛选条件
+const activeFilter = ref('all')
+
+// 监听路由变化
+watch(
+  () => route.query.filter,
+  (newFilter) => {
+    if (newFilter && filters.some((f) => f.key === newFilter)) {
+      activeFilter.value = newFilter as string
+    } else {
+      activeFilter.value = 'all'
+    }
+  },
+  { immediate: true },
+)
+
+// 设置筛选条件并更新URL
+function setFilter(filterKey: string) {
+  activeFilter.value = filterKey
+  // 更新URL参数
+  const query = { ...route.query }
+
+  if (filterKey === 'all') {
+    delete query.filter
+  } else {
+    query.filter = filterKey
+  }
+
+  // 扁平化 query 对象，确保所有值都是字符串
+  const flatQuery: Record<string, string> = {}
+  Object.entries(query).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      flatQuery[key] = value[0] ?? ''
+    } else if (value !== null && value !== undefined) {
+      flatQuery[key] = value
+    }
+  })
+
+  // 使用 replaceState 更新 URL
+  window.history.replaceState(
+    {},
+    '',
+    `${window.location.pathname}?${new URLSearchParams(flatQuery).toString()}`,
+  )
+}
 
 // 产品数据
 const products = ref<Product[]>([])
@@ -170,9 +222,9 @@ onMounted(() => {
       description: `这是一件精美的汉服，采用传统工艺制作，具有浓郁的中国风。灵感来自${['唐', '宋', '明'][i % 3]}代服饰特点。`,
       price: 50 + Math.floor(Math.random() * 100),
       category: '汉服',
-      dynasty: ['tang', 'song', 'ming'][i % 3] as 'tang' | 'song' | 'ming', // 修复点
+      dynasty: ['tang', 'song', 'ming'][i % 3] as 'tang' | 'song' | 'ming',
       tags: ['热门', '新品'],
-      images: [] as string[], // 修复 images 类型
+      images: [],
       material: '丝绸',
       sizeOptions: ['S', 'M', 'L'],
       careInstructions: '手洗',
@@ -221,3 +273,15 @@ function loadMore() {
   visibleCount.value += 12
 }
 </script>
+
+<style scoped>
+.sticky-filter-bar {
+  top: 5rem; /* 适配导航栏高度 */
+}
+
+@media (max-width: 768px) {
+  .sticky-filter-bar {
+    top: 4rem; /* 移动端适配 */
+  }
+}
+</style>
