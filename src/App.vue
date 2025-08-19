@@ -2,25 +2,21 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-17 12:28:51
+ * @LastEditTime: 2025-08-19 09:30:28
 -->
 <template>
   <div class="min-h-screen flex flex-col">
-    <!-- 导航栏 -->
-    <Navbar />
+    <!-- 全局加载指示器 -->
+    <div v-if="isLoading" class="global-loading"></div>
 
-    <!-- 主要内容 -->
+    <Navbar />
     <main class="flex-grow">
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
-          <div>
-            <component :is="Component" />
-          </div>
+          <component :is="Component" />
         </transition>
       </router-view>
     </main>
-
-    <!-- 页脚 -->
     <Footer />
   </div>
 </template>
@@ -28,17 +24,40 @@
 <script setup lang="ts">
 import Navbar from '@/components/layout/Navbar.vue'
 import Footer from '@/components/layout/Footer.vue'
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const isLoading = ref(false)
+
+// 监听路由变化显示加载状态
+watch(
+  () => route.path,
+  () => {
+    isLoading.value = true
+    setTimeout(() => {
+      isLoading.value = false
+    }, 300)
+  },
+)
 </script>
 
 <style>
-/* 添加路由切换动画 */
+/* 增强路由过渡动画 */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-.fade-enter-from,
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
 .fade-leave-to {
   opacity: 0;
+  transform: translateY(-20px);
 }
 </style>
