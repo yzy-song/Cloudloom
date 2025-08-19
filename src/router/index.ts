@@ -2,12 +2,13 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-19 11:28:56
+ * @LastEditTime: 2025-08-19 14:39:53
  */
 import { createRouter, createWebHistory } from 'vue-router'
-import type { RouteRecordRaw } from 'vue-router'
 
 import HomeView from '../views/HomeView.vue'
+
+import type { RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -52,6 +53,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Knowledge',
     component: () => import('../views/KnowledgeView.vue'),
     meta: { title: '汉服知识 - 云锦轩' },
+  },
+  {
+    path: '/survey-page', // 新增的路由路径
+    name: 'Survey',
+    component: () => import('../views/SurveyView.vue'), // 导入新的组件
   },
   {
     path: '/404',

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>汉服体验馆市场调研问卷</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import { createApp } from 'vue'
+      import SurveyView from '/src/views/SurveyView.vue'
+      import '/src/assets/styles/main.css' // 确保样式被正确引入
+
+      // 显式创建并挂载应用
+      createApp(SurveyView).mount('#app')
+    </script>
+  </body>
+</html>
