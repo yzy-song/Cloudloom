@@ -2,14 +2,12 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-19 10:12:22
+ * @LastEditTime: 2025-08-19 10:36:35
  */
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
-
 import tailwindcss from '@tailwindcss/vite'
 import os from 'os'
 
@@ -26,30 +24,30 @@ const getLocalIp = () => {
   return 'localhost'
 }
 
-const localIp = getLocalIp()
+// 导出 defineConfig 函数，并传入环境参数
+export default defineConfig(({ mode }) => {
+  const isProd = mode === 'production'
+  const devIp = isProd ? 'cloudloom.yzysong.com' : getLocalIp()
+  const devPort = isProd ? '80' : 5173 // 生产环境默认使用80端口
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [vue(), vueDevTools(), tailwindcss()],
-  server: {
-    host: '0.0.0.0', // 允许所有网络接口访问
-    port: 5173, // 指定端口号（可选）
-    strictPort: true, // 如果端口被占用则报错
-    open: false, // 不自动打开浏览器
-
-    // 启用更快的预加载
-    preTransformRequests: true,
-  },
-
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
+  return {
+    plugins: [vue(), vueDevTools(), tailwindcss()],
+    server: {
+      host: '0.0.0.0',
+      port: 5173,
+      strictPort: true,
+      open: false,
+      preTransformRequests: true,
     },
-  },
-
-  // 将 IP 地址和端口号注入为环境变量
-  define: {
-    'import.meta.env.VITE_DEV_IP': JSON.stringify(localIp),
-    'import.meta.env.VITE_DEV_PORT': JSON.stringify(5173), // 或者从 server.port 中动态获取
-  },
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+      },
+    },
+    // 将 IP 地址和端口号注入为环境变量
+    define: {
+      'import.meta.env.VITE_DEV_IP': JSON.stringify(devIp),
+      'import.meta.env.VITE_DEV_PORT': JSON.stringify(devPort),
+    },
+  }
 })

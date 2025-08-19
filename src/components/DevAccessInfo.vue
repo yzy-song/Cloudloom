@@ -62,13 +62,17 @@ import { useDevStore } from '@/stores/devStore'
 
 // 获取开发模式的IP地址和端口号
 const devIp = import.meta.env.VITE_DEV_IP
-const devPort = import.meta.env.VITE_PORT || 5173 // 使用默认端口或vite配置的端口
+const devPort = import.meta.env.VITE_DEV_PORT || 5173
 
 // 控制面板和二维码显示状态，从devStore中管理
 const devStore = useDevStore()
 
 // 计算属性：生成访问URL
 const accessUrl = computed(() => {
+  // 根据端口号判断是否为默认端口，如果是，则不显示端口号
+  if (devPort === '80' || devPort === '443') {
+    return `http://${devIp}`
+  }
   return `http://${devIp}:${devPort}`
 })
 
