@@ -103,6 +103,7 @@
             :category="related.category"
             :dynasty="related.dynasty"
             :price="related.price"
+            :id="related.id"
           />
         </div>
       </section>
@@ -147,9 +148,9 @@ const product = computed<Product>(() => ({
 }))
 
 const relatedProducts = computed(() => [
-  { title: '宋制褙子套装', category: '宋代汉服', dynasty: '宋', price: 79.99 },
-  { title: '明制立领斜襟长袄', category: '明代汉服', dynasty: '明', price: 92.99 },
-  { title: '唐风圆领袍', category: '唐代男装', dynasty: '唐', price: 89.99 },
-  { title: '汉元素改良连衣裙', category: '现代汉服', dynasty: '现代', price: 69.99 },
+  { id: 1, title: '宋制褙子套装', category: '宋代汉服', dynasty: '宋', price: 79.99 },
+  { id: 2, title: '明制立领斜襟长袄', category: '明代汉服', dynasty: '明', price: 92.99 },
+  { id: 3, title: '唐风圆领袍', category: '唐代男装', dynasty: '唐', price: 89.99 },
+  { id: 4, title: '汉元素改良连衣裙', category: '现代汉服', dynasty: '现代', price: 69.99 },
 ])
 </script>

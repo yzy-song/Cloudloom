@@ -137,6 +137,7 @@
             :category="product.category"
             :dynasty="product.dynasty"
             :price="product.price"
+            :id="product.id"
           />
         </div>
       </div>
@@ -244,6 +245,7 @@ interface Product {
   category: string
   dynasty: string
   price: number
+  id: number
 }
 
 interface HeroSlide {
@@ -305,11 +307,11 @@ const categories = ref([
 ])
 
 const featuredProducts: Product[] = [
-  { title: '唐风齐胸襦裙', category: '盛唐风华', dynasty: '唐', price: 89.99 },
-  { title: '宋制百迭裙', category: '雅致宋韵', dynasty: '宋', price: 79.99 },
-  { title: '明制马面裙', category: '端庄明风', dynasty: '明', price: 99.99 },
-  { title: '汉服刺绣团扇', category: '汉服配饰', dynasty: '通用', price: 24.99 }, // 新增周边
-  { title: '传统纹样笔记本', category: '文创产品', dynasty: '通用', price: 12.99 }, // 新增文创
+  { id: 1, title: '唐风齐胸襦裙', category: '盛唐风华', dynasty: '唐', price: 89.99 },
+  { id: 2, title: '宋制百迭裙', category: '雅致宋韵', dynasty: '宋', price: 79.99 },
+  { id: 3, title: '明制马面裙', category: '端庄明风', dynasty: '明', price: 99.99 },
+  { id: 4, title: '汉服刺绣团扇', category: '汉服配饰', dynasty: '通用', price: 24.99 }, // 新增周边
+  { id: 5, title: '传统纹样笔记本', category: '文创产品', dynasty: '通用', price: 12.99 }, // 新增文创
 ]
 
 // 轮播图数据 - 包含汉服、周边和文创产品
