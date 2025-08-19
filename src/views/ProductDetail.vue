@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white">
+  <div class="bg-white relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
         <!-- 图片展示 -->
@@ -13,6 +13,8 @@
               v-for="n in 4"
               :key="n"
               class="bg-gray-200 border-2 border-dashed rounded-xl aspect-square cursor-pointer hover:opacity-80 transition-opacity"
+              :class="{ 'ring-2 ring-hanfu-red': activeImage === n - 1 }"
+              @click="activeImage = n - 1"
             />
           </div>
         </div>
@@ -32,9 +34,9 @@
 
               <div class="mt-6 flex items-center">
                 <div class="flex text-yellow-400">
-                  <StarIcon v-for="i in 5" :key="i" class="h-5 w-5" />
+                  <StarIcon v-for="i in 5" :key="i" class="h-5 w-5 fill-current" />
                 </div>
-                <span class="ml-2 text-gray-600">(28 条评价)</span>
+                <span class="ml-2 text-gray-600">({{ product.reviews }} 条评价)</span>
               </div>
 
               <p class="mt-6 text-xl text-hanfu-red font-medium">€{{ product.price.toFixed(2) }}</p>
@@ -81,9 +83,22 @@
                 </div>
 
                 <div class="flex flex-wrap gap-4">
-                  <button class="flex-1 btn-primary py-4">立即预约体验</button>
-                  <button class="p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-                    <HeartIcon class="h-6 w-6 text-gray-600" />
+                  <button
+                    class="flex-1 btn-primary py-4 hover:scale-[1.02] transition-transform"
+                    @click="bookExperience"
+                  >
+                    立即预约体验
+                  </button>
+                  <button
+                    class="p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                    @click="toggleFavorite"
+                  >
+                    <HeartIcon
+                      :class="[
+                        'h-6 w-6 transition-colors',
+                        isFavorite ? 'text-hanfu-red fill-current' : 'text-gray-600',
+                      ]"
+                    />
                   </button>
                 </div>
               </div>
@@ -96,15 +111,20 @@
       <section class="mt-24">
         <h2 class="text-2xl font-display text-gray-900 mb-8">相关推荐</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <ProductCard
+          <div
             v-for="(related, index) in relatedProducts"
             :key="index"
-            :title="related.title"
-            :category="related.category"
-            :dynasty="related.dynasty"
-            :price="related.price"
-            :id="related.id"
-          />
+            class="cursor-pointer"
+            @click="navigateToProduct(related.id)"
+          >
+            <ProductCard
+              :title="related.title"
+              :category="related.category"
+              :dynasty="related.dynasty"
+              :price="related.price"
+              :id="related.id"
+            />
+          </div>
         </div>
       </section>
     </div>
@@ -113,16 +133,27 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+
 import { StarIcon, HeartIcon, CheckCircleIcon } from '@heroicons/vue/24/outline'
+import { useRoute, useRouter } from 'vue-router'
+
 import ProductCard from '@/components/ui/card/ProductCard.vue'
+import { useFavoritesStore } from '@/stores/favorites'
 import { type Product } from '@/types'
+
+const route = useRoute()
+const router = useRouter()
+const favoritesStore = useFavoritesStore()
 
 const props = defineProps<{
   id: string
 }>()
 
 const selectedSize = ref('M')
+const activeImage = ref(0)
+const isFavorite = computed(() => favoritesStore.isFavorite(parseInt(props.id)))
 
+// 产品数据
 const product = computed<Product>(() => ({
   id: parseInt(props.id),
   title: '唐风齐胸襦裙 · 霓裳羽衣',
@@ -131,6 +162,7 @@ const product = computed<Product>(() => ({
   price: 89.99,
   category: '齐胸襦裙',
   dynasty: '唐',
+  dynastyLabel: '唐',
   tags: ['热门', '新品', '真丝'],
   images: [],
   material: '100%桑蚕丝',
@@ -145,12 +177,34 @@ const product = computed<Product>(() => ({
     '渐变染色工艺',
     '传统缠枝莲纹样',
   ],
+  reviews: 28,
 }))
 
 const relatedProducts = computed(() => [
-  { id: 1, title: '宋制褙子套装', category: '宋代汉服', dynasty: '宋', price: 79.99 },
-  { id: 2, title: '明制立领斜襟长袄', category: '明代汉服', dynasty: '明', price: 92.99 },
-  { id: 3, title: '唐风圆领袍', category: '唐代男装', dynasty: '唐', price: 89.99 },
-  { id: 4, title: '汉元素改良连衣裙', category: '现代汉服', dynasty: '现代', price: 69.99 },
+  { id: 101, title: '宋制褙子套装', category: '宋代汉服', dynasty: '宋', price: 79.99 },
+  { id: 102, title: '明制立领斜襟长袄', category: '明代汉服', dynasty: '明', price: 92.99 },
+  { id: 103, title: '唐风圆领袍', category: '唐代男装', dynasty: '唐', price: 89.99 },
+  { id: 104, title: '汉元素改良连衣裙', category: '现代汉服', dynasty: '现代', price: 69.99 },
 ])
+
+// 添加到收藏
+function toggleFavorite() {
+  favoritesStore.toggleFavorite(parseInt(props.id))
+}
+
+// 预约体验
+function bookExperience() {
+  router.push({
+    path: '/booking',
+    query: {
+      productId: props.id,
+      size: selectedSize.value,
+    },
+  })
+}
+
+// 导航到产品详情
+function navigateToProduct(id: number) {
+  router.push(`/product/${id}`)
+}
 </script>

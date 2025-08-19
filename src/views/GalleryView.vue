@@ -1,6 +1,5 @@
 <template>
-  <div class="bg-white min-h-screen">
-    <!-- 顶部大图 -->
+  <div class="bg-white min-h-screen relative">
     <div class="relative h-64 md:h-96 overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-r from-hanfu-blue/70 to-hanfu-red/40"></div>
       <div class="absolute inset-0 bg-gray-200 border-2 border-dashed rounded-xl w-full h-full" />
@@ -12,7 +11,6 @@
       </div>
     </div>
 
-    <!-- 筛选与排序 -->
     <div
       class="sticky-filter-bar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sticky top-16 bg-white z-10 border-b"
     >
@@ -47,12 +45,16 @@
       </div>
     </div>
 
-    <!-- 瀑布流展示 -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div v-if="loading" class="flex justify-center py-12">
         <div
           class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-hanfu-red"
         ></div>
+      </div>
+
+      <div v-else-if="filteredProducts.length === 0" class="text-center py-12">
+        <div class="text-gray-500 text-xl">没有找到匹配的产品</div>
+        <button class="mt-4 btn-outline" @click="setFilter('all')">查看所有产品</button>
       </div>
 
       <div v-else class="columns-1 sm:columns-2 lg:columns-3 gap-6">
@@ -62,23 +64,21 @@
           class="mb-6 break-inside-avoid"
         >
           <div
-            class="overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl"
+            class="overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl cursor-pointer"
+            @click="$router.push(`/product/${product.id}`)"
           >
             <div class="bg-gray-200 border-2 border-dashed aspect-[3/4] w-full" />
             <div class="p-4 bg-white">
               <div class="flex justify-between">
                 <h3 class="font-display text-lg font-medium">{{ product.title }}</h3>
-                <span class="text-hanfu-red font-medium">{{ product.dynasty }}</span>
+                <span class="text-hanfu-red font-medium">{{ product.dynastyLabel }}</span>
               </div>
               <p class="mt-2 text-gray-600 text-sm line-clamp-2">
                 {{ product.description }}
               </p>
               <div class="mt-4 flex justify-between items-center">
                 <span class="text-hanfu-red font-medium">€{{ product.price.toFixed(2) }}</span>
-                <router-link
-                  :to="`/product/${product.id}`"
-                  class="text-hanfu-blue hover:underline flex items-center"
-                >
+                <span class="text-hanfu-blue hover:underline flex items-center">
                   查看详情
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -94,14 +94,13 @@
                       d="M9 5l7 7-7 7"
                     />
                   </svg>
-                </router-link>
+                </span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 加载更多 -->
       <div v-if="!loading && hasMore" class="mt-12 text-center">
         <button
           @click="loadMore"
@@ -123,8 +122,10 @@
         </button>
       </div>
 
-      <!-- 没有更多提示 -->
-      <div v-if="!hasMore && !loading" class="mt-12 text-center text-gray-500">
+      <div
+        v-if="!hasMore && !loading && filteredProducts.length > 0"
+        class="mt-12 text-center text-gray-500"
+      >
         已展示所有汉服藏品
       </div>
     </div>
@@ -133,7 +134,9 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
+
 import { useRoute } from 'vue-router'
+
 import { type Product } from '@/types'
 
 const route = useRoute()
@@ -146,6 +149,7 @@ const filters = [
   { label: '明制', key: 'ming' },
   { label: '男装', key: 'male' },
   { label: '女装', key: 'female' },
+  { label: '儿童装', key: 'kids' },
   { label: '婚服系列', key: 'wedding' },
   { label: '汉服周边', key: 'accessories' },
   { label: '文创产品', key: 'cultural' },
@@ -188,21 +192,21 @@ function setFilter(filterKey: string) {
     query.filter = filterKey
   }
 
-  // 扁平化 query 对象，确保所有值都是字符串
-  const flatQuery: Record<string, string> = {}
+  // 过滤并转换 query 对象，确保所有值都是字符串
+  const normalizedQuery: Record<string, string> = {}
   Object.entries(query).forEach(([key, value]) => {
-    if (Array.isArray(value)) {
-      flatQuery[key] = value[0] ?? ''
-    } else if (value !== null && value !== undefined) {
-      flatQuery[key] = value
+    if (typeof value === 'string') {
+      normalizedQuery[key] = value
+    } else if (Array.isArray(value)) {
+      normalizedQuery[key] = value.join(',')
     }
   })
 
-  // 使用 replaceState 更新 URL
+  // 使用replaceState避免添加历史记录
   window.history.replaceState(
     {},
     '',
-    `${window.location.pathname}?${new URLSearchParams(flatQuery).toString()}`,
+    `${window.location.pathname}?${new URLSearchParams(normalizedQuery).toString()}`,
   )
 }
 
@@ -212,32 +216,61 @@ const loading = ref(true)
 const visibleCount = ref(12)
 const hasMore = computed(() => visibleCount.value < products.value.length)
 
+// 朝代标签映射
+const dynastyLabels = {
+  tang: '唐',
+  song: '宋',
+  ming: '明',
+  male: '男',
+  female: '女',
+  kids: '童',
+  wedding: '婚服',
+  accessories: '周边',
+  cultural: '文创',
+}
+
 // 初始化产品数据
 onMounted(() => {
   // 模拟API请求
   setTimeout(() => {
-    products.value = Array.from({ length: 36 }, (_, i) => ({
-      id: i + 1,
-      title: `汉服系列 #${i + 1}`,
-      description: `这是一件精美的汉服，采用传统工艺制作，具有浓郁的中国风。灵感来自${['唐', '宋', '明'][i % 3]}代服饰特点。`,
-      price: 50 + Math.floor(Math.random() * 100),
-      category: '汉服',
-      dynasty: ['tang', 'song', 'ming'][i % 3] as 'tang' | 'song' | 'ming',
-      tags: ['热门', '新品'],
-      images: [],
-      material: '丝绸',
-      sizeOptions: ['S', 'M', 'L'],
-      careInstructions: '手洗',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      details: [
-        '100% 天然桑蚕丝面料',
-        '手工刺绣装饰纹样',
-        '可拆卸披帛设计',
-        '渐变染色工艺',
-        '传统缠枝莲纹样',
-      ],
-    }))
+    // 确保我们有足够的类别来随机生成
+    type DynastyKey = keyof typeof dynastyLabels
+
+    // 修改 categories 的定义
+    const categories = Object.keys(dynastyLabels) as DynastyKey[]
+
+    // 修改 dynasty 的类型
+    // const dynasty = categories[i % categories.length] as DynastyKey
+
+    products.value = Array.from({ length: 36 }, (_, i) => {
+      const dynasty = categories[i % categories.length]
+      return {
+        id: i + 1,
+        title: `汉服系列 #${i + 1}`,
+        description: `这是一件精美的汉服，采用传统工艺制作，具有浓郁的中国风。灵感来自${dynastyLabels[dynasty]}代服饰特点。`,
+        price: 50 + Math.floor(Math.random() * 100),
+        category: '汉服',
+        dynasty: dynasty,
+        dynastyLabel: dynastyLabels[dynasty],
+        tags: ['热门', '新品'],
+        images: [],
+        material: '丝绸',
+        sizeOptions: ['S', 'M', 'L'],
+        careInstructions: '手洗',
+        createdAt: new Date(
+          Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000,
+        ).toISOString(),
+        updatedAt: new Date().toISOString(),
+        details: [
+          '100% 天然桑蚕丝面料',
+          '手工刺绣装饰纹样',
+          '可拆卸披帛设计',
+          '渐变染色工艺',
+          '传统缠枝莲纹样',
+        ],
+        reviews: Math.floor(Math.random() * 5),
+      }
+    })
     loading.value = false
   }, 1200)
 })

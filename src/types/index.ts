@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 11:09:37
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-17 12:18:43
+ * @LastEditTime: 2025-08-19 10:49:49
  */
 // 产品类型
 export interface Product {
@@ -12,6 +12,7 @@ export interface Product {
   price: number
   category: string
   dynasty: string
+  dynastyLabel: string
   tags: string[]
   images: string[]
   material: string
@@ -20,6 +21,7 @@ export interface Product {
   createdAt: string
   updatedAt: string
   details: string[]
+  reviews: number
 }
 
 // 分类类型

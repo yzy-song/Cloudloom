@@ -2,9 +2,8 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-18 08:51:28
+ * @LastEditTime: 2025-08-19 11:28:56
  */
-
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 
@@ -42,12 +41,17 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/CollaborationView.vue'),
     meta: { title: '商业合作 - 云锦轩' },
   },
-  // 在路由配置中添加测试路由
   {
-    path: '/tailwind-test',
-    name: 'TailwindTest',
-    component: () => import('../views/TailwindTest.vue'),
-    meta: { title: 'Tailwind 测试' },
+    path: '/booking',
+    name: 'Booking',
+    component: () => import('../views/BookingView.vue'),
+    meta: { title: '预约体验 - 云锦轩' },
+  },
+  {
+    path: '/knowledge',
+    name: 'Knowledge',
+    component: () => import('../views/KnowledgeView.vue'),
+    meta: { title: '汉服知识 - 云锦轩' },
   },
   {
     path: '/404',
@@ -72,19 +76,28 @@ const router = createRouter({
   routes,
   scrollBehavior(to, from, savedPosition) {
     if (to.query.filter !== from.query.filter) {
-      // 当筛选参数变化时，滚动到筛选区域
       return {
         el: '.sticky-filter-bar',
         behavior: 'smooth',
-        top: 80, // 距离顶部偏移量
+        top: 80,
       }
     }
+
+    // 页面切换时滚动到顶部
+    if (to.path !== from.path) {
+      return { top: 0, behavior: 'smooth' }
+    }
+
     return savedPosition || { top: 0 }
   },
 })
 
 router.beforeEach((to, from, next) => {
+  // 设置页面标题
   document.title = (to.meta.title as string) || '云锦轩 - 爱尔兰汉服体验馆'
+
+  // 可以在这里添加用户认证检查等逻辑
+
   next()
 })
 

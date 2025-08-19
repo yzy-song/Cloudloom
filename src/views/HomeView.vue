@@ -1,234 +1,267 @@
 <template>
-  <div>
-    <div class="overflow-hidden">
-      <section class="relative bg-gradient-to-r from-hanfu-blue/10 to-hanfu-red/10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 class="text-4xl md:text-5xl lg:text-6xl font-display text-gray-900 leading-tight">
-                发现东方美学<br />
-                <span class="text-hanfu-red">汉服文化体验</span>
-              </h1>
-              <p class="mt-6 text-lg text-gray-600 max-w-lg">
-                在爱尔兰体验纯正的中国传统服饰文化，专业汉服租赁、摄影服务与文化沙龙，让东方之美绽放异域
-              </p>
-              <div class="mt-10 flex flex-wrap gap-4">
-                <button class="btn-primary">预约体验</button>
-                <router-link to="/gallery" class="btn-outline"> 查看汉服 </router-link>
-              </div>
+  <div class="overflow-hidden relative">
+    <!-- 英雄区域 -->
+    <section class="relative bg-gradient-to-r from-hanfu-blue/10 to-hanfu-red/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-display text-gray-900 leading-tight">
+              发现东方美学<br />
+              <span class="text-hanfu-red">汉服文化体验</span>
+            </h1>
+            <p class="mt-6 text-lg text-gray-600 max-w-lg">
+              在爱尔兰体验纯正的中国传统服饰文化，专业汉服租赁、摄影服务与文化沙龙，让东方之美绽放异域
+            </p>
+            <div class="mt-10 flex flex-wrap gap-4">
+              <button
+                class="btn-primary hover:scale-[1.03] transition-transform"
+                @click="navigateToBooking"
+              >
+                预约体验
+              </button>
+              <router-link
+                to="/gallery"
+                class="btn-outline hover:scale-[1.03] transition-transform"
+              >
+                查看汉服
+              </router-link>
             </div>
+          </div>
 
-            <div class="relative">
-              <div
-                class="absolute -top-6 -right-6 w-32 h-32 bg-hanfu-gold rounded-full opacity-20"
-              ></div>
-              <div
-                class="absolute -bottom-6 -left-6 w-48 h-48 bg-hanfu-blue rounded-full opacity-10"
-              ></div>
+          <!-- 轮播图区域 -->
+          <div class="relative">
+            <!-- 装饰性元素 -->
+            <div
+              class="absolute -top-6 -right-6 w-32 h-32 bg-hanfu-gold rounded-full opacity-20"
+            ></div>
+            <div
+              class="absolute -bottom-6 -left-6 w-48 h-48 bg-hanfu-blue rounded-full opacity-10"
+            ></div>
 
-              <div class="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-2xl">
-                <Swiper
-                  :modules="[SwiperAutoplay, SwiperNavigation, SwiperPagination]"
-                  :slides-per-view="1"
-                  :loop="true"
-                  :autoplay="{
-                    delay: 5000,
-                    disableOnInteraction: false,
-                  }"
-                  :pagination="{
-                    clickable: true,
-                    el: '.swiper-pagination',
-                    type: 'bullets',
-                  }"
-                  :navigation="{
-                    prevEl: '.swiper-button-prev',
-                    nextEl: '.swiper-button-next',
-                  }"
-                  class="w-full h-full"
-                >
-                  <SwiperSlide v-for="(slide, index) in heroSlides" :key="index">
-                    <div class="relative w-full h-full">
-                      <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-full" />
+            <!-- Swiper轮播图 -->
+            <div class="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-2xl">
+              <Swiper
+                :modules="[SwiperAutoplay, SwiperNavigation, SwiperPagination]"
+                :slides-per-view="1"
+                :loop="true"
+                :autoplay="{
+                  delay: 5000,
+                  disableOnInteraction: false,
+                }"
+                :pagination="{
+                  clickable: true,
+                  el: '.swiper-pagination',
+                  type: 'bullets',
+                }"
+                :navigation="{
+                  prevEl: '.swiper-button-prev',
+                  nextEl: '.swiper-button-next',
+                }"
+                class="w-full h-full"
+              >
+                <SwiperSlide v-for="(slide, index) in heroSlides" :key="index">
+                  <div class="relative w-full h-full">
+                    <!-- 占位图片 -->
+                    <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-full" />
 
-                      <div class="absolute inset-0 flex items-center justify-center p-6">
-                        <div
-                          class="text-center text-white bg-black/30 backdrop-blur-sm rounded-xl p-6 max-w-xs"
+                    <!-- 轮播内容 -->
+                    <div class="absolute inset-0 flex items-center justify-center p-6">
+                      <div
+                        class="text-center text-white bg-black/30 backdrop-blur-sm rounded-xl p-6 max-w-xs"
+                      >
+                        <h3 class="text-xl font-display font-bold">{{ slide.title }}</h3>
+                        <p class="mt-2 text-sm">{{ slide.description }}</p>
+                        <button
+                          v-if="slide.buttonText"
+                          class="mt-4 btn-outline bg-white/10 hover:bg-white/20 transition-colors"
+                          @click="handleSlideAction(slide.action)"
                         >
-                          <h3 class="text-xl font-display font-bold">{{ slide.title }}</h3>
-                          <p class="mt-2 text-sm">{{ slide.description }}</p>
-                          <button
-                            v-if="slide.buttonText"
-                            class="mt-4 btn-outline bg-white/10 hover:bg-white/20"
-                            @click="handleSlideAction(slide.action)"
-                          >
-                            {{ slide.buttonText }}
-                          </button>
-                        </div>
+                          {{ slide.buttonText }}
+                        </button>
                       </div>
                     </div>
-                  </SwiperSlide>
-                </Swiper>
+                  </div>
+                </SwiperSlide>
+              </Swiper>
 
-                <div class="swiper-pagination !bottom-4 !left-1/2 !-translate-x-1/2"></div>
+              <!-- 自定义分页器 -->
+              <div class="swiper-pagination !bottom-4 !left-1/2 !-translate-x-1/2"></div>
 
-                <div
-                  class="swiper-button-prev !left-2 !text-white !bg-black/30 !w-10 !h-10 !rounded-full after:!text-sm"
-                ></div>
-                <div
-                  class="swiper-button-next !right-2 !text-white !bg-black/30 !w-10 !h-10 !rounded-full after:!text-sm"
-                ></div>
-              </div>
-
+              <!-- 自定义导航按钮 -->
               <div
-                class="absolute -bottom-4 -right-4 bg-white px-6 py-3 rounded-full shadow-lg z-10"
+                class="swiper-button-prev !left-2 !text-white !bg-black/30 !w-10 !h-10 !rounded-full after:!text-sm hover:!bg-black/50 transition"
+              ></div>
+              <div
+                class="swiper-button-next !right-2 !text-white !bg-black/30 !w-10 !h-10 !rounded-full after:!text-sm hover:!bg-black/50 transition"
+              ></div>
+            </div>
+
+            <!-- 装饰性标签 -->
+            <div class="absolute -bottom-4 -right-4 bg-white px-6 py-3 rounded-full shadow-lg z-10">
+              <span class="font-medium text-hanfu-blue">始于衣冠 · 达于博远</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 特色分类 -->
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl md:text-4xl font-display text-gray-900">探索汉服世界</h2>
+          <p class="mt-4 text-lg text-gray-600">按朝代、形制与场景探索我们精心准备的汉服收藏</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div
+            v-for="(category, index) in categories"
+            :key="index"
+            class="group relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer"
+            @click="navigateToGallery(category.filterKey)"
+          >
+            <div class="bg-gray-200 border-2 border-dashed rounded-2xl aspect-[4/3] w-full"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 p-6 w-full">
+              <h3 class="text-xl font-display font-bold text-white">{{ category.title }}</h3>
+              <p class="mt-1 text-white/90">{{ category.count }} 件汉服</p>
+              <button
+                class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white border border-white px-4 py-2 rounded-full hover:bg-white/10"
               >
-                <span class="font-medium text-hanfu-blue">始于衣冠 · 达于博远</span>
+                查看系列
+              </button>
+            </div>
+            <div class="absolute top-4 right-4">
+              <div class="bg-hanfu-gold text-hanfu-blue rounded-full px-3 py-1 text-xs font-medium">
+                精选系列
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-3xl md:text-4xl font-display text-gray-900">探索汉服世界</h2>
-            <p class="mt-4 text-lg text-gray-600">按朝代、形制与场景探索我们精心准备的汉服收藏</p>
+    <!-- 精选汉服展示 -->
+    <section class="py-16 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center mb-12">
+          <div>
+            <h2 class="text-3xl font-display text-gray-900">精选汉服</h2>
+            <p class="mt-2 text-gray-600">我们最受欢迎的汉服系列</p>
           </div>
+          <router-link to="/gallery" class="text-hanfu-red hover:underline font-medium">
+            查看全部 &rarr;
+          </router-link>
+        </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <CategoryCard
-              v-for="(category, index) in categories"
-              :key="index"
-              :title="category.title"
-              :count="category.count"
-              :routePath="category.routePath"
-              :filterKey="category.filterKey"
-            />
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div
+            v-for="(product, index) in featuredProducts"
+            :key="index"
+            class="hanfu-card cursor-pointer transform hover:-translate-y-1 transition-transform duration-300"
+            @click="navigateToProduct(index + 1)"
+          >
+            <div class="bg-gray-200 border-2 border-dashed rounded-t-2xl aspect-[3/4] w-full"></div>
+            <div class="p-5">
+              <div class="flex justify-between items-start">
+                <h3 class="hanfu-card-title">{{ product.title }}</h3>
+                <span class="px-2 py-1 bg-hanfu-blue/10 text-hanfu-blue text-xs rounded-full">
+                  {{ product.dynasty }}
+                </span>
+              </div>
+              <p class="text-gray-600 mt-2 text-sm line-clamp-2">
+                {{
+                  product.description ||
+                  '灵感来自盛唐时期的女子服饰，采用真丝提花面料，裙头绣有传统缠枝纹样'
+                }}
+              </p>
+              <div class="mt-4 flex justify-between items-center">
+                <span class="text-hanfu-red font-medium">€{{ product.price.toFixed(2) }}</span>
+                <span class="text-sm text-hanfu-blue hover:underline">查看详情</span>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="py-16 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex justify-between items-center mb-12">
+    <!-- 合作邀请 -->
+    <section class="py-16 bg-hanfu-green/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-3xl shadow-hanfu p-8 md:p-12">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 class="text-3xl font-display text-gray-900">精选汉服</h2>
-              <p class="mt-2 text-gray-600">我们最受欢迎的汉服系列</p>
-            </div>
-            <router-link to="/gallery" class="text-hanfu-red hover:underline font-medium">
-              查看全部 &rarr;
-            </router-link>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <ProductCard
-              v-for="(product, index) in featuredProducts"
-              :key="index"
-              :title="product.title"
-              :category="product.category"
-              :dynasty="product.dynasty"
-              :price="product.price"
-              :id="product.id"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section class="py-16 bg-hanfu-green/10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="bg-white rounded-3xl shadow-hanfu p-8 md:p-12">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 class="text-3xl md:text-4xl font-display text-gray-900">寻找合作伙伴</h2>
-                <p class="mt-4 text-lg text-gray-600">
-                  我们正在爱尔兰寻找合作伙伴，共同推广汉服文化。无论您是礼品店、文化中心还是活动策划方，我们都期待与您合作。
-                </p>
-                <ul class="mt-6 space-y-3">
-                  <li class="flex items-start">
-                    <div class="flex-shrink-0 mt-1">
-                      <CheckCircleIcon class="h-5 w-5 text-hanfu-green" />
-                    </div>
-                    <span class="ml-3 text-gray-700">批发价格优惠</span>
-                  </li>
-                  <li class="flex items-start">
-                    <div class="flex-shrink-0 mt-1">
-                      <CheckCircleIcon class="h-5 w-5 text-hanfu-green" />
-                    </div>
-                    <span class="ml-3 text-gray-700">独家文化内容支持</span>
-                  </li>
-                  <li class="flex items-start">
-                    <div class="flex-shrink-0 mt-1">
-                      <CheckCircleIcon class="h-5 w-5 text-hanfu-green" />
-                    </div>
-                    <span class="ml-3 text-gray-700">联合营销推广</span>
-                  </li>
-                </ul>
-                <div class="mt-8">
-                  <router-link to="/collaboration" class="btn-primary"> 了解合作详情 </router-link>
-                </div>
+              <h2 class="text-3xl md:text-4xl font-display text-gray-900">寻找合作伙伴</h2>
+              <p class="mt-4 text-lg text-gray-600">
+                我们正在爱尔兰寻找合作伙伴，共同推广汉服文化。无论您是礼品店、文化中心还是活动策划方，我们都期待与您合作。
+              </p>
+              <ul class="mt-6 space-y-3">
+                <li class="flex items-start">
+                  <div class="flex-shrink-0 mt-1">
+                    <CheckCircleIcon class="h-5 w-5 text-hanfu-green" />
+                  </div>
+                  <span class="ml-3 text-gray-700">批发价格优惠</span>
+                </li>
+                <li class="flex items-start">
+                  <div class="flex-shrink-0 mt-1">
+                    <CheckCircleIcon class="h-5 w-5 text-hanfu-green" />
+                  </div>
+                  <span class="ml-3 text-gray-700">独家文化内容支持</span>
+                </li>
+                <li class="flex items-start">
+                  <div class="flex-shrink-0 mt-1">
+                    <CheckCircleIcon class="h-5 w-5 text-hanfu-green" />
+                  </div>
+                  <span class="ml-3 text-gray-700">联合营销推广</span>
+                </li>
+              </ul>
+              <div class="mt-8">
+                <button
+                  class="btn-primary hover:scale-[1.03] transition-transform"
+                  @click="navigateToCollaboration"
+                >
+                  了解合作详情
+                </button>
               </div>
-              <div class="relative">
-                <div class="bg-gray-200 border-2 border-dashed rounded-2xl aspect-video w-full" />
-                <div class="absolute -bottom-4 -left-4 bg-white rounded-xl px-6 py-4 shadow-lg">
-                  <div class="text-hanfu-blue font-medium">爱尔兰汉服文化推广计划</div>
-                </div>
+            </div>
+            <div class="relative">
+              <div class="bg-gray-200 border-2 border-dashed rounded-2xl aspect-video w-full" />
+              <div class="absolute -bottom-4 -left-4 bg-white rounded-xl px-6 py-4 shadow-lg">
+                <div class="text-hanfu-blue font-medium">爱尔兰汉服文化推广计划</div>
               </div>
             </div>
           </div>
         </div>
-      </section>
-    </div>
-
-    <button
-      v-if="isDev"
-      @click="toggleDevPanel"
-      class="fixed bottom-4 left-4 bg-blue-500 text-white p-3 rounded-full shadow-lg z-50 hover:bg-blue-600 transition"
-      aria-label="开发模式控制"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-        />
-      </svg>
-    </button>
-
-    <DevAccessInfo ref="devPanel" />
+      </div>
+    </section>
+    <DevAccessInfo />
   </div>
 </template>
 
 <script setup lang="ts">
-import CategoryCard from '@/components/ui/card/CategoryCard.vue'
-import ProductCard from '@/components/ui/card/ProductCard.vue'
 import { CheckCircleIcon } from '@heroicons/vue/24/outline'
-import { ref, onMounted } from 'vue'
-import DevAccessInfo from '@/components/DevAccessInfo.vue'
-
-// 导入Swiper组件
-import { Swiper, SwiperSlide } from 'swiper/vue'
 import {
   Autoplay as SwiperAutoplay,
   Navigation as SwiperNavigation,
   Pagination as SwiperPagination,
 } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { useRouter } from 'vue-router'
+
+// 导入Swiper组件
+
 import 'swiper/css'
 import 'swiper/css/autoplay'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
+import DevAccessInfo from '@/components/DevAccessInfo.vue'
+
+const router = useRouter()
 
 interface Category {
   title: string
   count: number
-  image?: string
+  filterKey: string
 }
 
 interface Product {
@@ -236,7 +269,7 @@ interface Product {
   category: string
   dynasty: string
   price: number
-  id: number
+  description?: string
 }
 
 interface HeroSlide {
@@ -246,63 +279,33 @@ interface HeroSlide {
   action?: string
 }
 
-const categories = ref([
-  {
-    title: '唐制汉服',
-    count: 28,
-    routePath: '/gallery?dynasty=tang',
-    filterKey: 'tang',
-  },
-  {
-    title: '宋制汉服',
-    count: 22,
-    routePath: '/gallery?dynasty=song',
-    filterKey: 'song',
-  },
-  {
-    title: '明制汉服',
-    count: 35,
-    routePath: '/gallery?dynasty=ming',
-    filterKey: 'ming',
-  },
-  {
-    title: '男装',
-    count: 35,
-    routePath: '/gallery?dynasty=male',
-    filterKey: 'male',
-  },
-  {
-    title: '女装',
-    count: 35,
-    routePath: '/gallery?dynasty=female',
-    filterKey: 'female',
-  },
-  {
-    title: '婚服系列',
-    count: 12,
-    routePath: '/gallery?category=wedding',
-    filterKey: 'wedding',
-  },
-  {
-    title: '汉服周边',
-    count: 15,
-    routePath: '/gallery?category=accessories',
-    filterKey: 'accessories',
-  },
-  {
-    title: '文创产品',
-    count: 18,
-    routePath: '/gallery?category=cultural',
-    filterKey: 'cultural',
-  },
-])
+const categories: Category[] = [
+  { title: '唐制汉服', count: 28, filterKey: 'tang' },
+  { title: '宋制汉服', count: 22, filterKey: 'song' },
+  { title: '明制汉服', count: 35, filterKey: 'ming' },
+  { title: '婚服系列', count: 12, filterKey: 'wedding' },
+  { title: '汉服周边', count: 15, filterKey: 'accessories' },
+  { title: '文创产品', count: 18, filterKey: 'cultural' },
+]
 
 const featuredProducts: Product[] = [
-  { id: 1, title: '唐风齐胸襦裙', category: '盛唐风华', dynasty: '唐', price: 89.99 },
-  { id: 2, title: '宋制百迭裙', category: '雅致宋韵', dynasty: '宋', price: 79.99 },
-  { id: 3, title: '明制马面裙', category: '端庄明风', dynasty: '明', price: 99.99 },
-  { id: 4, title: '汉服刺绣团扇', category: '汉服配饰', dynasty: '通用', price: 24.99 }, // 新增周边
-  { id: 5, title: '传统纹样笔记本', category: '文创产品', dynasty: '通用', price: 12.99 }, // 新增文创
+  { title: '唐风齐胸襦裙', category: '盛唐风华', dynasty: '唐', price: 89.99 },
+  { title: '宋制百迭裙', category: '雅致宋韵', dynasty: '宋', price: 79.99 },
+  { title: '明制马面裙', category: '端庄明风', dynasty: '明', price: 99.99 },
+  {
+    title: '汉服刺绣团扇',
+    category: '汉服配饰',
+    dynasty: '通用',
+    price: 24.99,
+    description: '手工刺绣真丝团扇，传统纹样设计，汉服搭配佳品',
+  },
+  {
+    title: '传统纹样笔记本',
+    category: '文创产品',
+    dynasty: '通用',
+    price: 12.99,
+    description: '中国传统纹样设计，优质纸张，文化传承与实用结合',
+  },
 ]
 
 // 轮播图数据 - 包含汉服、周边和文创产品
@@ -311,56 +314,51 @@ const heroSlides: HeroSlide[] = [
     title: '盛唐风华系列',
     description: '体验大唐盛世服饰，感受千年文化魅力',
     buttonText: '查看详情',
-    action: '/gallery?dynasty=tang',
+    action: '/gallery?filter=tang',
   },
   {
     title: '汉服配饰精选',
     description: '团扇、发簪、荷包等传统配饰',
     buttonText: '探索周边',
-    action: '/gallery?category=accessories',
+    action: '/gallery?filter=accessories',
   },
   {
     title: '文创产品上新',
     description: '传统纹样设计的日常用品与艺术品',
     buttonText: '浏览文创',
-    action: '/gallery?category=cultural',
+    action: '/gallery?filter=cultural',
   },
   {
     title: '儿童汉服特惠',
     description: '专为儿童设计的传统服饰，传承从小开始',
     buttonText: '查看系列',
-    action: '/gallery?tag=kids',
+    action: '/gallery?filter=kids',
   },
 ]
 
-const isDev = ref(false)
-const devPanel = ref<InstanceType<typeof DevAccessInfo> | null>(null)
+// 导航方法
+function navigateToGallery(filter: string) {
+  router.push({ path: '/gallery', query: { filter } })
+}
 
-onMounted(() => {
-  isDev.value = import.meta.env.DEV
-})
+function navigateToProduct(id: number) {
+  router.push(`/product/${id}`)
+}
 
-// 切换开发面板显示
-function toggleDevPanel() {
-  if (devPanel.value) {
-    // 通过组件引用来控制面板显示
-    const panel = devPanel.value as any
-    panel.isVisible = !panel.isVisible
+function navigateToCollaboration() {
+  router.push('/collaboration')
+}
 
-    // 保存状态到本地存储
-    localStorage.setItem('devPanelVisible', panel.isVisible.toString())
-  }
+function navigateToBooking() {
+  router.push('/booking')
 }
 
 // 处理轮播图按钮点击
 function handleSlideAction(action?: string) {
   if (action) {
-    // 这里可以添加路由跳转或其他操作
-    console.log('Slide action triggered:', action)
-    // 实际项目中可以这样跳转：
-    // router.push(action)
+    router.push(action)
   }
 }
 </script>
 
-<style></style>
+<style scoped></style>
