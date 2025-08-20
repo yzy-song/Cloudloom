@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 11:15:06
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-18 11:45:18
+ * @LastEditTime: 2025-08-20 19:38:50
 -->
 <template>
   <div
@@ -19,20 +19,23 @@
             <h3
               class="font-display text-lg font-medium text-gray-900 group-hover:text-hanfu-red transition-colors"
             >
-              {{ title }}
+              {{ product }}
             </h3>
-            <p class="text-sm text-gray-500 mt-1">{{ category }}</p>
+            <p class="text-sm text-gray-500 mt-1">{{ product.category }}</p>
           </div>
           <span class="px-2 py-1 bg-hanfu-blue/10 text-hanfu-blue text-xs rounded-full">
-            {{ dynasty }}
+            {{ product.dynasty }}
           </span>
         </div>
         <p class="mt-3 text-gray-600 text-sm line-clamp-3">
-          {{ description || '灵感来自盛唐时期的女子服饰，采用真丝提花面料，裙头绣有传统缠枝纹样' }}
+          {{
+            product.description ||
+            '灵感来自盛唐时期的女子服饰，采用真丝提花面料，裙头绣有传统缠枝纹样'
+          }}
         </p>
       </div>
       <div class="mt-4 flex justify-between items-center">
-        <span class="text-hanfu-red font-medium">€{{ price.toFixed(2) }}</span>
+        <span class="text-hanfu-red font-medium">€{{ product.price.toFixed(2) }}</span>
         <button
           class="text-hanfu-red hover:text-hanfu-red/80 transition-colors"
           @click.stop="navigateToDetail"
@@ -47,23 +50,16 @@
 <script setup lang="ts">
 import { defineProps, withDefaults } from 'vue'
 import { useRouter } from 'vue-router'
-
+import type { Product } from '@/types'
 const router = useRouter()
 
 interface Props {
-  id: number
-  title: string
-  category: string
-  dynasty: string
-  price: number
-  description?: string
+  product: Product
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  description: '',
-})
+const props = defineProps<Props>()
 
 function navigateToDetail() {
-  router.push({ name: 'ProductDetail', params: { id: props.id } })
+  router.push({ name: 'ProductDetail', params: { id: props.product.id } })
 }
 </script>

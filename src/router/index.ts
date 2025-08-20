@@ -2,13 +2,14 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-19 14:39:53
+ * @LastEditTime: 2025-08-20 18:54:40
  */
 import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from '../views/HomeView.vue'
 
 import type { RouteRecordRaw } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.store'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -46,7 +47,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/booking',
     name: 'Booking',
     component: () => import('../views/BookingView.vue'),
-    meta: { title: '预约体验 - 云锦轩' },
+    meta: { title: '预约体验 - 云锦轩', requiresAuth: true },
   },
   {
     path: '/knowledge',
@@ -55,9 +56,34 @@ const routes: Array<RouteRecordRaw> = [
     meta: { title: '汉服知识 - 云锦轩' },
   },
   {
-    path: '/survey-page', // 新增的路由路径
+    path: '/login',
+    name: 'Login',
+    component: () => import('../views/LoginView.vue'),
+    meta: { title: '登录 - 云锦轩', requiresGuest: true },
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('../views/ProfileView.vue'),
+    meta: { title: '个人资料 - 云锦轩', requiresAuth: true },
+  },
+  {
+    path: '/orders',
+    name: 'Orders',
+    component: () => import('../views/OrdersView.vue'),
+    meta: { title: '我的预约 - 云锦轩', requiresAuth: true },
+  },
+  {
+    path: '/favorites',
+    name: 'Favorites',
+    component: () => import('../views/FavoritesView.vue'),
+    meta: { title: '我的收藏 - 云锦轩', requiresAuth: true },
+  },
+  {
+    path: '/survey-page',
     name: 'Survey',
-    component: () => import('../views/SurveyView.vue'), // 导入新的组件
+    component: () => import('../views/SurveyView.vue'),
+    meta: { title: '市场调研 - 云锦轩' },
   },
   {
     path: '/404',
@@ -102,7 +128,25 @@ router.beforeEach((to, from, next) => {
   // 设置页面标题
   document.title = (to.meta.title as string) || '云锦轩 - 爱尔兰汉服体验馆'
 
-  // 可以在这里添加用户认证检查等逻辑
+  const authStore = useAuthStore()
+
+  // 初始化用户状态
+  authStore.initAuth()
+
+  // 检查是否需要认证
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath },
+    })
+    return
+  }
+
+  // 检查是否需要访客状态（已登录用户不能访问登录页）
+  if (to.meta.requiresGuest && authStore.isAuthenticated) {
+    next({ path: '/' })
+    return
+  }
 
   next()
 })

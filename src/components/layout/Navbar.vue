@@ -35,10 +35,98 @@
           </router-link>
           <button
             class="btn-primary hover:scale-[1.03] transition-transform"
-            @click="$router.push('/booking')"
+            @click="navigateToBooking"
           >
             预约体验
           </button>
+
+          <!-- 用户菜单 -->
+          <div v-if="authStore.isAuthenticated" class="relative ml-3">
+            <div>
+              <button
+                @click="isUserMenuOpen = !isUserMenuOpen"
+                class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-hanfu-red"
+                id="user-menu-button"
+                aria-expanded="false"
+                aria-haspopup="true"
+              >
+                <span class="sr-only">打开用户菜单</span>
+                <img
+                  class="h-8 w-8 rounded-full"
+                  :src="
+                    authStore.user?.avatar ||
+                    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+                  "
+                  alt="用户头像"
+                />
+                <span class="ml-2 text-gray-700">{{ authStore.user?.name }}</span>
+                <ChevronDownIcon class="ml-1 h-4 w-4 text-gray-400" />
+              </button>
+            </div>
+
+            <!-- 用户下拉菜单 -->
+            <transition
+              enter-active-class="transition ease-out duration-100"
+              enter-from-class="transform opacity-0 scale-95"
+              enter-to-class="transform opacity-100 scale-100"
+              leave-active-class="transition ease-in duration-75"
+              leave-from-class="transform opacity-100 scale-100"
+              leave-to-class="transform opacity-0 scale-95"
+            >
+              <div
+                v-show="isUserMenuOpen"
+                class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                role="menu"
+                aria-orientation="vertical"
+                aria-labelledby="user-menu-button"
+                tabindex="-1"
+              >
+                <router-link
+                  to="/profile"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  role="menuitem"
+                  tabindex="-1"
+                  @click="isUserMenuOpen = false"
+                >
+                  个人资料
+                </router-link>
+                <router-link
+                  to="/orders"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  role="menuitem"
+                  tabindex="-1"
+                  @click="isUserMenuOpen = false"
+                >
+                  我的预约
+                </router-link>
+                <router-link
+                  to="/favorites"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  role="menuitem"
+                  tabindex="-1"
+                  @click="isUserMenuOpen = false"
+                >
+                  我的收藏
+                </router-link>
+                <button
+                  @click="logout"
+                  class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  role="menuitem"
+                  tabindex="-1"
+                >
+                  退出登录
+                </button>
+              </div>
+            </transition>
+          </div>
+
+          <router-link
+            v-else
+            to="/login"
+            class="text-gray-700 hover:text-hanfu-red transition-colors font-medium"
+          >
+            登录/注册
+          </router-link>
         </div>
 
         <!-- 移动端菜单按钮 -->
@@ -67,6 +155,57 @@
         >
           {{ item.name }}
         </router-link>
+
+        <div v-if="authStore.isAuthenticated" class="border-b py-3">
+          <div class="flex items-center mb-3">
+            <img
+              class="h-8 w-8 rounded-full"
+              :src="
+                authStore.user?.avatar ||
+                'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+              "
+              alt="用户头像"
+            />
+            <span class="ml-2 text-gray-700">{{ authStore.user?.name }}</span>
+          </div>
+          <router-link
+            to="/profile"
+            class="block py-2 text-gray-700 hover:text-hanfu-red"
+            @click="mobileMenuOpen = false"
+          >
+            个人资料
+          </router-link>
+          <router-link
+            to="/orders"
+            class="block py-2 text-gray-700 hover:text-hanfu-red"
+            @click="mobileMenuOpen = false"
+          >
+            我的预约
+          </router-link>
+          <router-link
+            to="/favorites"
+            class="block py-2 text-gray-700 hover:text-hanfu-red"
+            @click="mobileMenuOpen = false"
+          >
+            我的收藏
+          </router-link>
+          <button
+            @click="logout"
+            class="block w-full text-left py-2 text-gray-700 hover:text-hanfu-red"
+          >
+            退出登录
+          </button>
+        </div>
+
+        <router-link
+          v-else
+          to="/login"
+          class="block py-3 text-gray-700 hover:text-hanfu-red border-b"
+          @click="mobileMenuOpen = false"
+        >
+          登录/注册
+        </router-link>
+
         <button
           class="w-full mt-4 btn-primary"
           @click="($router.push('/booking'), (mobileMenuOpen = false))"
@@ -79,12 +218,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { Bars3Icon } from '@heroicons/vue/24/outline'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { Bars3Icon, ChevronDownIcon } from '@heroicons/vue/24/outline'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.store'
 
 const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
+
 const mobileMenuOpen = ref(false)
+const isUserMenuOpen = ref(false)
 
 interface NavItem {
   name: string
@@ -101,6 +245,47 @@ const navItems: NavItem[] = [
 
 // 当前激活的路由
 const activePath = computed(() => route.path)
+
+// 退出登录
+const logout = () => {
+  authStore.logout()
+  isUserMenuOpen.value = false
+  mobileMenuOpen.value = false
+  router.push('/')
+}
+
+// 预约体验
+const navigateToBooking = () => {
+  if (!authStore.isAuthenticated) {
+    // 如果未登录，跳转到登录页，并携带重定向参数
+    router.push({ path: '/login', query: { redirect: '/booking' } })
+  } else {
+    router.push('/booking')
+  }
+}
+
+// 初始化用户状态
+onMounted(() => {
+  authStore.initAuth()
+})
+
+// 点击外部关闭用户菜单
+const handleClickOutside = (event: MouseEvent) => {
+  const target = event.target as HTMLElement
+  if (!target.closest('#user-menu-button')) {
+    isUserMenuOpen.value = false
+  }
+}
+
+// 添加全局点击监听
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+// 移除监听
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 <style scoped>

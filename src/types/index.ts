@@ -2,11 +2,11 @@
  * @Author: yzy
  * @Date: 2025-08-16 11:09:37
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-20 16:16:26
+ * @LastEditTime: 2025-08-20 18:41:10
  */
 // 产品类型
 export interface Product {
-  id: string | number
+  id: number
   title: string
   description: string
   price: number

@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker'
+import { fa, faker } from '@faker-js/faker'
 import type {
   Product,
   ProductCategory,
@@ -56,7 +56,7 @@ export const generateProduct = (): Product => {
   const outfitTypes = ['齐胸襦裙', '直裾', '曲裾', '袄裙', '道袍', '比甲', '马面裙']
 
   return {
-    id: faker.string.uuid(),
+    id: faker.number.int(),
     title: `${faker.helpers.arrayElement(Object.values(eraNames))} · ${faker.helpers.arrayElement(outfitTypes)}`,
     description: faker.lorem.paragraphs(2),
     price: parseFloat(faker.number.int({ min: 50, max: 300 }).toString()),
