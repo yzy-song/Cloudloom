@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-19 13:55:46
+ * @LastEditTime: 2025-08-20 16:33:52
  */
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
@@ -29,6 +29,7 @@ export default defineConfigWithVueTs(
     },
     rules: {
       // import 顺序
+
       'import/order': [
         'error',
         {
@@ -48,7 +49,7 @@ export default defineConfigWithVueTs(
             },
           ],
           pathGroupsExcludedImportTypes: ['builtin'],
-          'newlines-between': 'always',
+          'newlines-between': 'ignore',
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
@@ -60,6 +61,7 @@ export default defineConfigWithVueTs(
       'vue/multi-word-component-names': 'off',
       'vue/no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
 )

@@ -261,6 +261,23 @@ onMounted(() => {
           Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000,
         ).toISOString(),
         updatedAt: new Date().toISOString(),
+        rentalPrice: Math.floor(Math.random() * 100) + 50,
+        rentalPeriods: [
+          {
+            id: '1',
+            name: '1 小时',
+            duration: 1,
+            unit: 'hour',
+            price: Math.floor(Math.random() * 10) + 5,
+          },
+          {
+            id: '2',
+            name: '1 天',
+            duration: 1,
+            unit: 'day',
+            price: Math.floor(Math.random() * 50) + 20,
+          },
+        ],
         details: [
           '100% 天然桑蚕丝面料',
           '手工刺绣装饰纹样',
