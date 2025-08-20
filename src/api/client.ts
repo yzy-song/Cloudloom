@@ -56,4 +56,9 @@ export const api = {
     apiClient.put<ApiResponse<T>>(url, data).then((res) => res.data),
 
   delete: <T>(url: string) => apiClient.delete<ApiResponse<T>>(url).then((res) => res.data),
+
+  patch: <T>(
+    url: string,
+    data?: any, // 添加 patch 方法
+  ) => apiClient.patch<T>(url, data).then((res) => res.data),
 }

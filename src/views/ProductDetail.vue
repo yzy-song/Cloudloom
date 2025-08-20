@@ -138,12 +138,12 @@ import { StarIcon, HeartIcon, CheckCircleIcon } from '@heroicons/vue/24/outline'
 import { useRoute, useRouter } from 'vue-router'
 
 import ProductCard from '@/components/ui/card/ProductCard.vue'
-import { useFavoritesStore } from '@/stores/favorites'
+import { useFavoriteStore } from '@/stores/favorite.store'
 import { type Product } from '@/types'
 
 const route = useRoute()
 const router = useRouter()
-const favoritesStore = useFavoritesStore()
+const favoritesStore = useFavoriteStore()
 
 const props = defineProps<{
   id: string
@@ -151,7 +151,7 @@ const props = defineProps<{
 
 const selectedSize = ref('M')
 const activeImage = ref(0)
-const isFavorite = computed(() => favoritesStore.isFavorite(parseInt(props.id)))
+const isFavorite = computed(() => favoritesStore.isFavorite(props.id))
 
 // 产品数据
 const product = computed<Product>(() => ({
@@ -160,6 +160,23 @@ const product = computed<Product>(() => ({
   description:
     '此款齐胸襦裙灵感来自盛唐时期的女子服饰，采用高级真丝提花面料制成，裙头绣有传统缠枝纹样，衣身采用渐变染色工艺。广袖设计飘逸灵动，重现"风吹仙袂飘飘举"的唐诗意境。',
   price: 89.99,
+  rentalPrice: 50,
+  rentalPeriods: [
+    {
+      id: '1',
+      name: '1天',
+      duration: 1,
+      unit: 'day',
+      price: 50,
+    },
+    {
+      id: '2',
+      name: '3天',
+      duration: 3,
+      unit: 'day',
+      price: 80,
+    },
+  ],
   category: '齐胸襦裙',
   dynasty: '唐',
   dynastyLabel: '唐',
@@ -189,7 +206,7 @@ const relatedProducts = computed(() => [
 
 // 添加到收藏
 function toggleFavorite() {
-  favoritesStore.toggleFavorite(parseInt(props.id))
+  favoritesStore.toggleFavorite(props.id)
 }
 
 // 预约体验

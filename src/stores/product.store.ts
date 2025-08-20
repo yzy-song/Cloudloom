@@ -1,9 +1,10 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import type { Product, ProductCategory, ApiResponse } from '@/types'
-import { apiClient } from '@/api/client'
+import { api } from '@/api/client'
 
-export const useProductsStore = defineStore('products', () => {
+export const useProductStore = defineStore('product', () => {
+  // State
   const products = ref<Product[]>([])
   const featuredProducts = ref<Product[]>([])
   const currentProduct = ref<Product | null>(null)
@@ -16,6 +17,13 @@ export const useProductsStore = defineStore('products', () => {
     totalPages: 0,
   })
 
+  // Getters
+  const totalProducts = computed(() => pagination.value.total)
+  const currentPage = computed(() => pagination.value.page)
+  const hasNextPage = computed(() => currentPage.value < pagination.value.totalPages)
+  const hasPrevPage = computed(() => currentPage.value > 1)
+
+  // Actions
   const fetchProducts = async (filters?: {
     category?: ProductCategory
     page?: number
@@ -31,7 +39,7 @@ export const useProductsStore = defineStore('products', () => {
       if (filters?.page) params.append('page', filters.page.toString())
       if (filters?.limit) params.append('limit', filters.limit.toString())
 
-      const response = await apiClient.get<ApiResponse<Product[]>>(`/products?${params.toString()}`)
+      const response = await api.get<ApiResponse<Product[]>>(`/products?${params.toString()}`)
 
       products.value = response.data.data
       pagination.value = response.data.pagination || {
@@ -48,19 +56,10 @@ export const useProductsStore = defineStore('products', () => {
     }
   }
 
-  const fetchFeaturedProducts = async () => {
-    try {
-      const response = await apiClient.get<ApiResponse<Product[]>>('/products?featured=true')
-      featuredProducts.value = response.data.data
-    } catch (e) {
-      console.error('Fetch featured products error:', e)
-    }
-  }
-
   const fetchProductById = async (id: string) => {
     loading.value = true
     try {
-      const response = await apiClient.get<ApiResponse<Product>>(`/products/${id}`)
+      const response = await api.get<ApiResponse<Product>>(`/products/${id}`)
       currentProduct.value = response.data.data
     } catch (e: any) {
       error.value = e.response?.data?.error || 'Product not found'
@@ -71,31 +70,30 @@ export const useProductsStore = defineStore('products', () => {
   }
 
   const getProductById = (id: string) => {
+    const productId = parseInt(id, 10)
     return (
-      products.value.find((product) => product.id === id) ||
-      featuredProducts.value.find((product) => product.id === id)
+      products.value.find((product) => product.id === productId) ||
+      featuredProducts.value.find((product) => product.id === productId)
     )
   }
 
-  // 计算属性
-  const totalProducts = computed(() => pagination.value.total)
-  const currentPage = computed(() => pagination.value.page)
-  const hasNextPage = computed(() => currentPage.value < pagination.value.totalPages)
-  const hasPrevPage = computed(() => currentPage.value > 1)
-
   return {
+    // State
     products,
     featuredProducts,
     currentProduct,
     loading,
     error,
     pagination,
+
+    // Getters
     totalProducts,
     currentPage,
     hasNextPage,
     hasPrevPage,
+
+    // Actions
     fetchProducts,
-    fetchFeaturedProducts,
     fetchProductById,
     getProductById,
   }
