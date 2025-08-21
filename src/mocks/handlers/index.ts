@@ -1,6 +1,14 @@
 import { http, HttpResponse } from 'msw'
 import { generateProduct, generateEraInfo, generateBooking } from '../data/generators'
-import type { ApiResponse, Product, EraInfo, Booking, CustomerInfo, BookingStatus } from '@/types'
+import type {
+  ApiResponse,
+  Product,
+  EraInfo,
+  Booking,
+  CustomerInfo,
+  BookingStatus,
+  Category,
+} from '@/types'
 
 // 生成模拟数据
 const products = Array.from({ length: 50 }, generateProduct)
@@ -8,6 +16,62 @@ const eraInfos = Array.from({ length: 3 }, generateEraInfo)
 const bookings = Array.from({ length: 20 }, generateBooking)
 
 export const handlers = [
+  // 添加分类接口
+  http.get('/api/categories', () => {
+    const response: ApiResponse<Category[]> = {
+      data: [
+        {
+          id: 1,
+          title: '唐制汉服',
+          productCount: 28,
+          filterKey: 'tang',
+          image: '',
+          description: '唐制汉服',
+        },
+        {
+          id: 2,
+          title: '宋制汉服',
+          productCount: 22,
+          filterKey: 'song',
+          image: '',
+          description: '宋制汉服',
+        },
+        {
+          id: 3,
+          title: '明制汉服',
+          productCount: 35,
+          filterKey: 'ming',
+          image: '',
+          description: '明制汉服',
+        },
+        {
+          id: 4,
+          title: '婚服系列',
+          productCount: 12,
+          filterKey: 'wedding',
+          image: '',
+          description: '婚服',
+        },
+        {
+          id: 5,
+          title: '汉服周边',
+          productCount: 15,
+          filterKey: 'accessories',
+          image: '',
+          description: '周边',
+        },
+        {
+          id: 6,
+          title: '文创产品',
+          productCount: 18,
+          filterKey: 'cultural',
+          image: '',
+          description: '文创产品',
+        },
+      ],
+    }
+    return HttpResponse.json(response)
+  }),
   // 获取产品列表
   http.get('/api/products', ({ request }) => {
     const url = new URL(request.url)
@@ -43,7 +107,7 @@ export const handlers = [
 
   // 获取单个产品
   http.get('/api/products/:id', ({ params }) => {
-    const product = products.find((p) => p.id === params.id)
+    const product = products.find((p) => p.id === Number(params.id))
 
     if (!product) {
       return HttpResponse.json({ error: 'Product not found' }, { status: 404 })

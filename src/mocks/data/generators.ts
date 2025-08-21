@@ -54,7 +54,7 @@ export const generateProduct = (): Product => {
   }
 
   const outfitTypes = ['齐胸襦裙', '直裾', '曲裾', '袄裙', '道袍', '比甲', '马面裙']
-
+  console.log('生成mock数据')
   return {
     id: faker.number.int(),
     title: `${faker.helpers.arrayElement(Object.values(eraNames))} · ${faker.helpers.arrayElement(outfitTypes)}`,
@@ -117,7 +117,6 @@ export const generateBooking = (): Booking => ({
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
     email: faker.internet.email(),
-    // 替换第116行及类似行：
     phone: faker.phone.number({ style: 'international' }),
     notes: faker.lorem.sentence(),
   },

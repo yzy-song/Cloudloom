@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-20 16:45:21
+ * @LastEditTime: 2025-08-21 12:47:58
  */
 import { fileURLToPath, URL } from 'node:url'
 import os from 'os'
@@ -10,9 +10,9 @@ import { resolve } from 'path'
 
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
+import AutoImport from 'unplugin-auto-import/vite'
 import { defineConfig } from 'vite'
 import vueDevTools from 'vite-plugin-vue-devtools'
-
 // 获取本地IP地址 - 使用os模块替代address模块
 const getLocalIp = () => {
   const interfaces = os.networkInterfaces()
@@ -33,7 +33,31 @@ export default defineConfig(({ mode }) => {
   const devPort = isProd ? '80' : 5173
 
   return {
-    plugins: [vue(), vueDevTools(), tailwindcss()],
+    plugins: [
+      vue(),
+      vueDevTools(),
+      tailwindcss(),
+      AutoImport({
+        // 配置需要自动导入的库
+        imports: [
+          'vue', // 自动导入 Vue 相关函数（ref, reactive, onMounted 等）
+          'vue-router', // 自动导入 vue-router 的 API（useRoute, useRouter）
+          'pinia', // 自动导入 Pinia 的 API（storeToRefs, defineStore）
+          {
+            // 第三方库的命名导入（如 lodash 的 debounce）
+            lodash: [
+              ['debounce', '_debounce'], // import { debounce as _debounce } from 'lodash'
+            ],
+          },
+        ],
+        // 生成自动导入的 TypeScript 声明文件（解决 ESLint/TS 报错）
+        dts: 'src/auto-imports.d.ts',
+        // 自定义解析器（可选，如需要支持 Nuxt 等）
+        resolvers: [
+          /* ... */
+        ],
+      }),
+    ],
     server: {
       host: '0.0.0.0', // 允许所有网络接口访问
       port: 5173, // 指定端口号（可选）
