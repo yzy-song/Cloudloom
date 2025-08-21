@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-20 15:36:39
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-20 16:02:44
+ * @LastEditTime: 2025-08-21 15:50:03
  */
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
@@ -22,12 +22,54 @@ export const useCategoriesStore = defineStore('categories', () => {
 
       // 模拟数据
       categories.value = [
-        { id: 1, name: '唐制汉服', description: '唐代风格汉服', productCount: 28, image: '' },
-        { id: 2, name: '宋制汉服', description: '宋代风格汉服', productCount: 22, image: '' },
-        { id: 3, name: '明制汉服', description: '明代风格汉服', productCount: 35, image: '' },
-        { id: 4, name: '婚服系列', description: '传统婚服', productCount: 12, image: '' },
-        { id: 5, name: '汉服周边', description: '配饰和周边', productCount: 15, image: '' },
-        { id: 6, name: '文创产品', description: '文化创意产品', productCount: 18, image: '' },
+        {
+          id: 1,
+          title: '唐制汉服',
+          description: '唐代风格汉服',
+          filterKey: 'tang',
+          productCount: 28,
+          image: '',
+        },
+        {
+          id: 2,
+          title: '宋制汉服',
+          description: '宋代风格汉服',
+          filterKey: 'song',
+          productCount: 22,
+          image: '',
+        },
+        {
+          id: 3,
+          title: '明制汉服',
+          description: '明代风格汉服',
+          filterKey: 'ming',
+          productCount: 35,
+          image: '',
+        },
+        {
+          id: 4,
+          title: '婚服系列',
+          description: '传统婚服',
+          filterKey: 'wedding',
+          productCount: 12,
+          image: '',
+        },
+        {
+          id: 5,
+          title: '汉服周边',
+          description: '配饰和周边',
+          filterKey: 'accessories',
+          productCount: 15,
+          image: '',
+        },
+        {
+          id: 6,
+          title: '文创产品',
+          description: '文化创意产品',
+          filterKey: 'cultural',
+          productCount: 18,
+          image: '',
+        },
       ]
     } catch (e) {
       error.value = 'Failed to fetch categories'

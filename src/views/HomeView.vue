@@ -115,8 +115,8 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <div
-            v-for="(category, index) in categories"
-            :key="index"
+            v-for="category in categories"
+            :key="category.id"
             class="group relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer"
             @click="navigateToGallery(category.filterKey)"
           >
@@ -124,17 +124,12 @@
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             <div class="absolute bottom-0 left-0 p-6 w-full">
               <h3 class="text-xl font-display font-bold text-white">{{ category.title }}</h3>
-              <p class="mt-1 text-white/90">{{ category.count }} 件汉服</p>
+              <p class="mt-1 text-white/90">{{ category.productCount }} 件汉服</p>
               <button
                 class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white border border-white px-4 py-2 rounded-full hover:bg-white/10"
               >
                 查看系列
               </button>
-            </div>
-            <div class="absolute top-4 right-4">
-              <div class="bg-hanfu-gold text-hanfu-blue rounded-full px-3 py-1 text-xs font-medium">
-                精选系列
-              </div>
             </div>
           </div>
         </div>
@@ -154,12 +149,19 @@
           </router-link>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- 加载状态 -->
+        <div v-if="loading" class="text-center py-12">加载中...</div>
+
+        <!-- 错误状态 -->
+        <div v-if="error" class="text-center py-12 text-red-500">{{ error }}</div>
+
+        <!-- 正常显示 -->
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <div
-            v-for="(product, index) in featuredProducts"
-            :key="index"
+            v-for="product in featuredProducts"
+            :key="product.id"
             class="hanfu-card cursor-pointer transform hover:-translate-y-1 transition-transform duration-300"
-            @click="navigateToProduct(index + 1)"
+            @click="navigateToProduct(product.id)"
           >
             <div class="bg-gray-200 border-2 border-dashed rounded-t-2xl aspect-[3/4] w-full"></div>
             <div class="p-5">
@@ -170,10 +172,7 @@
                 </span>
               </div>
               <p class="text-gray-600 mt-2 text-sm line-clamp-2">
-                {{
-                  product.description ||
-                  '灵感来自盛唐时期的女子服饰，采用真丝提花面料，裙头绣有传统缠枝纹样'
-                }}
+                {{ product.description }}
               </p>
               <div class="mt-4 flex justify-between items-center">
                 <span class="text-hanfu-red font-medium">€{{ product.price.toFixed(2) }}</span>
@@ -184,7 +183,6 @@
         </div>
       </div>
     </section>
-
     <!-- 合作邀请 -->
     <section class="py-16 bg-hanfu-green/10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -239,6 +237,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { CheckCircleIcon } from '@heroicons/vue/24/outline'
 import {
   Autoplay as SwiperAutoplay,
@@ -247,66 +246,15 @@ import {
 } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { useRouter } from 'vue-router'
-
-// 导入Swiper组件
-
-import 'swiper/css'
-import 'swiper/css/autoplay'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
+import type { Category, HeroSlide, Product } from '@/types'
 import DevAccessInfo from '@/components/DevAccessInfo.vue'
+import { useApi } from '@/composables/useApi'
 
 const router = useRouter()
+const { get, loading, error } = useApi()
 
-interface Category {
-  title: string
-  count: number
-  filterKey: string
-}
-
-interface Product {
-  title: string
-  category: string
-  dynasty: string
-  price: number
-  description?: string
-}
-
-interface HeroSlide {
-  title: string
-  description: string
-  buttonText?: string
-  action?: string
-}
-
-const categories: Category[] = [
-  { title: '唐制汉服', count: 28, filterKey: 'tang' },
-  { title: '宋制汉服', count: 22, filterKey: 'song' },
-  { title: '明制汉服', count: 35, filterKey: 'ming' },
-  { title: '婚服系列', count: 12, filterKey: 'wedding' },
-  { title: '汉服周边', count: 15, filterKey: 'accessories' },
-  { title: '文创产品', count: 18, filterKey: 'cultural' },
-]
-
-const featuredProducts: Product[] = [
-  { title: '唐风齐胸襦裙', category: '盛唐风华', dynasty: '唐', price: 89.99 },
-  { title: '宋制百迭裙', category: '雅致宋韵', dynasty: '宋', price: 79.99 },
-  { title: '明制马面裙', category: '端庄明风', dynasty: '明', price: 99.99 },
-  {
-    title: '汉服刺绣团扇',
-    category: '汉服配饰',
-    dynasty: '通用',
-    price: 24.99,
-    description: '手工刺绣真丝团扇，传统纹样设计，汉服搭配佳品',
-  },
-  {
-    title: '传统纹样笔记本',
-    category: '文创产品',
-    dynasty: '通用',
-    price: 12.99,
-    description: '中国传统纹样设计，优质纸张，文化传承与实用结合',
-  },
-]
+const categories = ref<Category[]>([])
+const featuredProducts = ref<Product[]>([])
 
 // 轮播图数据 - 包含汉服、周边和文创产品
 const heroSlides: HeroSlide[] = [
@@ -336,6 +284,34 @@ const heroSlides: HeroSlide[] = [
   },
 ]
 
+// 获取分类数据
+const fetchCategories = async () => {
+  try {
+    const data = await get<Category[]>('/categories')
+    if (data) {
+      categories.value = data
+    }
+  } catch (err) {
+    console.error('Failed to fetch categories:', err)
+  }
+}
+
+// 获取精选产品数据
+const fetchFeaturedProducts = async () => {
+  try {
+    const data = await get<Product[]>('/products?featured=true&limit=6')
+    if (data) {
+      featuredProducts.value = data
+    }
+  } catch (err) {
+    console.error('Failed to fetch featured products:', err)
+  }
+}
+
+onMounted(() => {
+  fetchCategories()
+  fetchFeaturedProducts()
+})
 // 导航方法
 function navigateToGallery(filter: string) {
   router.push({ path: '/gallery', query: { filter } })

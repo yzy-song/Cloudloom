@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 11:09:37
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-20 18:41:10
+ * @LastEditTime: 2025-08-21 15:16:57
  */
 // 产品类型
 export interface Product {
@@ -30,10 +30,18 @@ export interface Product {
 // 分类类型
 export interface Category {
   id: number
-  name: string
   description: string
   productCount: number
   image: string
+  title: string
+  filterKey: string
+}
+
+export interface HeroSlide {
+  title: string
+  description: string
+  buttonText?: string
+  action?: string
 }
 
 // 合作类型

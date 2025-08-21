@@ -1,9 +1,19 @@
+/*
+ * @Author: yzy
+ * @Date: 2025-08-20 15:42:00
+ * @LastEditors: yzy
+ * @LastEditTime: 2025-08-21 16:30:00
+ */
 import axios from 'axios'
-import type { ApiResponse } from '@/types'
+
+// 根据环境变量动态设置 baseURL
+// 如果启用 Mock，则使用相对路径，确保 MSW 能拦截请求
+const isMockEnabled = import.meta.env.VITE_ENABLE_MOCK === 'true'
+const baseURL = isMockEnabled ? '/api' : import.meta.env.VITE_API_BASE_URL
 
 // 创建axios实例
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: baseURL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -25,7 +35,7 @@ apiClient.interceptors.request.use(
 // 响应拦截器
 apiClient.interceptors.response.use(
   (response) => {
-    // 处理ApiResponse格式
+    // 处理response格式
     if (response.data && typeof response.data === 'object' && 'data' in response.data) {
       return response.data
     }
@@ -44,21 +54,15 @@ apiClient.interceptors.response.use(
   },
 )
 
-// 类型化的API调用方法
+// 类型化的API调用方法 - 更新返回类型
 export const api = {
-  get: <T>(url: string, params?: any) =>
-    apiClient.get<ApiResponse<T>>(url, { params }).then((res) => res.data),
+  get: <T>(url: string, params?: any) => apiClient.get<T>(url, { params }), // 直接返回 T，不是 ApiResponse<T>
 
-  post: <T>(url: string, data?: any) =>
-    apiClient.post<ApiResponse<T>>(url, data).then((res) => res.data),
+  post: <T>(url: string, data?: any) => apiClient.post<T>(url, data),
 
-  put: <T>(url: string, data?: any) =>
-    apiClient.put<ApiResponse<T>>(url, data).then((res) => res.data),
+  put: <T>(url: string, data?: any) => apiClient.put<T>(url, data),
 
-  delete: <T>(url: string) => apiClient.delete<ApiResponse<T>>(url).then((res) => res.data),
+  delete: <T>(url: string) => apiClient.delete<T>(url),
 
-  patch: <T>(
-    url: string,
-    data?: any, // 添加 patch 方法
-  ) => apiClient.patch<T>(url, data).then((res) => res.data),
+  patch: <T>(url: string, data?: any) => apiClient.patch<T>(url, data),
 }

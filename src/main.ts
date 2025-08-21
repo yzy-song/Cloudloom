@@ -1,41 +1,43 @@
 /*
  * @Author: yzy
- * @Date: 2025-08-16 10:23:53
+ * @Date: 2025-08-20 16:35:27
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-20 16:20:53
+ * @LastEditTime: 2025-08-21 16:19:26
  */
+// src/main.ts
+
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
 import './assets/styles/main.css'
+
 const app = createApp(App)
+const pinia = createPinia()
 
-app.use(createPinia())
-app.use(router)
-
-// 启动MSW
-const startMockService = async () => {
+// 异步启动 MSW
+async function startApp() {
   if (import.meta.env.VITE_ENABLE_MOCK === 'true') {
-    if (typeof window !== 'undefined') {
-      // 浏览器环境
-      const { startMockServiceWorker } = await import('./mocks/browser')
-      await startMockServiceWorker()
-    } else {
-      // Node环境 (测试时使用)
-      const { startMockServer } = await import('./mocks/server')
-      startMockServer()
+    console.log('Starting MSW...')
+    try {
+      // 检查是否是浏览器环境
+      if (typeof window !== 'undefined') {
+        const { startMockServiceWorker } = await import('./mocks/browser')
+        await startMockServiceWorker()
+        console.log('MSW successfully started.')
+      }
+    } catch (error) {
+      console.error('Failed to start MSW:', error)
+      // 即使 MSW 失败，也让应用继续运行
     }
   }
+
+  // 挂载应用
+  app.use(pinia)
+  app.use(router)
+  app.mount('#app')
 }
 
 // 启动应用
-startMockService()
-  .then(() => {
-    app.mount('#app')
-  })
-  .catch((error) => {
-    console.error('Failed to start mock service:', error)
-    app.mount('#app') // 即使mock失败也继续启动应用
-  })
+startApp()
