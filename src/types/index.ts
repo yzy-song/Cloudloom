@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 11:09:37
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-21 15:16:57
+ * @LastEditTime: 2025-08-22 15:34:25
  */
 // 产品类型
 export interface Product {
@@ -42,6 +42,7 @@ export interface HeroSlide {
   description: string
   buttonText?: string
   action?: string
+  image: string
 }
 
 // 合作类型
