@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-22 11:18:38
+ * @LastEditTime: 2025-08-22 17:20:45
  */
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -16,7 +16,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'Home',
     component: HomeView,
-    meta: { title: '云锦轩 - 爱尔兰汉服体验馆' },
+    meta: { title: '云锦轩 - 汉服体验馆' },
   },
   {
     path: '/gallery',
@@ -126,7 +126,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   // 设置页面标题
-  document.title = (to.meta.title as string) || '云锦轩 - 爱尔兰汉服体验馆'
+  document.title = (to.meta.title as string) || '云锦轩 - 汉服体验馆'
   // 检查是否禁用认证检查
   const disableAuth = import.meta.env.VITE_DISABLE_AUTH === 'true'
   if (disableAuth) {
