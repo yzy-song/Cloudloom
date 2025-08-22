@@ -67,8 +67,14 @@
             class="overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl cursor-pointer"
             @click="$router.push(`/product/${product.id}`)"
           >
-            <div class="bg-gray-200 border-2 border-dashed aspect-[3/4] w-full" />
-            <div class="p-4 bg-white">
+            <img
+              v-if="product.images && product.images.length > 0"
+              :src="product.images[0]"
+              :alt="product.title"
+              class="w-full aspect-[3/4] object-cover transform group-hover:scale-105 transition-transform duration-300"
+            />
+            <div v-else class="bg-gray-200 border-2 border-dashed aspect-[3/4] w-full" />
+            <div class="p-4 bg-red">
               <div class="flex justify-between">
                 <h3 class="font-display text-lg font-medium">{{ product.title }}</h3>
                 <span class="text-hanfu-red font-medium">{{ product.dynastyLabel }}</span>
