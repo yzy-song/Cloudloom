@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-21 12:47:58
+ * @LastEditTime: 2025-08-22 11:33:23
  */
 import { fileURLToPath, URL } from 'node:url'
 import os from 'os'
@@ -48,6 +48,9 @@ export default defineConfig(({ mode }) => {
             lodash: [
               ['debounce', '_debounce'], // import { debounce as _debounce } from 'lodash'
             ],
+          },
+          {
+            '@/utils/logger': ['logger'], // 自动解析为 inject('logger')
           },
         ],
         // 生成自动导入的 TypeScript 声明文件（解决 ESLint/TS 报错）

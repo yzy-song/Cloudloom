@@ -137,8 +137,9 @@ import { ref, computed, onMounted, watch } from 'vue'
 
 import { useRoute } from 'vue-router'
 
+import { useApi } from '@/composables/useApi'
 import { type Product } from '@/types'
-
+const { get } = useApi()
 const route = useRoute()
 
 // 筛选条件
@@ -216,6 +217,26 @@ const loading = ref(true)
 const visibleCount = ref(12)
 const hasMore = computed(() => visibleCount.value < products.value.length)
 
+// 获取产品数据
+const fetchProducts = async () => {
+  loading.value = true
+  try {
+    const response = await get<Product[]>('/products', {
+      params: {
+        limit: 100, // 获取足够多的产品用于分页
+        page: 1,
+      },
+    })
+    if (response) {
+      products.value = response
+    }
+  } catch (error) {
+    console.error('Failed to fetch products:', error)
+    // 可以添加错误处理，比如显示错误信息
+  } finally {
+    loading.value = false
+  }
+}
 // 朝代标签映射
 const dynastyLabels = {
   tang: '唐',
@@ -231,65 +252,7 @@ const dynastyLabels = {
 
 // 初始化产品数据
 onMounted(() => {
-  // 模拟API请求
-  setTimeout(() => {
-    // 确保我们有足够的类别来随机生成
-    type DynastyKey = keyof typeof dynastyLabels
-
-    // 修改 categories 的定义
-    const categories = Object.keys(dynastyLabels) as DynastyKey[]
-
-    // 修改 dynasty 的类型
-    // const dynasty = categories[i % categories.length] as DynastyKey
-
-    products.value = Array.from({ length: 36 }, (_, i) => {
-      const dynasty = categories[i % categories.length]
-      return {
-        id: i + 1,
-        title: `汉服系列 #${i + 1}`,
-        description: `这是一件精美的汉服，采用传统工艺制作，具有浓郁的中国风。灵感来自${dynastyLabels[dynasty]}代服饰特点。`,
-        price: 50 + Math.floor(Math.random() * 100),
-        category: '汉服',
-        dynasty: dynasty,
-        dynastyLabel: dynastyLabels[dynasty],
-        tags: ['热门', '新品'],
-        images: [],
-        material: '丝绸',
-        sizeOptions: ['S', 'M', 'L'],
-        careInstructions: '手洗',
-        createdAt: new Date(
-          Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000,
-        ).toISOString(),
-        updatedAt: new Date().toISOString(),
-        rentalPrice: Math.floor(Math.random() * 100) + 50,
-        rentalPeriods: [
-          {
-            id: '1',
-            name: '1 小时',
-            duration: 1,
-            unit: 'hour',
-            price: Math.floor(Math.random() * 10) + 5,
-          },
-          {
-            id: '2',
-            name: '1 天',
-            duration: 1,
-            unit: 'day',
-            price: Math.floor(Math.random() * 50) + 20,
-          },
-        ],
-        details: [
-          '100% 天然桑蚕丝面料',
-          '手工刺绣装饰纹样',
-          '可拆卸披帛设计',
-          '渐变染色工艺',
-          '传统缠枝莲纹样',
-        ],
-        reviews: Math.floor(Math.random() * 5),
-      }
-    })
-    loading.value = false
-  }, 1200)
+  fetchProducts()
 })
 
 // 过滤和排序后的产品

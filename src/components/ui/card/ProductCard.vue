@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 11:15:06
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-20 19:38:50
+ * @LastEditTime: 2025-08-22 11:04:16
 -->
 <template>
   <div
@@ -19,7 +19,7 @@
             <h3
               class="font-display text-lg font-medium text-gray-900 group-hover:text-hanfu-red transition-colors"
             >
-              {{ product }}
+              {{ product.title }}
             </h3>
             <p class="text-sm text-gray-500 mt-1">{{ product.category }}</p>
           </div>
@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, withDefaults } from 'vue'
+import { defineProps } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Product } from '@/types'
 const router = useRouter()
@@ -58,7 +58,6 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
 function navigateToDetail() {
   router.push({ name: 'ProductDetail', params: { id: props.product.id } })
 }

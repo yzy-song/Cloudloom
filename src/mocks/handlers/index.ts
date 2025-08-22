@@ -117,6 +117,24 @@ export const handlers = [
     return HttpResponse.json(response)
   }),
 
+  // 获取相关产品
+  http.get('/api/products/:id/related', ({ params }) => {
+    const productId = parseInt(params.id as string)
+    const currentProduct = products.find((p) => p.id === productId)
+
+    if (!currentProduct) {
+      return HttpResponse.json([], { status: 404 })
+    }
+
+    // 基于相同朝代和分类推荐
+    const relatedProducts = products
+      .filter((p) => p.id !== productId)
+      .filter((p) => p.dynasty === currentProduct.dynasty || p.category === currentProduct.category)
+      .slice(0, 4)
+
+    return HttpResponse.json(relatedProducts)
+  }),
+
   // 获取朝代信息
   http.get('/api/eras', () => {
     const response: ApiResponse<EraInfo[]> = { data: eraInfos }
