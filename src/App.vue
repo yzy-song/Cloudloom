@@ -22,10 +22,10 @@
 </template>
 
 <script setup lang="ts">
-import Navbar from '@/components/layout/Navbar.vue'
-import Footer from '@/components/layout/Footer.vue'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import Footer from '@/components/layout/Footer.vue'
+import Navbar from '@/components/layout/Navbar.vue'
 
 const route = useRoute()
 const isLoading = ref(false)

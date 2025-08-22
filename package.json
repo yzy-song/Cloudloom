@@ -10,7 +10,7 @@
     "dev": "vite",
     "build": "run-s type-check lint build-only",
     "type-check": "vue-tsc --build",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "lint": "eslint . --fix",
     "format": "prettier --write src/",
     "test:unit": "vitest",
     "test:e2e": "cypress run",

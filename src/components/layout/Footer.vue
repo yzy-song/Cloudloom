@@ -155,7 +155,7 @@
 
       <!-- 版权信息 -->
       <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
-        <p>&copy; 2023 云锦轩爱尔兰汉服体验馆. 保留所有权利.</p>
+        <p>&copy; 2023 云锦轩汉服体验馆. 保留所有权利.</p>
         <div class="mt-2 flex justify-center space-x-4">
           <router-link to="/privacy" class="hover:text-gray-300 transition">隐私政策</router-link>
           <router-link to="/terms" class="hover:text-gray-300 transition">服务条款</router-link>
