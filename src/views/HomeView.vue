@@ -1,3 +1,9 @@
+<!--
+ * @Author: yzy
+ * @Date: 2025-08-18 12:36:27
+ * @LastEditors: yzy
+ * @LastEditTime: 2025-08-22 15:03:39
+-->
 <template>
   <div class="overflow-hidden relative">
     <!-- 英雄区域 -->
