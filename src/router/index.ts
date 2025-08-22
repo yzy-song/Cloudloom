@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-22 17:20:45
+ * @LastEditTime: 2025-08-22 17:47:09
  */
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -127,9 +127,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   // 设置页面标题
   document.title = (to.meta.title as string) || '云锦轩 - 汉服体验馆'
-  // 检查是否禁用认证检查
-  const disableAuth = import.meta.env.VITE_DISABLE_AUTH === 'true'
-  if (disableAuth) {
+  // 检查是否启用认证检查,如果为true，那么有一些页面需要登录后才可访问
+  const enableAuth = import.meta.env.VITE_ENABLE_AUTH === 'true'
+  if (!enableAuth) {
     next()
     return
   }
