@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "npx run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
@@ -17,7 +17,8 @@
     "test:unit": "vitest",
     "test:e2e": "cypress run",
     "test": "npm run test:unit && npm run test:e2e",
-    "prepare": "husky install",
+    "prepare": "npx husky install",
+  
     "mock:dev": "VITE_ENABLE_MOCK=true vite",
     "mock:build": "VITE_ENABLE_MOCK=true vite build"
   },

@@ -174,10 +174,10 @@ export const useAuthStore = defineStore('auth', () => {
 
     try {
       const response = await api.patch<{ user: User }>('/auth/profile', profileData)
-      user.value = response.user
+      user.value = response.data.user
 
       // 更新本地存储
-      localStorage.setItem('hanfu_user', JSON.stringify(response.user))
+      localStorage.setItem('hanfu_user', JSON.stringify(response.data.user))
 
       return { success: true }
     } catch (e: any) {

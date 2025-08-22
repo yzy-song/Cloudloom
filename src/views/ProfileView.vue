@@ -10,14 +10,14 @@
             <div class="flex flex-col items-center">
               <img
                 :src="
-                  userStore.user?.avatar ||
+                  authStore.user?.avatar ||
                   'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
                 "
                 alt="用户头像"
                 class="h-32 w-32 rounded-full object-cover"
               />
-              <h2 class="mt-4 text-xl font-display">{{ userStore.user?.name }}</h2>
-              <p class="text-gray-600">{{ userStore.user?.email }}</p>
+              <h2 class="mt-4 text-xl font-display">{{ authStore.user?.name }}</h2>
+              <p class="text-gray-600">{{ authStore.user?.email }}</p>
             </div>
           </div>
 
@@ -63,10 +63,10 @@
 
               <button
                 type="submit"
-                :disabled="userStore.loading"
+                :disabled="authStore.loading"
                 class="btn-primary w-full py-4 mt-6 hover:scale-[1.02] transition-transform disabled:opacity-50"
               >
-                {{ userStore.loading ? '保存中...' : '保存更改' }}
+                {{ authStore.loading ? '保存中...' : '保存更改' }}
               </button>
             </form>
           </div>
@@ -78,19 +78,19 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { useUserStore } from '@/stores/user.store'
+import { useAuthStore } from '@/stores/auth.store'
 
-const userStore = useUserStore()
+const authStore = useAuthStore()
 
 const profileData = reactive({
-  name: userStore.user?.name || '',
-  email: userStore.user?.email || '',
-  phone: userStore.user?.phone || '',
+  name: authStore.user?.name || '',
+  email: authStore.user?.email || '',
+  phone: authStore.user?.phone || '',
 })
 
 // 更新个人资料
 const updateProfile = async () => {
-  const result = await userStore.updateProfile(profileData)
+  const result = await authStore.updateProfile(profileData)
   if (result.success) {
     // 可以添加成功提示
     console.log('资料更新成功')
@@ -102,10 +102,10 @@ const updateProfile = async () => {
 
 // 初始化表单数据
 onMounted(() => {
-  if (userStore.user) {
-    profileData.name = userStore.user.name
-    profileData.email = userStore.user.email
-    profileData.phone = userStore.user.phone || ''
+  if (authStore.user) {
+    profileData.name = authStore.user.name
+    profileData.email = authStore.user.email
+    profileData.phone = authStore.user.phone || ''
   }
 })
 </script>
