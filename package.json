@@ -8,19 +8,21 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "npx run-p type-check \"build-only {@}\" --",
-    "preview": "vite preview",
-    "build-only": "vite build",
+    "build": "run-s type-check lint build-only",
     "type-check": "vue-tsc --build",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
     "test:unit": "vitest",
     "test:e2e": "cypress run",
-    "test": "npm run test:unit && npm run test:e2e",
     "prepare": "npx husky install",
-  
     "mock:dev": "VITE_ENABLE_MOCK=true vite",
-    "mock:build": "VITE_ENABLE_MOCK=true vite build"
+    "mock:build": "VITE_ENABLE_MOCK=true vite build",
+    "build:prod": "vite build",
+    "build:test": "vite build --mode test",
+    "preview": "vite preview",
+    "build-only": "vite build",
+    "test": "vitest",
+    "pre-commit": "lint-staged"
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
