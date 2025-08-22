@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-18 12:36:27
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-22 15:03:39
+ * @LastEditTime: 2025-08-22 17:04:31
 -->
 <template>
   <div class="overflow-hidden relative">
@@ -47,7 +47,7 @@
             <!-- Swiper轮播图 -->
             <div class="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-2xl">
               <Swiper
-                :modules="[SwiperAutoplay, SwiperNavigation, SwiperPagination]"
+                :modules="[Autoplay, Navigation, Pagination]"
                 :slides-per-view="1"
                 :loop="true"
                 :autoplay="{
@@ -67,8 +67,17 @@
               >
                 <SwiperSlide v-for="(slide, index) in heroSlides" :key="index">
                   <div class="relative w-full h-full">
+                    <img
+                      v-if="slide.image && slide.image != ''"
+                      :src="slide.image"
+                      :alt="slide.title"
+                      class="w-full aspect-[3/4] object-cover rounded-2xl"
+                    />
                     <!-- 占位图片 -->
-                    <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-full" />
+                    <div
+                      v-else
+                      class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-full"
+                    />
 
                     <!-- 轮播内容 -->
                     <div class="absolute inset-0 flex items-center justify-center p-6">
@@ -88,18 +97,16 @@
                     </div>
                   </div>
                 </SwiperSlide>
+
+                <!-- 分页器导航器 -->
+                <div class="swiper-pagination !bottom-4 !left-1/2 !-translate-x-1/2"></div>
+                <div
+                  class="swiper-button-prev !left-2 !text-white !bg-black/30 !w-10 !h-10 !rounded-full after:!text-sm hover:!bg-black/50 transition"
+                ></div>
+                <div
+                  class="swiper-button-next !right-2 !text-white !bg-black/30 !w-10 !h-10 !rounded-full after:!text-sm hover:!bg-black/50 transition"
+                ></div>
               </Swiper>
-
-              <!-- 自定义分页器 -->
-              <div class="swiper-pagination !bottom-4 !left-1/2 !-translate-x-1/2"></div>
-
-              <!-- 自定义导航按钮 -->
-              <div
-                class="swiper-button-prev !left-2 !text-white !bg-black/30 !w-10 !h-10 !rounded-full after:!text-sm hover:!bg-black/50 transition"
-              ></div>
-              <div
-                class="swiper-button-next !right-2 !text-white !bg-black/30 !w-10 !h-10 !rounded-full after:!text-sm hover:!bg-black/50 transition"
-              ></div>
             </div>
 
             <!-- 装饰性标签 -->
@@ -245,12 +252,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { CheckCircleIcon } from '@heroicons/vue/24/outline'
-import {
-  Autoplay as SwiperAutoplay,
-  Navigation as SwiperNavigation,
-  Pagination as SwiperPagination,
-} from 'swiper/modules'
+// import {
+//   Autoplay as SwiperAutoplay,
+//   Navigation as SwiperNavigation,
+//   Pagination as SwiperPagination,
+// } from 'swiper/modules'
+import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/vue'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/autoplay'
+
 import { useRouter } from 'vue-router'
 import type { Category, HeroSlide, Product } from '@/types'
 import DevAccessInfo from '@/components/DevAccessInfo.vue'
@@ -263,32 +276,36 @@ const categories = ref<Category[]>([])
 const featuredProducts = ref<Product[]>([])
 
 // 轮播图数据 - 包含汉服、周边和文创产品
-const heroSlides: HeroSlide[] = [
+const heroSlides = ref<HeroSlide[]>([
   {
     title: '盛唐风华系列',
     description: '体验大唐盛世服饰，感受千年文化魅力',
     buttonText: '查看详情',
     action: '/gallery?filter=tang',
+    image: '/images/hero/hanfu1.png',
   },
   {
     title: '汉服配饰精选',
     description: '团扇、发簪、荷包等传统配饰',
     buttonText: '探索周边',
     action: '/gallery?filter=accessories',
+    image: '/images/hero/hanfu2.png',
   },
   {
     title: '文创产品上新',
     description: '传统纹样设计的日常用品与艺术品',
     buttonText: '浏览文创',
     action: '/gallery?filter=cultural',
+    image: '/images/hero/hanfu3.png',
   },
   {
     title: '儿童汉服特惠',
     description: '专为儿童设计的传统服饰，传承从小开始',
     buttonText: '查看系列',
     action: '/gallery?filter=kids',
+    image: '/images/hero/hanfu4.png',
   },
-]
+])
 
 // 获取分类数据
 const fetchCategories = async () => {
