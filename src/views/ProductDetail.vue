@@ -5,10 +5,69 @@
         <!-- 图片展示 -->
         <div>
           <!-- 主图 -->
-          <div class="bg-gray-200 border-2 border-dashed rounded-2xl aspect-[3/4] w-full" />
+          <div
+            class="relative overflow-hidden rounded-2xl aspect-[3/4]"
+            @touchstart="handleTouchStart"
+            @touchmove="handleTouchMove"
+            @touchend="handleTouchEnd"
+          >
+            <img
+              v-if="product?.images && product.images.length > 0"
+              :src="product.images[activeImage]"
+              :alt="product.title"
+              class="w-full aspect-[3/4] object-cover rounded-2xl"
+            />
+            <div
+              v-else
+              class="bg-gray-200 border-2 border-dashed rounded-2xl aspect-[3/4] w-full"
+            />
 
+            <!-- 导航箭头 -->
+            <button
+              v-if="product?.images && product.images.length > 1"
+              @click="prevImage"
+              class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+            <button
+              v-if="product?.images && product.images.length > 1"
+              @click="nextImage"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
           <!-- 缩略图 -->
-          <div class="mt-6 grid grid-cols-4 gap-4">
+          <div
+            v-if="product?.images && product.images.length > 1"
+            class="mt-6 grid grid-cols-4 gap-4"
+          >
+            <img
+              v-for="(image, index) in product.images"
+              :key="index"
+              :src="image"
+              :alt="`${product.title} - 图片 ${index + 1}`"
+              class="w-full aspect-square object-cover rounded-xl cursor-pointer hover:opacity-80 transition-opacity"
+              :class="{ 'ring-2 ring-hanfu-red': activeImage === index }"
+              @click="activeImage = index"
+            />
+          </div>
+          <div v-else class="mt-6 grid grid-cols-4 gap-4">
             <div
               v-for="n in 4"
               :key="n"
@@ -18,7 +77,6 @@
             />
           </div>
         </div>
-
         <!-- 产品信息 -->
         <div>
           <div class="sticky top-24">
@@ -170,12 +228,55 @@ watch(
     }
   },
 )
+
+const touchStartX = ref(0)
+const touchEndX = ref(0)
+
+const handleTouchStart = (e: TouchEvent) => {
+  touchStartX.value = e.touches[0].clientX
+}
+
+const handleTouchMove = (e: TouchEvent) => {
+  touchEndX.value = e.touches[0].clientX
+}
+
+const handleTouchEnd = () => {
+  if (!touchStartX.value || !touchEndX.value) return
+
+  const diff = touchStartX.value - touchEndX.value
+  const minSwipeDistance = 50 // 最小滑动距离
+
+  if (Math.abs(diff) > minSwipeDistance) {
+    if (diff > 0) {
+      nextImage() // 向左滑动，下一张
+    } else {
+      prevImage() // 向右滑动，上一张
+    }
+  }
+
+  // 重置触摸数据
+  touchStartX.value = 0
+  touchEndX.value = 0
+}
+
+const nextImage = () => {
+  if (product.value?.images) {
+    activeImage.value = (activeImage.value + 1) % product.value.images.length
+  }
+}
+
+const prevImage = () => {
+  if (product.value?.images) {
+    activeImage.value =
+      (activeImage.value - 1 + product.value.images.length) % product.value.images.length
+  }
+}
 // 获取产品详情
 const fetchProduct = async () => {
   const data = await get<Product>(`/products/${props.id}`)
   if (data) {
     product.value = data
-    logger.info('Fetched product:', data)
+    logger.log('Fetched product:', data)
   }
 }
 // 获取相关产品
