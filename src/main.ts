@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-20 16:35:27
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-21 16:19:26
+ * @LastEditTime: 2025-08-22 11:35:20
  */
 // src/main.ts
 
@@ -11,6 +11,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
+import { installLogger } from '@/utils/logger'
 import './assets/styles/main.css'
 
 const app = createApp(App)
@@ -32,6 +33,8 @@ async function startApp() {
       // 即使 MSW 失败，也让应用继续运行
     }
   }
+
+  installLogger(app, { persistErrors: true })
 
   // 挂载应用
   app.use(pinia)

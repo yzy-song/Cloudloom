@@ -24,28 +24,31 @@
           <div class="sticky top-24">
             <div>
               <span
+                v-if="product"
                 class="inline-block px-3 py-1 bg-hanfu-blue/10 text-hanfu-blue rounded-full text-sm"
               >
                 {{ product.dynasty }}代汉服
               </span>
               <h1 class="mt-4 text-3xl md:text-4xl font-display text-gray-900">
-                {{ product.title }}
+                {{ product?.title }}
               </h1>
 
               <div class="mt-6 flex items-center">
                 <div class="flex text-yellow-400">
                   <StarIcon v-for="i in 5" :key="i" class="h-5 w-5 fill-current" />
                 </div>
-                <span class="ml-2 text-gray-600">({{ product.reviews }} 条评价)</span>
+                <span class="ml-2 text-gray-600">({{ product?.reviews }} 条评价)</span>
               </div>
 
-              <p class="mt-6 text-xl text-hanfu-red font-medium">€{{ product.price.toFixed(2) }}</p>
+              <p class="mt-6 text-xl text-hanfu-red font-medium">
+                €{{ product?.price.toFixed(2) }}
+              </p>
 
               <div class="mt-8 space-y-6">
                 <div>
                   <h3 class="text-lg font-medium text-gray-900">产品描述</h3>
                   <p class="mt-2 text-gray-600">
-                    {{ product.description }}
+                    {{ product?.description }}
                   </p>
                 </div>
 
@@ -53,7 +56,7 @@
                   <h3 class="text-lg font-medium text-gray-900">工艺细节</h3>
                   <ul class="mt-2 text-gray-600 space-y-2">
                     <li
-                      v-for="(detail, index) in product.details"
+                      v-for="(detail, index) in product?.details"
                       :key="index"
                       class="flex items-start"
                     >
@@ -67,7 +70,7 @@
                   <h3 class="text-lg font-medium text-gray-900">尺寸选择</h3>
                   <div class="mt-3 flex flex-wrap gap-3">
                     <button
-                      v-for="size in product.sizeOptions"
+                      v-for="size in product?.sizeOptions"
                       :key="size"
                       :class="[
                         'w-14 h-14 rounded-full flex items-center justify-center border-2 transition',
@@ -107,24 +110,15 @@
         </div>
       </div>
 
-      <!-- 相关产品 -->
       <section class="mt-24">
         <h2 class="text-2xl font-display text-gray-900 mb-8">相关推荐</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div
-            v-for="(related, index) in relatedProducts"
-            :key="index"
-            class="cursor-pointer"
+          <ProductCard
+            v-for="related in relatedProducts"
+            :key="related.id"
+            :product="related"
             @click="navigateToProduct(related.id)"
-          >
-            <ProductCard
-              :title="related.title"
-              :category="related.category"
-              :dynasty="related.dynasty"
-              :price="related.price"
-              :id="related.id"
-            />
-          </div>
+          />
         </div>
       </section>
     </div>
@@ -132,16 +126,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 import { StarIcon, HeartIcon, CheckCircleIcon } from '@heroicons/vue/24/outline'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 import ProductCard from '@/components/ui/card/ProductCard.vue'
+import { useApi } from '@/composables/useApi'
 import { useFavoriteStore } from '@/stores/favorite.store'
 import { type Product } from '@/types'
 
-const route = useRoute()
+const { get } = useApi()
+const product = ref<Product | null>(null)
+const relatedProducts = ref<Product[]>([])
+const loading = ref(true)
 const router = useRouter()
 const favoritesStore = useFavoriteStore()
 
@@ -149,60 +147,44 @@ const props = defineProps<{
   id: string
 }>()
 
+const currentId = ref(props.id)
+
 const selectedSize = ref('M')
 const activeImage = ref(0)
 const isFavorite = computed(() => favoritesStore.isFavorite(props.id))
 
-// 产品数据
-const product = computed<Product>(() => ({
-  id: parseInt(props.id),
-  title: '唐风齐胸襦裙 · 霓裳羽衣',
-  description:
-    '此款齐胸襦裙灵感来自盛唐时期的女子服饰，采用高级真丝提花面料制成，裙头绣有传统缠枝纹样，衣身采用渐变染色工艺。广袖设计飘逸灵动，重现"风吹仙袂飘飘举"的唐诗意境。',
-  price: 89.99,
-  rentalPrice: 50,
-  rentalPeriods: [
-    {
-      id: '1',
-      name: '1天',
-      duration: 1,
-      unit: 'day',
-      price: 50,
-    },
-    {
-      id: '2',
-      name: '3天',
-      duration: 3,
-      unit: 'day',
-      price: 80,
-    },
-  ],
-  category: '齐胸襦裙',
-  dynasty: '唐',
-  dynastyLabel: '唐',
-  tags: ['热门', '新品', '真丝'],
-  images: [],
-  material: '100%桑蚕丝',
-  sizeOptions: ['S', 'M', 'L', 'XL'],
-  careInstructions: '手洗，不可漂白，低温熨烫',
-  createdAt: '2023-05-10',
-  updatedAt: '2023-05-10',
-  details: [
-    '100% 天然桑蚕丝面料',
-    '手工刺绣装饰纹样',
-    '可拆卸披帛设计',
-    '渐变染色工艺',
-    '传统缠枝莲纹样',
-  ],
-  reviews: 28,
-}))
-
-const relatedProducts = computed(() => [
-  { id: 101, title: '宋制褙子套装', category: '宋代汉服', dynasty: '宋', price: 79.99 },
-  { id: 102, title: '明制立领斜襟长袄', category: '明代汉服', dynasty: '明', price: 92.99 },
-  { id: 103, title: '唐风圆领袍', category: '唐代男装', dynasty: '唐', price: 89.99 },
-  { id: 104, title: '汉元素改良连衣裙', category: '现代汉服', dynasty: '现代', price: 69.99 },
-])
+const route = useRoute()
+// 监听路由参数变化
+watch(
+  () => route.params.id,
+  async (newId) => {
+    if (newId && newId !== currentId.value) {
+      loading.value = true
+      try {
+        await Promise.all([fetchProduct(), fetchRelatedProducts()])
+      } catch (error) {
+        console.error('Failed to fetch product data:', error)
+      } finally {
+        loading.value = false
+      }
+    }
+  },
+)
+// 获取产品详情
+const fetchProduct = async () => {
+  const data = await get<Product>(`/products/${props.id}`)
+  if (data) {
+    product.value = data
+    logger.info('Fetched product:', data)
+  }
+}
+// 获取相关产品
+const fetchRelatedProducts = async () => {
+  const data = await get<Product[]>(`/products/${props.id}/related`)
+  if (data) {
+    relatedProducts.value = data
+  }
+}
 
 // 添加到收藏
 function toggleFavorite() {
@@ -224,4 +206,15 @@ function bookExperience() {
 function navigateToProduct(id: number) {
   router.push(`/product/${id}`)
 }
+
+// 初始化数据
+onMounted(async () => {
+  try {
+    await Promise.all([fetchProduct(), fetchRelatedProducts()])
+  } catch (error) {
+    console.error('Failed to fetch product data:', error)
+  } finally {
+    loading.value = false
+  }
+})
 </script>

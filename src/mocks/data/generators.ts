@@ -29,6 +29,7 @@ export const rentalPeriods: RentalPeriod[] = [
   { id: '5', name: '3天', duration: 3, unit: 'day', price: 210 },
 ]
 
+let productIdCounter = 1000
 export const generateProduct = (): Product => {
   const categories: ProductCategory[] = [
     'tang',
@@ -54,9 +55,10 @@ export const generateProduct = (): Product => {
   }
 
   const outfitTypes = ['齐胸襦裙', '直裾', '曲裾', '袄裙', '道袍', '比甲', '马面裙']
-  console.log('生成mock数据')
+
+  productIdCounter++
   return {
-    id: faker.number.int(),
+    id: productIdCounter, // 使用自增ID
     title: `${faker.helpers.arrayElement(Object.values(eraNames))} · ${faker.helpers.arrayElement(outfitTypes)}`,
     description: faker.lorem.paragraphs(2),
     price: parseFloat(faker.number.int({ min: 50, max: 300 }).toString()),

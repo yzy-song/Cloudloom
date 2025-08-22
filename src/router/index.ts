@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-20 18:54:40
+ * @LastEditTime: 2025-08-22 11:18:38
  */
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -127,6 +127,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   // 设置页面标题
   document.title = (to.meta.title as string) || '云锦轩 - 爱尔兰汉服体验馆'
+  // 检查是否禁用认证检查
+  const disableAuth = import.meta.env.VITE_DISABLE_AUTH === 'true'
+  if (disableAuth) {
+    next()
+    return
+  }
 
   const authStore = useAuthStore()
 

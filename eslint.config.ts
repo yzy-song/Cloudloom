@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-20 16:33:52
+ * @LastEditTime: 2025-08-22 11:24:17
  */
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
@@ -55,7 +55,7 @@ export default defineConfigWithVueTs(
       ],
 
       // console.log 警告（但允许 warn 和 error）
-      'no-console': ['warn', { allow: ['warn', 'error', 'log', 'info'] }],
+      'no-console': ['warn', { allow: ['warn', 'error', 'log', 'info', 'debug'] }],
 
       // 关闭 Vue 里的一些规则
       'vue/multi-word-component-names': 'off',
