@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-18 12:36:27
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-22 17:04:31
+ * @LastEditTime: 2025-08-23 21:24:05
 -->
 <template>
   <div class="overflow-hidden relative">
@@ -324,7 +324,11 @@ const fetchFeaturedProducts = async () => {
   try {
     const data = await get<Product[]>('/products?featured=true&limit=6')
     if (data) {
-      featuredProducts.value = data
+      // featuredProducts.value = data
+      featuredProducts.value = data.map((product) => ({
+        ...product,
+        price: Number(product.price),
+      }))
     }
   } catch (err) {
     console.error('Failed to fetch featured products:', err)

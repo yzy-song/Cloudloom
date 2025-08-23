@@ -16,7 +16,7 @@
                 alt="用户头像"
                 class="h-32 w-32 rounded-full object-cover"
               />
-              <h2 class="mt-4 text-xl font-display">{{ authStore.user?.name }}</h2>
+              <h2 class="mt-4 text-xl font-display">{{ authStore.user?.username }}</h2>
               <p class="text-gray-600">{{ authStore.user?.email }}</p>
             </div>
           </div>
@@ -29,7 +29,7 @@
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">姓名</label>
                   <input
-                    v-model="profileData.name"
+                    v-model="profileData.username"
                     type="text"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-hanfu-red focus:border-hanfu-red"
                     required
@@ -83,7 +83,7 @@ import { useAuthStore } from '@/stores/auth.store'
 const authStore = useAuthStore()
 
 const profileData = reactive({
-  name: authStore.user?.name || '',
+  username: authStore.user?.username || '',
   email: authStore.user?.email || '',
   phone: authStore.user?.phone || '',
 })
@@ -103,7 +103,7 @@ const updateProfile = async () => {
 // 初始化表单数据
 onMounted(() => {
   if (authStore.user) {
-    profileData.name = authStore.user.name
+    profileData.username = authStore.user.username
     profileData.email = authStore.user.email
     profileData.phone = authStore.user.phone || ''
   }

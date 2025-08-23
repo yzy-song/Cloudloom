@@ -116,8 +116,7 @@ export const generateBooking = (): Booking => ({
   id: `booking_${faker.string.uuid()}`,
   packageId: `package_${faker.number.int({ min: 1, max: 5 })}`,
   customer: {
-    firstName: faker.person.firstName(),
-    lastName: faker.person.lastName(),
+    username: faker.person.fullName(),
     email: faker.internet.email(),
     phone: faker.phone.number({ style: 'international' }),
     notes: faker.lorem.sentence(),
@@ -131,8 +130,7 @@ export const generateBooking = (): Booking => ({
 })
 
 export const generateCustomer = (): CustomerInfo => ({
-  firstName: faker.person.firstName(),
-  lastName: faker.person.lastName(),
+  username: faker.person.fullName(),
   email: faker.internet.email(),
   phone: faker.phone.number({ style: 'international' }),
   notes: faker.lorem.sentence(),

@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-22 11:33:23
+ * @LastEditTime: 2025-08-23 20:10:10
  */
 import { fileURLToPath, URL } from 'node:url'
 import os from 'os'
@@ -67,6 +67,14 @@ export default defineConfig(({ mode }) => {
       strictPort: true, // 如果端口被占用则报错
       open: false, // 不自动打开浏览器
       preTransformRequests: true,
+      // 仅开发环境用代理
+      proxy: {
+        '/api': {
+          target: 'http://localhost:3001', // 开发环境后端地址
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
+      },
     },
     resolve: {
       alias: {

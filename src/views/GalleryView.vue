@@ -12,7 +12,7 @@
     </div>
 
     <div
-      class="sticky-filter-bar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sticky top-16 bg-white z-10 border-b"
+      class="sticky-filter-bar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:sticky md:top-0 bg-white z-10 border-b"
     >
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div class="flex flex-wrap gap-2">
