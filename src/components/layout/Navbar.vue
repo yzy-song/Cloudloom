@@ -59,7 +59,7 @@
                   "
                   alt="用户头像"
                 />
-                <span class="ml-2 text-gray-700">{{ authStore.user?.name }}</span>
+                <span class="ml-2 text-gray-700">{{ authStore.user?.username }}</span>
                 <ChevronDownIcon class="ml-1 h-4 w-4 text-gray-400" />
               </button>
             </div>
@@ -166,7 +166,7 @@
               "
               alt="用户头像"
             />
-            <span class="ml-2 text-gray-700">{{ authStore.user?.name }}</span>
+            <span class="ml-2 text-gray-700">{{ authStore.user?.username }}</span>
           </div>
           <router-link
             to="/profile"
@@ -247,12 +247,35 @@ const navItems: NavItem[] = [
 const activePath = computed(() => route.path)
 
 // 退出登录
-const logout = () => {
-  authStore.logout()
-  isUserMenuOpen.value = false
-  mobileMenuOpen.value = false
-  router.push('/')
+const logout = async () => {
+  try {
+    await authStore.logout()
+    isUserMenuOpen.value = false
+    mobileMenuOpen.value = false
+
+    // 强制刷新页面以确保状态完全重置
+    if (route.path !== '/') {
+      router.push('/')
+    } else {
+      // 如果已经在首页，强制重新加载
+      window.location.reload()
+    }
+  } catch (error) {
+    console.error('Logout failed:', error)
+  }
 }
+
+// 监听认证状态变化
+watch(
+  () => authStore.isAuthenticated,
+  (newValue) => {
+    if (!newValue) {
+      // 用户登出时关闭所有菜单
+      isUserMenuOpen.value = false
+      mobileMenuOpen.value = false
+    }
+  },
+)
 
 // 预约体验
 const navigateToBooking = () => {
@@ -264,11 +287,6 @@ const navigateToBooking = () => {
   }
 }
 
-// 初始化用户状态
-onMounted(() => {
-  authStore.initAuth()
-})
-
 // 点击外部关闭用户菜单
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement
@@ -277,8 +295,11 @@ const handleClickOutside = (event: MouseEvent) => {
   }
 }
 
-// 添加全局点击监听
 onMounted(() => {
+  // 初始化用户状态
+  authStore.initAuth()
+
+  // 添加全局点击监听
   document.addEventListener('click', handleClickOutside)
 })
 

@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-20 15:42:00
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-21 16:30:00
+ * @LastEditTime: 2025-08-23 21:01:41
  */
 import axios from 'axios'
 
@@ -53,6 +53,14 @@ apiClient.interceptors.response.use(
     return Promise.reject(new Error(errorMessage))
   },
 )
+
+export const setAuthToken = (token: string | null) => {
+  if (token) {
+    apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  } else {
+    delete apiClient.defaults.headers.common['Authorization']
+  }
+}
 
 // 类型化的API调用方法 - 更新返回类型
 export const api = {

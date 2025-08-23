@@ -40,56 +40,41 @@
             <form class="space-y-6" @submit.prevent="handleSubmit">
               <!-- 名字字段 (注册时显示) -->
               <div v-if="!isLoginMode">
-                <label for="firstName" class="block text-sm font-medium text-gray-700">名字</label>
+                <label for="username" class="block text-sm font-medium text-gray-700">用户名</label>
                 <div class="mt-1">
                   <input
-                    id="firstName"
-                    v-model="formData.firstName"
+                    id="username"
+                    v-model="formData.username"
                     type="text"
                     required
                     class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-hanfu-red focus:border-hanfu-red sm:text-sm"
-                    :class="{ 'border-red-500': errors.firstName }"
-                    placeholder="请输入您的名字"
+                    :class="{ 'border-red-500': errors.username }"
+                    placeholder="请输入用户名"
                   />
-                  <p v-if="errors.firstName" class="mt-1 text-sm text-red-600">
-                    {{ errors.firstName }}
+                  <p v-if="errors.username" class="mt-1 text-sm text-red-600">
+                    {{ errors.username }}
                   </p>
                 </div>
               </div>
 
-              <!-- 姓氏字段 (注册时显示) -->
-              <div v-if="!isLoginMode">
-                <label for="lastName" class="block text-sm font-medium text-gray-700">姓氏</label>
-                <div class="mt-1">
-                  <input
-                    id="lastName"
-                    v-model="formData.lastName"
-                    type="text"
-                    required
-                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-hanfu-red focus:border-hanfu-red sm:text-sm"
-                    :class="{ 'border-red-500': errors.lastName }"
-                    placeholder="请输入您的姓氏"
-                  />
-                  <p v-if="errors.lastName" class="mt-1 text-sm text-red-600">
-                    {{ errors.lastName }}
-                  </p>
-                </div>
-              </div>
-
-              <!-- 邮箱字段 -->
+              <!-- 邮箱/用户名字段 -->
               <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">邮箱地址</label>
+                <label for="identifier" class="block text-sm font-medium text-gray-700">
+                  {{ isLoginMode ? '邮箱或用户名' : '邮箱地址' }}
+                </label>
                 <div class="mt-1">
                   <input
-                    id="email"
-                    v-model="formData.email"
-                    type="email"
+                    id="identifier"
+                    v-model="formData.identifier"
+                    type="text"
                     required
                     class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-hanfu-red focus:border-hanfu-red sm:text-sm"
-                    :class="{ 'border-red-500': errors.email }"
-                    placeholder="请输入邮箱地址"
+                    :class="{ 'border-red-500': errors.identifier }"
+                    :placeholder="isLoginMode ? '请输入邮箱或用户名' : '请输入邮箱地址'"
                   />
-                  <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email }}</p>
+                  <p v-if="errors.identifier" class="mt-1 text-sm text-red-600">
+                    {{ errors.identifier }}
+                  </p>
                 </div>
               </div>
 
@@ -276,18 +261,16 @@ const isLoginMode = ref(true)
 const containerHeight = ref(520) // 默认高度
 
 const formData = reactive({
-  firstName: '',
-  lastName: '',
-  email: '',
+  username: '',
+  identifier: '',
   password: '',
   confirmPassword: '',
   remember: false,
 })
 
 const errors = reactive({
-  firstName: '',
-  lastName: '',
-  email: '',
+  username: '',
+  identifier: '',
   password: '',
   confirmPassword: '',
 })
@@ -305,6 +288,15 @@ const updateContainerHeight = async () => {
 const toggleMode = async () => {
   isLoginMode.value = !isLoginMode.value
   authStore.error = null
+
+  // 重置表单数据
+  formData.username = ''
+  formData.identifier = ''
+  formData.password = ''
+  formData.confirmPassword = ''
+  formData.remember = false
+
+  // 清除错误信息
   Object.keys(errors).forEach((key) => {
     errors[key as keyof typeof errors] = ''
   })
@@ -321,22 +313,21 @@ const validateForm = () => {
   })
 
   if (!isLoginMode.value) {
-    if (!formData.firstName.trim()) {
-      errors.firstName = '请输入名字'
+    if (!formData.username.trim()) {
+      errors.username = '请输入用户名'
+      isValid = false
+    } else if (formData.username.length < 3) {
+      errors.username = '用户名至少需要3个字符'
       isValid = false
     }
-    if (!formData.lastName.trim()) {
-      errors.lastName = '请输入姓氏'
+    if (!formData.identifier.trim()) {
+      errors.identifier = isLoginMode.value ? '请输入邮箱或用户名' : '请输入邮箱地址'
+      isValid = false
+    } else if (!isLoginMode.value && !/\S+@\S+\.\S+/.test(formData.identifier)) {
+      // 只在注册时验证邮箱格式
+      errors.identifier = '邮箱格式不正确'
       isValid = false
     }
-  }
-
-  if (!formData.email.trim()) {
-    errors.email = '请输入邮箱地址'
-    isValid = false
-  } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-    errors.email = '邮箱格式不正确'
-    isValid = false
   }
 
   if (!formData.password) {
@@ -368,16 +359,15 @@ const handleSubmit = async () => {
 
   if (isLoginMode.value) {
     const loginData: LoginCredentials = {
-      email: formData.email,
+      identifier: formData.identifier,
       password: formData.password,
       remember: formData.remember,
     }
     result = await authStore.login(loginData)
   } else {
     const registerData: RegisterData = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
+      username: formData.username,
+      email: formData.identifier,
       password: formData.password,
       confirmPassword: formData.confirmPassword,
     }
@@ -385,6 +375,13 @@ const handleSubmit = async () => {
   }
 
   if (result.success) {
+    logger.info('登录成功')
+    logger.info('用户信息:', {
+      user: authStore.user,
+      token: authStore.token,
+      isAuthenticated: authStore.isAuthenticated,
+    })
+
     const redirect = (router.currentRoute.value.query.redirect as string) || '/'
     router.push(redirect)
   }
