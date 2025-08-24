@@ -3,7 +3,46 @@ import { defineStore } from 'pinia'
 import type { ApiResponse, Booking, BookingStatus, CustomerInfo } from '@/types'
 import { api } from '@/api/client'
 
+export interface BookingData {
+  // 商品相关（可选）
+  productId?: string
+  productTitle?: string
+
+  // 用户信息（必需）
+  name: string
+  contact: string // 电话
+  email: string
+
+  // 预约信息
+  date: string
+  time: string
+  participants: number
+  notes?: string
+
+  // 预约类型
+  type: 'product' | 'general' // 区分是商品预约还是通用预约
+}
+
 export const useBookingStore = defineStore('booking', () => {
+  interface BookingData {
+    // 商品相关（可选）
+    productId?: string
+    productTitle?: string
+
+    // 用户信息（必需）
+    name: string
+    contact: string // 电话
+    email: string
+
+    // 预约信息
+    date: string
+    time: string
+    participants: number
+    notes?: string
+
+    // 预约类型
+    type: 'product' | 'general' // 区分是商品预约还是通用预约
+  }
   // State
   const bookings = ref<Booking[]>([])
   const currentBooking = ref<Booking | null>(null)

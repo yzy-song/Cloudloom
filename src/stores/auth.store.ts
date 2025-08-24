@@ -114,11 +114,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = response.data.user
       token.value = response.data.accessToken
       isAuthenticated.value = true
-      console.log('Store状态已更新:', {
-        user: user.value,
-        token: token.value,
-        isAuthenticated: isAuthenticated.value,
-      })
+
       // 设置token到API客户端
       setAuthToken(response.data.accessToken)
       // 根据remember选项决定存储方式
