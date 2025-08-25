@@ -29,37 +29,18 @@ export const useProductStore = defineStore('product', () => {
     page?: number
     limit?: number
   }) => {
-    loading.value = true
-    error.value = null
-    try {
-      const params = new URLSearchParams()
-      if (filters?.category) params.append('category', filters.category)
-      if (filters?.page) params.append('page', filters.page.toString())
-      if (filters?.limit) params.append('limit', filters.limit.toString())
+    const params: Record<string, any> = {}
+    if (filters?.category) params.category = filters.category
+    if (filters?.page) params.page = filters.page
+    if (filters?.limit) params.limit = filters.limit
 
-      const response = await api.get<ApiResponse<Product[]>>(`/products?${params.toString()}`)
-      // 兼容 data 可能不存在的情况
-      const data = response.data as ApiResponse<Product[]> & { total?: number }
-      const list = Array.isArray(data) ? data : []
-      logger.info('data list:', list)
-      products.value = list.map((p) => ({
-        ...p,
-        price: Number(p.price),
-      }))
-      // 兼容 total 字段
-      pagination.value = {
-        page: filters?.page || 1,
-        limit: filters?.limit || 12,
-        total: typeof data.total === 'number' ? data.total : list.length,
-        totalPages: Math.ceil(
-          (typeof data.total === 'number' ? data.total : list.length) / (filters?.limit || 12),
-        ),
-      }
-    } catch (e: any) {
-      error.value = e.response?.data?.error || 'Failed to fetch products'
-      console.error('Fetch products error:', e)
-    } finally {
-      loading.value = false
+    const { list, total } = await fetchProductList(params)
+    products.value = list
+    pagination.value = {
+      page: filters?.page || 1,
+      limit: filters?.limit || 12,
+      total,
+      totalPages: Math.ceil(total / (filters?.limit || 12)),
     }
   }
 
@@ -81,23 +62,8 @@ export const useProductStore = defineStore('product', () => {
   }
 
   const fetchFeaturedProducts = async () => {
-    loading.value = true
-    error.value = null
-    try {
-      const response = await api.get('/products?page=1&limit=6')
-      // 兼容 data 可能不存在的情况
-      const data = response.data as ApiResponse<Product[]>
-      const list = Array.isArray(data) ? data : []
-      featuredProducts.value = list.map((p) => ({
-        ...p,
-        price: Number(p.price),
-      }))
-    } catch (e: any) {
-      error.value = e.response?.data?.error || 'Failed to fetch featured products'
-      console.error('Fetch featured products error:', e)
-    } finally {
-      loading.value = false
-    }
+    const { list } = await fetchProductList({ page: 1, limit: 6 })
+    featuredProducts.value = list
   }
 
   const getProductById = (id: string) => {
@@ -106,6 +72,30 @@ export const useProductStore = defineStore('product', () => {
       products.value.find((product) => product.id === productId) ||
       featuredProducts.value.find((product) => product.id === productId)
     )
+  }
+
+  async function fetchProductList(params: Record<string, any> = {}) {
+    loading.value = true
+    error.value = null
+    try {
+      const response = await api.get('/products', params)
+      // 兼容 data 可能不存在的情况
+      logger.debug('Fetched products response:', response) // Debug log
+      const list = Array.isArray(response.data) ? response.data : []
+      return {
+        list: list.map((p) => ({
+          ...p,
+          price: Number(p.price),
+        })),
+        total: list.length,
+      }
+    } catch (e: any) {
+      error.value = e.response?.data?.error || 'Failed to fetch products'
+      console.error('Fetch products error:', e)
+      return { list: [], total: 0 }
+    } finally {
+      loading.value = false
+    }
   }
 
   return {
@@ -128,5 +118,6 @@ export const useProductStore = defineStore('product', () => {
     fetchProductById,
     getProductById,
     fetchFeaturedProducts,
+    fetchProductList,
   }
 })
