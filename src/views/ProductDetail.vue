@@ -184,49 +184,41 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-
+import { ref, computed, watch, onMounted } from 'vue'
 import { StarIcon, HeartIcon, CheckCircleIcon } from '@heroicons/vue/24/outline'
-import { useRouter } from 'vue-router'
-
+import { useRoute, useRouter } from 'vue-router'
 import ProductCard from '@/components/ui/card/ProductCard.vue'
-import { useApi } from '@/composables/useApi'
 import { useFavoriteStore } from '@/stores/favorite.store'
-import { type Product } from '@/types'
+import { useProductStore } from '@/stores/product.store'
 
-const { get } = useApi()
-const product = ref<Product | null>(null)
-const relatedProducts = ref<Product[]>([])
-const loading = ref(true)
+const route = useRoute()
 const router = useRouter()
 const favoritesStore = useFavoriteStore()
+const productStore = useProductStore()
 
-const props = defineProps<{
-  id: string
-}>()
-
-const currentId = ref(props.id)
+const props = defineProps<{ id: string }>()
 
 const selectedSize = ref('M')
 const activeImage = ref(0)
 const isFavorite = computed(() => favoritesStore.isFavorite(props.id))
 
-const route = useRoute()
-// 监听路由参数变化
+// 详情和相关推荐都用 store
+const product = computed(() => productStore.currentProduct)
+const relatedProducts = computed(() => productStore.relatedProducts)
+const loading = computed(() => productStore.loading)
+
+const fetchData = async (id: string) => {
+  await Promise.all([productStore.fetchProductById(id), productStore.fetchRelatedProducts(id, 8)])
+}
+
 watch(
   () => route.params.id,
   async (newId) => {
-    if (newId && newId !== currentId.value) {
-      loading.value = true
-      try {
-        await Promise.all([fetchProduct(), fetchRelatedProducts()])
-      } catch (error) {
-        console.error('Failed to fetch product data:', error)
-      } finally {
-        loading.value = false
-      }
+    if (newId) {
+      await fetchData(String(newId))
     }
   },
+  { immediate: true },
 )
 
 const touchStartX = ref(0)
@@ -264,34 +256,17 @@ const nextImage = () => {
     activeImage.value = (activeImage.value + 1) % product.value.images.length
   }
 }
-
 const prevImage = () => {
   if (product.value?.images) {
     activeImage.value =
       (activeImage.value - 1 + product.value.images.length) % product.value.images.length
   }
 }
-// 获取产品详情
-const fetchProduct = async () => {
-  const data = await get<Product>(`/products/${props.id}`)
-  if (data) {
-    product.value = data
-  }
-}
-// 获取相关产品
-const fetchRelatedProducts = async () => {
-  const data = await get<Product[]>(`/products/${props.id}/related`)
-  if (data) {
-    relatedProducts.value = data
-  }
-}
 
-// 添加到收藏
 function toggleFavorite() {
   favoritesStore.toggleFavorite(props.id)
 }
 
-// 预约体验
 function bookExperience() {
   router.push({
     path: '/booking',
@@ -302,19 +277,7 @@ function bookExperience() {
   })
 }
 
-// 导航到产品详情
 function navigateToProduct(id: number) {
   router.push(`/product/${id}`)
 }
-
-// 初始化数据
-onMounted(async () => {
-  try {
-    await Promise.all([fetchProduct(), fetchRelatedProducts()])
-  } catch (error) {
-    console.error('Failed to fetch product data:', error)
-  } finally {
-    loading.value = false
-  }
-})
 </script>

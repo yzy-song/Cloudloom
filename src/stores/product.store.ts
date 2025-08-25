@@ -8,6 +8,7 @@ export const useProductStore = defineStore('product', () => {
   const products = ref<Product[]>([])
   const featuredProducts = ref<Product[]>([])
   const currentProduct = ref<Product | null>(null)
+  const relatedProducts = ref<Product[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
   const pagination = ref({
@@ -66,6 +67,25 @@ export const useProductStore = defineStore('product', () => {
     featuredProducts.value = list
   }
 
+  const fetchRelatedProducts = async (id: string | number, limit = 8) => {
+    loading.value = true
+    error.value = null
+    try {
+      // 推荐后端实现 /products/:id/related，否则用同分类/标签模拟
+      const response = await api.get(`/products/${id}/related`, { limit })
+      const list = Array.isArray(response.data) ? response.data : []
+      relatedProducts.value = list.map((p) => ({
+        ...p,
+        price: Number(p.price),
+      }))
+    } catch (e: any) {
+      error.value = e.response?.data?.error || 'Failed to fetch related products'
+      relatedProducts.value = []
+    } finally {
+      loading.value = false
+    }
+  }
+
   const getProductById = (id: string) => {
     const productId = parseInt(id, 10)
     return (
@@ -103,6 +123,7 @@ export const useProductStore = defineStore('product', () => {
     products,
     featuredProducts,
     currentProduct,
+    relatedProducts,
     loading,
     error,
     pagination,
@@ -118,6 +139,7 @@ export const useProductStore = defineStore('product', () => {
     fetchProductById,
     getProductById,
     fetchFeaturedProducts,
+    fetchRelatedProducts,
     fetchProductList,
   }
 })
