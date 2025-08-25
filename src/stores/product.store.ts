@@ -28,11 +28,9 @@ export const useProductStore = defineStore('product', () => {
     category?: ProductCategory
     page?: number
     limit?: number
-    featured?: boolean
   }) => {
     loading.value = true
     error.value = null
-
     try {
       const params = new URLSearchParams()
       if (filters?.category) params.append('category', filters.category)
@@ -40,13 +38,22 @@ export const useProductStore = defineStore('product', () => {
       if (filters?.limit) params.append('limit', filters.limit.toString())
 
       const response = await api.get<ApiResponse<Product[]>>(`/products?${params.toString()}`)
-
-      products.value = response.data.data
-      pagination.value = response.data.pagination || {
-        page: 1,
-        limit: 12,
-        total: 0,
-        totalPages: 0,
+      // 兼容 data 可能不存在的情况
+      const data = response.data as ApiResponse<Product[]> & { total?: number }
+      const list = Array.isArray(data) ? data : []
+      logger.info('data list:', list)
+      products.value = list.map((p) => ({
+        ...p,
+        price: Number(p.price),
+      }))
+      // 兼容 total 字段
+      pagination.value = {
+        page: filters?.page || 1,
+        limit: filters?.limit || 12,
+        total: typeof data.total === 'number' ? data.total : list.length,
+        totalPages: Math.ceil(
+          (typeof data.total === 'number' ? data.total : list.length) / (filters?.limit || 12),
+        ),
       }
     } catch (e: any) {
       error.value = e.response?.data?.error || 'Failed to fetch products'
@@ -60,10 +67,34 @@ export const useProductStore = defineStore('product', () => {
     loading.value = true
     try {
       const response = await api.get<ApiResponse<Product>>(`/products/${id}`)
-      currentProduct.value = response.data.data
+      // 统一转换 price 为数字
+      currentProduct.value = {
+        ...response.data.data,
+        price: Number(response.data.data.price),
+      }
     } catch (e: any) {
       error.value = e.response?.data?.error || 'Product not found'
       throw e
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const fetchFeaturedProducts = async () => {
+    loading.value = true
+    error.value = null
+    try {
+      const response = await api.get('/products?page=1&limit=6')
+      // 兼容 data 可能不存在的情况
+      const data = response.data as ApiResponse<Product[]>
+      const list = Array.isArray(data) ? data : []
+      featuredProducts.value = list.map((p) => ({
+        ...p,
+        price: Number(p.price),
+      }))
+    } catch (e: any) {
+      error.value = e.response?.data?.error || 'Failed to fetch featured products'
+      console.error('Fetch featured products error:', e)
     } finally {
       loading.value = false
     }
@@ -96,5 +127,6 @@ export const useProductStore = defineStore('product', () => {
     fetchProducts,
     fetchProductById,
     getProductById,
+    fetchFeaturedProducts,
   }
 })

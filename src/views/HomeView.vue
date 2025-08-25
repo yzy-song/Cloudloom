@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-18 12:36:27
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-23 21:24:05
+ * @LastEditTime: 2025-08-24 22:45:12
 -->
 <template>
   <div class="overflow-hidden relative">
@@ -250,13 +250,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { CheckCircleIcon } from '@heroicons/vue/24/outline'
-// import {
-//   Autoplay as SwiperAutoplay,
-//   Navigation as SwiperNavigation,
-//   Pagination as SwiperPagination,
-// } from 'swiper/modules'
 import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
@@ -265,15 +260,15 @@ import 'swiper/css/pagination'
 import 'swiper/css/autoplay'
 
 import { useRouter } from 'vue-router'
-import type { Category, HeroSlide, Product } from '@/types'
+import type { Category, HeroSlide } from '@/types'
 import DevAccessInfo from '@/components/DevAccessInfo.vue'
 import { useApi } from '@/composables/useApi'
+import { useProductStore } from '@/stores/product.store'
 
 const router = useRouter()
-const { get, loading, error } = useApi()
+const productStore = useProductStore()
 
 const categories = ref<Category[]>([])
-const featuredProducts = ref<Product[]>([])
 
 // 轮播图数据 - 包含汉服、周边和文创产品
 const heroSlides = ref<HeroSlide[]>([
@@ -308,6 +303,7 @@ const heroSlides = ref<HeroSlide[]>([
 ])
 
 // 获取分类数据
+const { get } = useApi()
 const fetchCategories = async () => {
   try {
     const data = await get<Category[]>('/categories')
@@ -319,26 +315,11 @@ const fetchCategories = async () => {
   }
 }
 
-// 获取精选产品数据
-const fetchFeaturedProducts = async () => {
-  try {
-    const data = await get<Product[]>('/products?featured=true&limit=6')
-    if (data) {
-      // featuredProducts.value = data
-      featuredProducts.value = data.map((product) => ({
-        ...product,
-        price: Number(product.price),
-      }))
-    }
-  } catch (err) {
-    console.error('Failed to fetch featured products:', err)
-  }
-}
-
 onMounted(() => {
   fetchCategories()
-  fetchFeaturedProducts()
+  productStore.fetchFeaturedProducts()
 })
+
 // 导航方法
 function navigateToGallery(filter: string) {
   router.push({ path: '/gallery', query: { filter } })
@@ -362,6 +343,11 @@ function handleSlideAction(action?: string) {
     router.push(action)
   }
 }
+
+// 直接用 store 的状态
+const featuredProducts = computed(() => productStore.featuredProducts)
+const loading = computed(() => productStore.loading)
+const error = computed(() => productStore.error)
 </script>
 
 <style scoped></style>

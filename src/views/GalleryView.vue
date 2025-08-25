@@ -140,12 +140,10 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-
 import { useRoute } from 'vue-router'
+import { useProductStore } from '@/stores/product.store'
 
-import { useApi } from '@/composables/useApi'
-import { type Product } from '@/types'
-const { get } = useApi()
+const productStore = useProductStore()
 const route = useRoute()
 
 // 筛选条件
@@ -217,53 +215,21 @@ function setFilter(filterKey: string) {
   )
 }
 
-// 产品数据
-const products = ref<Product[]>([])
-const loading = ref(true)
+// 分页
 const visibleCount = ref(12)
-const hasMore = computed(() => visibleCount.value < products.value.length)
-
-// 获取产品数据
-const fetchProducts = async () => {
-  loading.value = true
-  try {
-    const response = await get<Product[]>('/products', {
-      params: {
-        limit: 100, // 获取足够多的产品用于分页
-        page: 1,
-      },
-    })
-    if (response) {
-      products.value = response
-    }
-  } catch (error) {
-    console.error('Failed to fetch products:', error)
-    // 可以添加错误处理，比如显示错误信息
-  } finally {
-    loading.value = false
-  }
+const loadMore = () => {
+  visibleCount.value += 12
 }
-// 朝代标签映射
-const dynastyLabels = {
-  tang: '唐',
-  song: '宋',
-  ming: '明',
-  male: '男',
-  female: '女',
-  kids: '童',
-  wedding: '婚服',
-  accessories: '周边',
-  cultural: '文创',
-}
+const hasMore = computed(() => visibleCount.value < filteredProducts.value.length)
 
 // 初始化产品数据
 onMounted(() => {
-  fetchProducts()
+  productStore.fetchProducts({ limit: 100, page: 1 })
 })
 
 // 过滤和排序后的产品
 const filteredProducts = computed(() => {
-  let result = [...products.value]
+  let result = [...productStore.products]
 
   // 过滤
   if (activeFilter.value !== 'all') {
@@ -276,7 +242,6 @@ const filteredProducts = computed(() => {
   if (sortOption.value === 'newest') {
     result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
   } else if (sortOption.value === 'popular') {
-    // 模拟人气排序（随机）
     result.sort(() => Math.random() - 0.5)
   } else if (sortOption.value === 'price-asc') {
     result.sort((a, b) => a.price - b.price)
@@ -287,10 +252,7 @@ const filteredProducts = computed(() => {
   return result.slice(0, visibleCount.value)
 })
 
-// 加载更多
-function loadMore() {
-  visibleCount.value += 12
-}
+const loading = computed(() => productStore.loading)
 </script>
 
 <style scoped>

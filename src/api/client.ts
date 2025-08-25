@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-20 15:42:00
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-23 21:01:41
+ * @LastEditTime: 2025-08-25 04:38:24
  */
 import axios from 'axios'
 
@@ -23,6 +23,17 @@ export const apiClient = axios.create({
 // 请求拦截器
 apiClient.interceptors.request.use(
   (config) => {
+    // 拼接完整URL（包含baseURL和params）
+    const url = config.baseURL
+      ? config.baseURL.replace(/\/$/, '') + '/' + config.url?.replace(/^\//, '')
+      : config.url
+    let fullUrl = url
+    if (config.params) {
+      const params = new URLSearchParams(config.params).toString()
+      fullUrl += (fullUrl?.includes('?') ? '&' : '?') + params
+    }
+    logger.info('[API Request]', config.method?.toUpperCase(), fullUrl)
+
     const token = localStorage.getItem('auth_token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
