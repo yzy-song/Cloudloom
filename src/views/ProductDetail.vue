@@ -276,7 +276,6 @@ const fetchProduct = async () => {
   const data = await get<Product>(`/products/${props.id}`)
   if (data) {
     product.value = data
-    logger.log('Fetched product:', data)
   }
 }
 // 获取相关产品

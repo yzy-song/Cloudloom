@@ -77,8 +77,7 @@ export const handlers = [
     const url = new URL(request.url)
     const category = url.searchParams.get('category')
     const page = parseInt(url.searchParams.get('page') || '1')
-    const limit = parseInt(url.searchParams.get('limit') || '12')
-    const featured = url.searchParams.get('featured') === 'true'
+    const limit = parseInt(url.searchParams.get('limit') || '10')
 
     let filteredProducts = products
 
@@ -161,8 +160,7 @@ export const handlers = [
       id: `booking_${Date.now()}`,
       packageId: bookingData.packageId || 'package_1',
       customer: bookingData.customer || {
-        firstName: 'John',
-        lastName: 'Doe',
+        username: 'Doe',
         email: 'john@example.com',
         phone: '+353123456789',
       },
