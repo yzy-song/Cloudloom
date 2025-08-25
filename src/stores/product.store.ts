@@ -49,10 +49,9 @@ export const useProductStore = defineStore('product', () => {
     loading.value = true
     try {
       const response = await api.get<Product>(`/products/${id}`)
-      logger.info('Fetched product:', response)
       currentProduct.value = {
         ...response.data,
-        price: Number(response.data.price),
+        reviews: Number(response.data.price),
       }
     } catch (e: any) {
       error.value = e.response?.data?.error || 'Product not found'
