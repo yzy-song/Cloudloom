@@ -10,7 +10,8 @@ export const validateEmail = (email: string): boolean => {
 }
 
 export const validatePhone = (phone: string): boolean => {
-  const phoneRegex = /^(\+353|0)(\d{7,9})$/
+  // 支持+国家码或本地号，7-15位数字
+  const phoneRegex = /^(\+?\d{1,4}[-\s]?)?\d{7,15}$/
   return phoneRegex.test(phone.replace(/\s/g, ''))
 }
 
