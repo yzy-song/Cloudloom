@@ -14,15 +14,23 @@
             <div
               class="bg-gray-200 border-2 border-dashed rounded-xl aspect-[3/4] w-full mb-4"
             ></div>
-            <h3 class="text-lg font-medium">{{ product.title }}</h3>
-            <p class="text-gray-600 mt-1">尺寸: {{ booking.size }}</p>
-            <p class="text-hanfu-red text-xl font-medium mt-2">€{{ product.price.toFixed(2) }}</p>
+            <template v-if="booking.bookingType === 'standard'">
+              <h3 class="text-lg font-medium">{{ product?.title }}</h3>
+              <p class="text-gray-600 mt-1">尺寸: {{ booking.size }}</p>
+              <p class="text-hanfu-red text-xl font-medium mt-2">
+                €{{ product?.price ? product.price.toFixed(2) : '--' }}
+              </p>
+            </template>
+            <template v-else>
+              <h3 class="text-lg font-medium">时段预约</h3>
+              <p class="text-gray-600 mt-1">您将预约一个时间段，无需指定具体商品。</p>
+              <p class="text-hanfu-red text-xl font-medium mt-2">押金：€30</p>
+            </template>
           </div>
 
           <!-- 预约表单 -->
           <div>
-            <h2 class="text-xl font-display mb-4">填写预约信息</h2>
-            <form @submit.prevent="submitBooking">
+            <form @submit.prevent="submitBooking" novalidate>
               <div class="space-y-4">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">姓名 *</label>
@@ -33,23 +41,38 @@
                     required
                     placeholder="您的姓名"
                   />
+                  <div v-if="errors.name" class="text-red-500 text-xs mt-1">{{ errors.name }}</div>
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">联系方式 *</label>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">邮箱 *</label>
                   <input
-                    v-model="booking.contact"
+                    v-model="booking.email"
                     type="text"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-hanfu-red focus:border-hanfu-red"
                     required
-                    placeholder="电话或邮箱"
+                    placeholder="邮箱"
+                  />
+                  <div v-if="errors.email" class="text-red-500 text-xs mt-1">
+                    {{ errors.email }}
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">电话 *</label>
+                  <input
+                    v-model="booking.phone"
+                    type="text"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-hanfu-red focus:border-hanfu-red"
+                    required
+                    placeholder="电话"
                   />
                 </div>
 
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">预约日期 *</label>
                   <input
-                    v-model="booking.date"
+                    v-model="booking.bookingDate"
                     type="date"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-hanfu-red focus:border-hanfu-red"
                     required
@@ -65,6 +88,18 @@
                   >
                     <option value="">选择时间</option>
                     <option v-for="time in timeSlots" :key="time" :value="time">{{ time }}</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">预约类型 *</label>
+                  <select
+                    v-model="booking.bookingType"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-hanfu-red focus:border-hanfu-red"
+                    required
+                  >
+                    <option value="standard">标准预约</option>
+                    <option value="time_slot_only">仅预约时间段</option>
                   </select>
                 </div>
 
@@ -86,6 +121,10 @@
                 提交预约
               </button>
             </form>
+
+            <div v-if="message" class="my-4 text-center text-green-600 font-bold">
+              {{ message }}
+            </div>
           </div>
         </div>
       </div>
@@ -94,60 +133,128 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useBookingStore } from '@/stores/booking.store'
+import { useProductStore } from '@/stores/product.store'
+import { validateEmail, validatePhone, validateRequired } from '@/utils/validation'
 
 const route = useRoute()
 const router = useRouter()
 const isLoading = ref(false)
+const message = ref('')
 
-// 模拟产品数据
-const product = ref({
-  id: 1,
-  title: '唐风齐胸襦裙 · 霓裳羽衣',
-  price: 89.99,
-  dynasty: '唐',
-})
+const productStore = useProductStore()
+const bookingStore = useBookingStore()
+
+const productId = computed(() => route.query.productId as string)
+const sizeFromQuery = computed(() => route.query.size as string | undefined)
+
+const product = computed(() => productStore.currentProduct)
+const loadingProduct = computed(() => productStore.loading)
 
 // 预约信息
 const booking = ref({
   name: '',
-  contact: '',
-  date: '',
+  email: '',
+  phone: '',
+  bookingDate: '',
   time: '',
-  size: 'M',
+  size: sizeFromQuery.value || 'M',
   notes: '',
+  bookingType: 'standard', // 默认预约类型
+})
+
+// 表单错误信息
+const errors = ref({
+  name: '',
+  email: '',
+  phone: '',
+  bookingDate: '',
+  time: '',
 })
 
 // 可用时间段
-const timeSlots = ref([
+const timeSlots = [
   '10:00 - 11:30',
   '11:30 - 13:00',
   '13:00 - 14:30',
   '14:30 - 16:00',
   '16:00 - 17:30',
-])
+]
 
-// 从URL参数获取产品信息
-onMounted(() => {
-  if (route.query.productId) {
-    // 实际项目中这里应该从API获取产品详情
-    console.log('预约产品:', route.query.productId)
+// 获取产品详情
+onMounted(async () => {
+  if (productId.value) {
+    await productStore.fetchProductById(productId.value)
   }
-
-  if (route.query.size) {
-    booking.value.size = route.query.size as string
+  if (sizeFromQuery.value) {
+    booking.value.size = sizeFromQuery.value
   }
 })
 
+function validateBooking() {
+  let valid = true
+  errors.value = { name: '', email: '', phone: '', bookingDate: '', time: '' }
+
+  if (!validateRequired(booking.value.name)) {
+    errors.value.name = '请输入姓名'
+    valid = false
+  }
+  if (!validateRequired(booking.value.email)) {
+    errors.value.email = '请输入邮箱'
+    valid = false
+  } else if (!validateEmail(booking.value.email)) {
+    errors.value.email = '请输入有效的邮箱地址'
+    valid = false
+  }
+  if (!validateRequired(booking.value.phone)) {
+    errors.value.phone = '请输入电话'
+    valid = false
+  } else if (!validatePhone(booking.value.phone)) {
+    errors.value.phone = '请输入有效的电话号码'
+    valid = false
+  }
+  if (!validateRequired(booking.value.bookingDate)) {
+    errors.value.bookingDate = '请选择预约日期'
+    valid = false
+  }
+  if (!validateRequired(booking.value.time)) {
+    errors.value.time = '请选择预约时间'
+    valid = false
+  }
+  return valid
+}
+
 // 提交预约
-function submitBooking() {
+async function submitBooking() {
+  message.value = ''
+  if (!validateBooking()) return
+
   isLoading.value = true
-  setTimeout(() => {
-    console.log('提交预约:', booking.value)
-    alert('预约成功！我们将尽快与您确认。')
-    router.push('/')
+  try {
+    await bookingStore.createBooking({
+      productId: booking.value.bookingType === 'standard' ? product.value?.id : undefined,
+      customerFullname: booking.value.name,
+      customerEmail: booking.value.email,
+      customerPhone: booking.value.phone,
+      bookingDate: booking.value.bookingDate,
+      bookingTime: booking.value.time,
+      participants: 1,
+      notes: booking.value.notes,
+      bookingType: booking.value.bookingType,
+      totalAmount: 30,
+    })
+    message.value = '预约成功！我们将尽快与您确认。'
+    setTimeout(() => router.push('/'), 1500)
+  } catch (e: any) {
+    message.value =
+      e?.response?.data?.message ||
+      e?.response?.data?.error ||
+      e?.message ||
+      '预约失败，请稍后重试。'
+  } finally {
     isLoading.value = false
-  }, 1500)
+  }
 }
 </script>

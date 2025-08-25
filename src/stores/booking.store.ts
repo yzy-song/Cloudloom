@@ -71,14 +71,7 @@ export const useBookingStore = defineStore('booking', () => {
     }
   }
 
-  const createBooking = async (bookingData: {
-    packageId: string
-    customer: CustomerInfo
-    date: string
-    time: string
-    participants: number
-    totalAmount: number
-  }) => {
+  const createBooking = async (bookingData: any) => {
     loading.value = true
     error.value = null
 
