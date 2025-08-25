@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import type { Product, ProductCategory, ApiResponse } from '@/types'
+import type { ApiResponse, Product, ProductCategory } from '@/types'
 import { api } from '@/api/client'
 
 export const useProductStore = defineStore('product', () => {
@@ -48,11 +48,11 @@ export const useProductStore = defineStore('product', () => {
   const fetchProductById = async (id: string) => {
     loading.value = true
     try {
-      const response = await api.get<ApiResponse<Product>>(`/products/${id}`)
-      // 统一转换 price 为数字
+      const response = await api.get<Product>(`/products/${id}`)
+      logger.info('Fetched product:', response)
       currentProduct.value = {
-        ...response.data.data,
-        price: Number(response.data.data.price),
+        ...response.data,
+        price: Number(response.data.price),
       }
     } catch (e: any) {
       error.value = e.response?.data?.error || 'Product not found'
@@ -100,7 +100,6 @@ export const useProductStore = defineStore('product', () => {
     try {
       const response = await api.get('/products', params)
       // 兼容 data 可能不存在的情况
-      logger.debug('Fetched products response:', response) // Debug log
       const list = Array.isArray(response.data) ? response.data : []
       return {
         list: list.map((p) => ({
