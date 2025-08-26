@@ -241,6 +241,7 @@ const navItems: NavItem[] = [
   { name: '汉服知识', path: '/knowledge' },
   { name: '关于我们', path: '/about' },
   { name: '商业合作', path: '/collaboration' },
+  { name: '测试页', path: '/test' },
 ]
 
 // 当前激活的路由
