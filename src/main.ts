@@ -2,18 +2,18 @@
  * @Author: yzy
  * @Date: 2025-08-20 16:35:27
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-22 11:35:20
+ * @LastEditTime: 2025-08-26 15:58:22
  */
 // src/main.ts
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
+import i18n from './i18n'
 import router from './router'
 
 import { installLogger } from '@/utils/logger'
 import './assets/styles/main.css'
-
 const app = createApp(App)
 const pinia = createPinia()
 
@@ -39,6 +39,7 @@ async function startApp() {
   // 挂载应用
   app.use(pinia)
   app.use(router)
+  app.use(i18n)
   app.mount('#app')
 }
 

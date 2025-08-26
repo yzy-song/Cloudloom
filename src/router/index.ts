@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-22 17:47:09
+ * @LastEditTime: 2025-08-26 22:50:22
  */
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -84,6 +84,12 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Survey',
     component: () => import('../views/SurveyView.vue'),
     meta: { title: '市场调研 - 云锦轩' },
+  },
+  {
+    path: '/test',
+    name: 'TestPage',
+    component: () => import('../views/TestView.vue'),
+    meta: { title: '测试页面 - 云锦轩', requiresAuth: true },
   },
   {
     path: '/404',
