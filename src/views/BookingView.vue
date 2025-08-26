@@ -124,9 +124,34 @@
 
             <div v-if="message" class="my-4 text-center text-green-600 font-bold">
               {{ message }}
+              <div class="mt-2">
+                <router-link to="/my-bookings" class="btn-primary mr-2">查看我的预约</router-link>
+                <router-link to="/" class="btn-secondary">返回首页</router-link>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Stripe 支付弹窗 -->
+    <div v-if="showStripe" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <StripeCheckout
+        :clientSecret="clientSecret"
+        @success="onStripeSuccess"
+        @fail="onStripeFail"
+        @cancel="showStripe = false"
+      />
+    </div>
+
+    <!-- 支付成功提示 -->
+    <div
+      v-if="paymentSuccess"
+      class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+    >
+      <div class="bg-white rounded-xl p-8 shadow-lg w-full max-w-md text-center">
+        <div class="text-green-600 text-2xl font-bold mb-4">预约并支付成功！</div>
+        <router-link to="/" class="btn-primary">返回首页</router-link>
       </div>
     </div>
   </div>
@@ -135,6 +160,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import StripeCheckout from '@/components/StripeCheckout.vue' // 新增
 import { useBookingStore } from '@/stores/booking.store'
 import { useProductStore } from '@/stores/product.store'
 import { validateEmail, validatePhone, validateRequired } from '@/utils/validation'
@@ -227,13 +253,18 @@ function validateBooking() {
 }
 
 // 提交预约
+const showStripe = ref(false)
+const clientSecret = ref('')
+const paymentSuccess = ref(false)
+
 async function submitBooking() {
   message.value = ''
   if (!validateBooking()) return
 
   isLoading.value = true
   try {
-    await bookingStore.createBooking({
+    // 假设后端返回 { clientSecret: '...' }
+    const res = await bookingStore.createBooking({
       productId: booking.value.bookingType === 'standard' ? product.value?.id : undefined,
       customerFullname: booking.value.name,
       customerEmail: booking.value.email,
@@ -245,8 +276,11 @@ async function submitBooking() {
       bookingType: booking.value.bookingType,
       totalAmount: 30,
     })
-    message.value = '预约成功！我们将尽快与您确认。'
-    setTimeout(() => router.push('/'), 1500)
+    // 展示 Stripe 支付
+    logger.info('预约创建成功，准备支付', res.data)
+    clientSecret.value = (res.data as any).client_secret ?? ''
+    logger.info('客户端密钥', clientSecret.value)
+    showStripe.value = true
   } catch (e: any) {
     message.value =
       e?.response?.data?.message ||
@@ -256,5 +290,15 @@ async function submitBooking() {
   } finally {
     isLoading.value = false
   }
+}
+
+// Stripe 支付回调
+function onStripeSuccess(paymentIntent: any) {
+  paymentSuccess.value = true
+  showStripe.value = false
+  message.value = '支付成功，预约已提交！'
+}
+function onStripeFail(error: any) {
+  message.value = error.message || '支付失败，请重试'
 }
 </script>

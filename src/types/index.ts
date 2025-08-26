@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 11:09:37
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-24 08:02:19
+ * @LastEditTime: 2025-08-26 00:08:38
  */
 // 产品类型
 export interface Product {
