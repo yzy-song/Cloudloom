@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
+    "@stripe/stripe-js": "^7.8.0",
     "@tailwindcss/postcss": "^4.1.12",
     "@vueuse/head": "^2.0.0",
     "dayjs": "^1.11.13",
