@@ -251,6 +251,26 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const loginWithOAuth = async (payload: any) => {
+    loading.value = true
+    error.value = null
+    logger.debug('OAuth Login Payload:', payload)
+    try {
+      const response = await api.post<{ user: User; token: string }>('/auth/oauth-login', payload)
+      user.value = response.data.user
+      token.value = response.data.token
+      isAuthenticated.value = true
+      localStorage.setItem('cloudloom_user', JSON.stringify(response.data.user))
+      localStorage.setItem('auth_token', response.data.token)
+      return { success: true }
+    } catch (e: any) {
+      error.value = e.message || '第三方登录失败'
+      return { success: false, error: error.value }
+    } finally {
+      loading.value = false
+    }
+  }
+
   // 初始化
   initAuth()
 
@@ -267,5 +287,6 @@ export const useAuthStore = defineStore('auth', () => {
     validateToken,
     resetPassword,
     updateProfile,
+    loginWithOAuth,
   }
 })
