@@ -25,10 +25,7 @@
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div
-        class="bg-white shadow sm:rounded-lg relative"
-        :style="{ minHeight: containerHeight + 'px' }"
-      >
+      <div class="bg-white shadow sm:rounded-lg relative px-6 py-8">
         <Transition name="fade" mode="out-in">
           <div
             :key="isLoginMode ? 'login-form' : 'register-form'"
@@ -200,42 +197,42 @@
                 </button>
               </div>
             </form>
-            <div class="mt-6">
-              <div class="relative">
-                <div class="absolute inset-0 flex items-center">
-                  <div class="w-full border-t border-gray-300"></div>
-                </div>
-                <div class="relative flex justify-center text-sm">
-                  <span class="px-2 bg-white text-gray-500">{{ t('login.orOther') }}</span>
-                </div>
+            <div class="my-6 flex items-center">
+              <div class="flex-grow border-t border-gray-300"></div>
+              <span class="mx-4 text-gray-400">{{ t('login.orOther') }}</span>
+              <div class="flex-grow border-t border-gray-300"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <button
+                  @click="loginWithOAuth('google')"
+                  class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                >
+                  <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                    <path
+                      d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"
+                      fill="#4285F4"
+                    />
+                  </svg>
+                  {{ t('login.google') }}
+                </button>
               </div>
-              <div class="mt-6 grid grid-cols-2 gap-3">
-                <div>
-                  <button
-                    @click="loginWithOAuth('google')"
-                    class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                  >
-                    <svg class="w-5 h-5" viewBox="0 0 24 24">
-                      <path
-                        d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"
-                        fill="#4285F4"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <div>
-                  <button
-                    @click="loginWithOAuth('facebook')"
-                    class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                  >
-                    <svg class="w-5 h-5" fill="#3B5998" viewBox="0 0 24 24">
-                      <path
-                        d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
-                      />
-                    </svg>
-                  </button>
-                </div>
+              <div>
+                <button
+                  @click="loginWithOAuth('facebook')"
+                  class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                >
+                  <svg class="w-5 h-5 mr-2" fill="#3B5998" viewBox="0 0 24 24">
+                    <path
+                      d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                    />
+                  </svg>
+                  {{ t('login.facebook') }}
+                </button>
               </div>
+            </div>
+            <div v-if="oauthError" class="mt-4 text-red-600 text-sm text-center">
+              {{ oauthError }}
             </div>
           </div>
         </Transition>
@@ -247,8 +244,10 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import { LockClosedIcon } from '@heroicons/vue/24/solid'
+import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { auth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from '@/firebase'
 import { useAuthStore, type LoginCredentials, type RegisterData } from '@/stores/auth.store'
 
 const { t } = useI18n()
@@ -273,6 +272,8 @@ const errors = reactive({
   password: '',
   confirmPassword: '',
 })
+
+const oauthError = ref('')
 
 const updateContainerHeight = async () => {
   await nextTick()
@@ -361,18 +362,47 @@ const handleSubmit = async () => {
   if (result.success) {
     const redirect = (router.currentRoute.value.query.redirect as string) || '/'
     router.push(redirect)
+  } else {
+    oauthError.value = result.error || t('login.errorOAuth')
   }
 }
 
-const loginWithOAuth = (provider: string) => {
-  // 这里可根据实际业务调用第三方登录
-  // 提示错误可用 t('login.errorOAuth')
+async function loginWithOAuth(provider: 'google' | 'facebook') {
+  oauthError.value = ''
+  let providerInstance
+  if (provider === 'google') providerInstance = new GoogleAuthProvider()
+  else providerInstance = new FacebookAuthProvider()
+  try {
+    // 1. 弹出firebase登录窗口
+    const result = await signInWithPopup(auth, providerInstance)
+    const user = result.user
+    // 2. 获取第三方用户信息和idToken
+    const payload = {
+      provider,
+      providerId: user.uid,
+      email: user.email,
+      name: user.displayName,
+      avatar: user.photoURL,
+      idToken: await user.getIdToken(),
+    }
+    // 3. 调用 Pinia Store 的 loginWithOAuth 方法
+    const loginResult = await authStore.loginWithOAuth(payload)
+    if (loginResult.success) {
+      const redirect = (router.currentRoute.value.query.redirect as string) || '/'
+      router.push(redirect)
+    } else {
+      oauthError.value = loginResult.error || t('login.errorOAuth')
+    }
+  } catch (e: any) {
+    oauthError.value = e.message || t('login.errorOAuth')
+  }
 }
 
 onMounted(() => {
   authStore.initAuth()
   updateContainerHeight()
   if (authStore.isAuthenticated) {
+    logger.debug('User is already authenticated')
     router.push('/')
   }
 })
