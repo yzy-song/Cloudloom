@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-20 16:35:27
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-27 02:00:36
+ * @LastEditTime: 2025-08-27 23:47:02
  */
 // src/main.ts
 
@@ -35,6 +35,25 @@ async function startApp() {
   }
 
   installLogger(app, { persistErrors: true })
+
+  // --- 新增语言初始化逻辑 ---
+  if (typeof window !== 'undefined') {
+    // 1. 尝试从 localStorage 读取用户偏好语言
+    const savedLocale = localStorage.getItem('user-locale')
+    if (savedLocale && (savedLocale === 'zh-CN' || savedLocale === 'en-US')) {
+      i18n.global.locale.value = savedLocale
+    } else {
+      // 2. 如果没有保存的偏好，根据浏览器语言设置
+      const browserLanguage = navigator.language
+      if (browserLanguage.startsWith('zh')) {
+        i18n.global.locale.value = 'zh-CN'
+      } else {
+        i18n.global.locale.value = 'en-US'
+      }
+    }
+    console.log(`Application started with locale: ${i18n.global.locale.value}`)
+  }
+  // --- 语言初始化逻辑结束 ---
 
   // 挂载应用
   app.use(pinia)
