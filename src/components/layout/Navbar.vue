@@ -6,14 +6,14 @@
         <div class="flex-shrink-0">
           <router-link to="/" class="flex items-center group">
             <div
-              class="w-10 h-10 rounded-full bg-hanfu-red flex items-center justify-center mr-2 transition-transform group-hover:rotate-12"
+              class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center mr-2 transition-transform group-hover:rotate-12"
             >
-              <span class="text-white font-display text-xl">华</span>
+              <span class="text-white font-display text-xl">C</span>
             </div>
             <div
-              class="text-2xl font-display text-gray-900 tracking-wider group-hover:text-hanfu-red transition-colors"
+              class="text-2xl font-display text-gray-900 tracking-wider group-hover:text-blue-600 transition-colors"
             >
-              云锦轩
+              Cloudloom
             </div>
           </router-link>
         </div>
@@ -22,117 +22,119 @@
         <div class="hidden md:flex items-center space-x-8">
           <router-link
             v-for="item in navItems"
-            :key="item.name"
+            :key="item.path"
             :to="item.path"
-            class="text-gray-700 hover:text-hanfu-red transition-colors font-medium relative py-2"
-            :class="activePath === item.path ? 'text-hanfu-red font-semibold' : ''"
+            class="text-gray-700 hover:text-blue-600 transition-colors font-medium relative py-2"
+            :class="activePath === item.path ? 'text-blue-600 font-semibold' : ''"
           >
-            {{ item.name }}
+            {{ t(item.label) }}
             <span
               v-if="activePath === item.path"
-              class="absolute bottom-0 left-0 w-full h-0.5 bg-hanfu-red rounded-full"
+              class="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-full"
             ></span>
           </router-link>
-          <button
-            class="btn-primary hover:scale-[1.03] transition-transform"
-            @click="navigateToBooking"
+          <router-link
+            to="/booking"
+            class="px-5 py-2 bg-blue-600 text-white rounded-full font-semibold shadow hover:bg-blue-700 transition"
           >
-            预约体验
-          </button>
+            {{ t('navbar.bookNow') }}
+          </router-link>
+          <LanguageSwitcher />
+        </div>
 
-          <!-- 用户菜单 -->
-          <div v-if="authStore.isAuthenticated" class="relative ml-3">
-            <div>
-              <button
-                @click="isUserMenuOpen = !isUserMenuOpen"
-                class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-hanfu-red"
-                id="user-menu-button"
-                aria-expanded="false"
-                aria-haspopup="true"
-              >
-                <span class="sr-only">打开用户菜单</span>
-                <img
-                  class="h-8 w-8 rounded-full"
-                  :src="
-                    authStore.user?.avatar ||
-                    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                  "
-                  alt="用户头像"
-                />
-                <span class="ml-2 text-gray-700">{{ authStore.user?.username }}</span>
-                <ChevronDownIcon class="ml-1 h-4 w-4 text-gray-400" />
-              </button>
-            </div>
-
-            <!-- 用户下拉菜单 -->
-            <transition
-              enter-active-class="transition ease-out duration-100"
-              enter-from-class="transform opacity-0 scale-95"
-              enter-to-class="transform opacity-100 scale-100"
-              leave-active-class="transition ease-in duration-75"
-              leave-from-class="transform opacity-100 scale-100"
-              leave-to-class="transform opacity-0 scale-95"
+        <!-- 用户菜单 -->
+        <div v-if="authStore.isAuthenticated" class="relative ml-3">
+          <div>
+            <button
+              @click="isUserMenuOpen = !isUserMenuOpen"
+              class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-hanfu-red"
+              id="user-menu-button"
+              aria-expanded="false"
+              aria-haspopup="true"
             >
-              <div
-                v-show="isUserMenuOpen"
-                class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-                role="menu"
-                aria-orientation="vertical"
-                aria-labelledby="user-menu-button"
-                tabindex="-1"
-              >
-                <router-link
-                  to="/profile"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  role="menuitem"
-                  tabindex="-1"
-                  @click="isUserMenuOpen = false"
-                >
-                  个人资料
-                </router-link>
-                <router-link
-                  to="/orders"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  role="menuitem"
-                  tabindex="-1"
-                  @click="isUserMenuOpen = false"
-                >
-                  我的预约
-                </router-link>
-                <router-link
-                  to="/favorites"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  role="menuitem"
-                  tabindex="-1"
-                  @click="isUserMenuOpen = false"
-                >
-                  我的收藏
-                </router-link>
-                <button
-                  @click="logout"
-                  class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  role="menuitem"
-                  tabindex="-1"
-                >
-                  退出登录
-                </button>
-              </div>
-            </transition>
+              <span class="sr-only">打开用户菜单</span>
+              <img
+                class="h-8 w-8 rounded-full"
+                :src="
+                  authStore.user?.avatar ||
+                  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+                "
+                alt="用户头像"
+              />
+              <span class="ml-2 text-gray-700">{{ authStore.user?.username }}</span>
+              <ChevronDownIcon class="ml-1 h-4 w-4 text-gray-400" />
+            </button>
           </div>
 
-          <router-link
-            v-else
-            to="/login"
-            class="text-gray-700 hover:text-hanfu-red transition-colors font-medium"
+          <!-- 用户下拉菜单 -->
+          <transition
+            enter-active-class="transition ease-out duration-100"
+            enter-from-class="transform opacity-0 scale-95"
+            enter-to-class="transform opacity-100 scale-100"
+            leave-active-class="transition ease-in duration-75"
+            leave-from-class="transform opacity-100 scale-100"
+            leave-to-class="transform opacity-0 scale-95"
           >
-            登录/注册
-          </router-link>
+            <div
+              v-show="isUserMenuOpen"
+              class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="user-menu-button"
+              tabindex="-1"
+            >
+              <router-link
+                to="/profile"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                role="menuitem"
+                tabindex="-1"
+                @click="isUserMenuOpen = false"
+              >
+                个人资料
+              </router-link>
+              <router-link
+                to="/orders"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                role="menuitem"
+                tabindex="-1"
+                @click="isUserMenuOpen = false"
+              >
+                我的预约
+              </router-link>
+              <router-link
+                to="/favorites"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                role="menuitem"
+                tabindex="-1"
+                @click="isUserMenuOpen = false"
+              >
+                我的收藏
+              </router-link>
+              <button
+                @click="logout"
+                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                role="menuitem"
+                tabindex="-1"
+              >
+                退出登录
+              </button>
+            </div>
+          </transition>
         </div>
+        <router-link
+          v-else
+          to="/login"
+          class="text-gray-700 hover:text-hanfu-red transition-colors font-medium"
+        >
+          登录/注册
+        </router-link>
 
         <!-- 移动端菜单按钮 -->
         <div class="md:hidden flex items-center">
           <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2">
-            <Bars3Icon class="h-8 w-8 text-gray-600" />
+            <svg class="h-8 w-8 text-gray-600" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
           </button>
         </div>
       </div>
@@ -147,13 +149,13 @@
       <div class="pt-2 pb-3 space-y-1 px-4">
         <router-link
           v-for="item in navItems"
-          :key="item.name"
+          :key="item.label"
           :to="item.path"
           class="block py-3 text-gray-700 hover:text-hanfu-red border-b"
           @click="mobileMenuOpen = false"
           :class="activePath === item.path ? 'text-hanfu-red font-semibold' : ''"
         >
-          {{ item.name }}
+          {{ item.label }}
         </router-link>
 
         <div v-if="authStore.isAuthenticated" class="border-b py-3">
@@ -220,31 +222,26 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { Bars3Icon, ChevronDownIcon } from '@heroicons/vue/24/outline'
+import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import LanguageSwitcher from '../ui/LanguageSwitcher.vue'
 import { useAuthStore } from '@/stores/auth.store'
 
-const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 
 const mobileMenuOpen = ref(false)
 const isUserMenuOpen = ref(false)
+const { t } = useI18n()
+const route = useRoute()
 
-interface NavItem {
-  name: string
-  path: string
-}
-
-const navItems: NavItem[] = [
-  { name: '首页', path: '/' },
-  { name: '汉服展示', path: '/gallery' },
-  { name: '汉服知识', path: '/knowledge' },
-  { name: '关于我们', path: '/about' },
-  { name: '商业合作', path: '/collaboration' },
-  { name: '测试页', path: '/test' },
+const navItems = [
+  { label: 'navbar.home', path: '/' },
+  { label: 'navbar.gallery', path: '/gallery' },
+  { label: 'navbar.knowledge', path: '/knowledge' },
+  { label: 'navbar.about', path: '/about' },
+  { label: 'navbar.collaboration', path: '/collaboration' },
 ]
-
-// 当前激活的路由
 const activePath = computed(() => route.path)
 
 // 退出登录
