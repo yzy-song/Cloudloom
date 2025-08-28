@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-19 09:30:28
+ * @LastEditTime: 2025-08-28 13:54:28
 -->
 <template>
   <div class="min-h-screen flex flex-col">
@@ -23,9 +23,12 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import Footer from '@/components/layout/Footer.vue'
 import Navbar from '@/components/layout/Navbar.vue'
+
+const i18n = useI18n()
 
 const route = useRoute()
 const isLoading = ref(false)
@@ -40,6 +43,12 @@ watch(
     }, 300)
   },
 )
+
+onMounted(async () => {
+  const lang = localStorage.getItem('locale') || 'zh'
+  const messages = await fetch(`/locales/${lang}.json`).then((res) => res.json())
+  i18n.setLocaleMessage(lang, messages)
+})
 </script>
 
 <style>
