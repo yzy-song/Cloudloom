@@ -6,6 +6,7 @@ import { api, setAuthToken } from '@/api/client'
 export interface User {
   id: string
   username: string
+  nickName?: string
   email: string
   avatar?: string
   phone?: string

@@ -61,7 +61,11 @@
                 "
                 alt="用户头像"
               />
-              <span class="ml-2 text-gray-700">{{ authStore.user?.username }}</span>
+              <span class="ml-2 text-gray-700">{{
+                authStore.user?.nickName !== undefined && authStore.user.nickName !== ''
+                  ? authStore.user.nickName
+                  : authStore.user?.username
+              }}</span>
               <ChevronDownIcon class="ml-1 h-4 w-4 text-gray-400" />
             </button>
           </div>
