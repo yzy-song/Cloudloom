@@ -15,7 +15,7 @@ export const startMockServer = () => {
   server.listen({
     onUnhandledRequest: 'bypass',
   })
-  console.log('MSW server started successfully')
+  logger.log('MSW server started successfully')
 
   return server
 }
@@ -23,5 +23,5 @@ export const startMockServer = () => {
 // 关闭server的函数
 export const closeMockServer = () => {
   server.close()
-  console.log('MSW server closed')
+  logger.log('MSW server closed')
 }
