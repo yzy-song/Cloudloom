@@ -2,10 +2,16 @@
  * @Author: yzy
  * @Date: 2025-08-27 23:48:22
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-29 08:55:56
+ * @LastEditTime: 2025-08-29 12:24:26
  */
 // src/i18n/index.ts
 import { createI18n } from 'vue-i18n'
+
+// 直接导入语言包文件
+import enMessages from '@/locales/en.json'
+import zhMessages from '@/locales/zh.json'
+
+import { logger } from '@/utils/logger'
 
 /**
  * 获取用户偏好或浏览器默认语言
@@ -29,32 +35,24 @@ function getInitialLocale(): string {
 }
 
 /**
- * 动态加载所有语言包并创建i18n实例
- * @returns {Promise<any>}
+ * 创建i18n实例
+ * @returns {any}
  */
-export async function createI18nInstance() {
+export function createI18nInstance() {
   const initialLocale = getInitialLocale()
 
   const i18n = createI18n({
     legacy: false, // 使用 Composition API 模式
     locale: initialLocale,
     fallbackLocale: 'en',
-    messages: {}, // 初始为空，动态加载
+    // 在创建时直接提供所有语言包
+    messages: {
+      en: enMessages,
+      zh: zhMessages,
+    },
   })
 
-  // 动态加载所有语言包
-  const locales = ['en', 'zh']
-  for (const lang of locales) {
-    try {
-      const url = `/locales/${lang}.json`
-      logger.log(`Attempting to fetch from: ${url}`)
-
-      const messages = await fetch(`/locales/${lang}.json`).then((res) => res.json())
-      i18n.global.setLocaleMessage(lang, messages)
-    } catch (error) {
-      logger.error(`Failed to load locale messages for ${lang}:`, error)
-    }
-  }
+  logger.log(`i18n instance created with locale: ${initialLocale}`)
 
   return i18n
 }

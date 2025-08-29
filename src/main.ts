@@ -24,7 +24,8 @@ async function startApp() {
 
   // 使用导入的函数创建 router 实例
   const router = createRouterInstance()
-  const i18n = await createI18nInstance()
+  // 不再需要 await
+  const i18n = createI18nInstance()
 
   // 1. 导航守卫逻辑 (保持不变)
   router.beforeEach((to, from, next) => {
