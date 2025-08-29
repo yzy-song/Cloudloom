@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-23 20:10:10
+ * @LastEditTime: 2025-08-29 08:10:22
  */
 import { fileURLToPath, URL } from 'node:url'
 import os from 'os'
@@ -70,7 +70,7 @@ export default defineConfig(({ mode }) => {
       // 仅开发环境用代理
       proxy: {
         '/api': {
-          target: 'http://localhost:3001', // 开发环境后端地址
+          target: 'http://localhost:3000', // 开发环境后端地址
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
