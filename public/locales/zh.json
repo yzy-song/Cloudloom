@@ -87,5 +87,22 @@
     "errorUsernameLength": "至少需要3个字符。",
     "errorPasswordLength": "密码至少需要6位。",
     "errorEmailFormat": "邮箱格式不正确。"
+  },
+  "router": {
+    "home": "首页",
+    "gallery": "汉服展示",
+    "productDetail": "产品详情",
+    "about": "关于我们",
+    "collaboration": "商业合作",
+    "booking": "预约体验",
+    "knowledge": "汉服知识",
+    "login": "登录",
+    "profile": "个人资料",
+    "orders": "我的预约",
+    "favorites": "我的收藏",
+    "survey": "市场调研",
+    "test": "测试页面",
+    "notFound": "页面未找到",
+    "serverError": "服务器错误"
   }
 }

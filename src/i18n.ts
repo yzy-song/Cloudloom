@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-27 23:48:22
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-29 08:02:34
+ * @LastEditTime: 2025-08-29 08:55:56
  */
 // src/i18n/index.ts
 import { createI18n } from 'vue-i18n'
@@ -46,6 +46,9 @@ export async function createI18nInstance() {
   const locales = ['en', 'zh']
   for (const lang of locales) {
     try {
+      const url = `/locales/${lang}.json`
+      logger.log(`Attempting to fetch from: ${url}`)
+
       const messages = await fetch(`/locales/${lang}.json`).then((res) => res.json())
       i18n.global.setLocaleMessage(lang, messages)
     } catch (error) {

@@ -87,5 +87,22 @@
     "errorUsernameLength": "must be at least 3 characters.",
     "errorPasswordLength": "Password must be at least 6 characters.",
     "errorEmailFormat": "Invalid email format."
+  },
+  "router": {
+    "home": "Home",
+    "gallery": "Gallery",
+    "productDetail": "Product Detail",
+    "about": "About Us",
+    "collaboration": "Collaboration",
+    "booking": "Book Experience",
+    "knowledge": "Hanfu Knowledge",
+    "login": "Login",
+    "profile": "My Profile",
+    "orders": "My Bookings",
+    "favorites": "My Favorites",
+    "survey": "Market Survey",
+    "test": "Test Page",
+    "notFound": "Page Not Found",
+    "serverError": "Server Error"
   }
 }
