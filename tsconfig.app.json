@@ -7,6 +7,7 @@
 
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "resolveJsonModule": true // 添加这一行以支持导入 JSON 文件
   }
 }

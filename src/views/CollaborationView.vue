@@ -305,7 +305,7 @@ const form = ref({
 
 function submitForm() {
   // 这里处理表单提交逻辑，可以发送到后端
-  logger.og('提交合作申请', form.value)
+  logger.log('提交合作申请', form.value)
   alert('合作申请已提交，我们将尽快与您联系！')
   // 重置表单
   form.value = {
