@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-20 15:42:00
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-25 04:38:24
+ * @LastEditTime: 2025-08-28 17:30:39
  */
 import axios from 'axios'
 
@@ -17,6 +17,7 @@ export const apiClient = axios.create({
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest', // 避免某些服务器的 CSRF 检查
   },
 })
 
