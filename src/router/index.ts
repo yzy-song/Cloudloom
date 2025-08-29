@@ -2,11 +2,10 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-29 10:30:00
+ * @LastEditTime: 2025-08-29 11:36:51
  */
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import type { RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -106,24 +105,27 @@ const routes: Array<RouteRecordRaw> = [
   },
 ]
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
-  scrollBehavior(to, from, savedPosition) {
-    if (to.query.filter !== from.query.filter) {
-      return {
-        el: '.sticky-filter-bar',
-        behavior: 'smooth',
-        top: 80,
+// 导出一个函数来创建 router 实例
+export function createRouterInstance() {
+  const router = createRouter({
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes,
+    scrollBehavior(to, from, savedPosition) {
+      // 保持你原有的滚动逻辑不变
+      if (to.query.filter !== from.query.filter) {
+        return {
+          el: '.sticky-filter-bar',
+          behavior: 'smooth',
+          top: 80,
+        }
       }
-    }
 
-    if (to.path !== from.path) {
-      return { top: 0, behavior: 'smooth' }
-    }
+      if (to.path !== from.path) {
+        return { top: 0, behavior: 'smooth' }
+      }
 
-    return savedPosition || { top: 0 }
-  },
-})
-
-export default router
+      return savedPosition || { top: 0 }
+    },
+  })
+  return router
+}

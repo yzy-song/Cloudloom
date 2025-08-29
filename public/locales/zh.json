@@ -1,4 +1,7 @@
 {
+  "brand":{
+    "name": "云锦轩"
+  },
   "navbar": {
     "home": "首页",
     "gallery": "汉服展示",
@@ -86,7 +89,16 @@
     "errorOAuth": "第三方登录失败，请重试。",
     "errorUsernameLength": "至少需要3个字符。",
     "errorPasswordLength": "密码至少需要6位。",
-    "errorEmailFormat": "邮箱格式不正确。"
+    "errorEmailFormat": "邮箱格式不正确。",
+    "newToSite": "新用户？",
+    "alreadyMember": "已有账户？",
+    "loginWithGoogle": "使用 Google 登录",
+    "registerWithGoogle": "使用 Google 注册",
+    "loginWithFacebook": "使用 Facebook 登录",
+    "registerWithFacebook": "使用 Facebook 注册",
+    "loginWithEmail": "使用邮箱登录",
+    "registerWithEmail": "使用邮箱注册",
+    "backToOptions": "返回其他登录方式"
   },
   "router": {
     "home": "首页",
