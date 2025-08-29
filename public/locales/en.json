@@ -1,4 +1,7 @@
 {
+  "brand":{
+    "name": "Cloudloom"
+  },
   "navbar": {
     "home": "Home",
     "gallery": "Gallery",
@@ -86,7 +89,16 @@
     "errorOAuth": "Third-party login failed, please try again.",
     "errorUsernameLength": "must be at least 3 characters.",
     "errorPasswordLength": "Password must be at least 6 characters.",
-    "errorEmailFormat": "Invalid email format."
+    "errorEmailFormat": "Invalid email format.",
+    "newToSite": "New to this site?",
+    "alreadyMember": "Already a member?",
+    "loginWithGoogle": "Log in with Google",
+    "registerWithGoogle": "Sign up with Google",
+    "loginWithFacebook": "Log in with Facebook",
+    "registerWithFacebook": "Sign up with Facebook",
+    "loginWithEmail": "Log in with Email",
+    "registerWithEmail": "Sign up with Email",
+    "backToOptions": "Back to other options"
   },
   "router": {
     "home": "Home",

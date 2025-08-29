@@ -2,94 +2,72 @@
  * @Author: yzy
  * @Date: 2025-08-20 16:35:27
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-29 09:40:44
+ * @LastEditTime: 2025-08-29 11:36:51
  */
-// src/main.ts
-
-import { createApp } from 'vue'
+import { createApp, watchEffect } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
-// 导入异步创建i18n实例的函数
 import { createI18nInstance } from './i18n'
-import router from './router'
-
-import { useAuthStore } from './stores/auth.store' // 请根据你的实际路径调整
-import { installLogger } from '@/utils/logger'
+import { createRouterInstance } from './router' // 从 router/index.ts 导入创建函数
+import { useAuthStore } from './stores/auth.store'
+import { installLogger, logger } from '@/utils/logger' // 确保同时导入 logger
 import './assets/styles/main.css'
 
-// 异步启动应用
 async function startApp() {
   const app = createApp(App)
+
+  // 安装 Logger
+  installLogger(app)
+
   const pinia = createPinia()
+  app.use(pinia)
 
-  if (import.meta.env.VITE_ENABLE_MOCK === 'true') {
-    logger.log('Starting MSW...')
-    try {
-      if (typeof window !== 'undefined') {
-        const { startMockServiceWorker } = await import('./mocks/browser')
-        await startMockServiceWorker()
-        logger.log('MSW successfully started.')
-      }
-    } catch (error) {
-      logger.error('Failed to start MSW:', error)
-    }
-  }
-
-  installLogger(app, { persistErrors: true })
-
-  // 确保i18n实例和语言包加载完成后，再挂载应用
+  // 使用导入的函数创建 router 实例
+  const router = createRouterInstance()
   const i18n = await createI18nInstance()
 
+  // 1. 导航守卫逻辑 (保持不变)
   router.beforeEach((to, from, next) => {
-    // 动态设置页面标题
-    const titleKey = to.meta.titleKey as string
-    const brandName = i18n.global.t('brand.name') // 从语言包获取品牌名
+    const enableAuth = import.meta.env.VITE_ENABLE_AUTH === 'true'
+    if (enableAuth) {
+      const authStore = useAuthStore()
+      // Pinia store 在这里可以安全使用，因为 app.use(pinia) 已经执行
 
-    if (titleKey) {
-      // 使用 i18n.global.t 来翻译
-      document.title = `${i18n.global.t(titleKey)} - ${brandName}`
+      if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+        logger.warn('Route requires auth, but user is not authenticated. Redirecting to login.')
+        next({ name: 'Login', query: { redirect: to.fullPath } })
+      } else if (to.meta.requiresGuest && authStore.isAuthenticated) {
+        logger.debug('Route requires guest, but user is authenticated. Redirecting to home.')
+        next('/')
+      } else {
+        next()
+      }
+    } else {
+      next()
+    }
+  })
+
+  // 2. 使用 watchEffect 响应式地更新标题 (保持不变)
+  watchEffect(() => {
+    const route = router.currentRoute.value
+    const titleKey = route.meta.titleKey as string
+
+    const brandName = i18n.global.t('brand.name')
+    const pageTitle = titleKey ? i18n.global.t(titleKey) : ''
+
+    if (pageTitle && pageTitle !== titleKey) {
+      document.title = `${pageTitle} - ${brandName}`
     } else {
       document.title = brandName
     }
-
-    // 检查是否启用认证检查
-    const enableAuth = import.meta.env.VITE_ENABLE_AUTH === 'true'
-    if (!enableAuth) {
-      next()
-      return
-    }
-
-    const authStore = useAuthStore(pinia) // 确保在 router 守卫中 pinia 已初始化
-
-    // 初始化用户状态
-    authStore.initAuth()
-
-    // 检查是否需要认证
-    if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-      next({
-        path: '/login',
-        query: { redirect: to.fullPath },
-      })
-      return
-    }
-
-    // 检查是否需要访客状态（已登录用户不能访问登录页）
-    if (to.meta.requiresGuest && authStore.isAuthenticated) {
-      next({ path: '/' })
-      return
-    }
-
-    next()
   })
 
-  // 挂载应用
-  app.use(pinia)
-  app.use(router)
+  // 依次注册插件
   app.use(i18n)
-  app.mount('#app')
+  app.use(router)
 
-  logger.log(`Application started with locale: ${i18n.global.locale.value}`)
+  // 挂载应用
+  app.mount('#app')
 }
 
-// 启动应用
 startApp()
