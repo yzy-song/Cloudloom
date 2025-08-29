@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-16 10:23:53
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-28 13:54:28
+ * @LastEditTime: 2025-08-29 09:09:22
 -->
 <template>
   <div class="min-h-screen flex flex-col">
@@ -43,12 +43,6 @@ watch(
     }, 300)
   },
 )
-
-onMounted(async () => {
-  const lang = localStorage.getItem('locale') || 'zh'
-  const messages = await fetch(`/locales/${lang}.json`).then((res) => res.json())
-  i18n.setLocaleMessage(lang, messages)
-})
 </script>
 
 <style>
