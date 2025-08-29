@@ -73,7 +73,7 @@ export const useCategoriesStore = defineStore('categories', () => {
       ]
     } catch (e) {
       error.value = 'Failed to fetch categories'
-      console.error('Error fetching categories:', e)
+      logger.error('Error fetching categories:', e)
     } finally {
       loading.value = false
     }

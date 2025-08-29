@@ -93,10 +93,10 @@ const updateProfile = async () => {
   const result = await authStore.updateProfile(profileData)
   if (result.success) {
     // 可以添加成功提示
-    console.log('资料更新成功')
+    logger.og('资料更新成功')
   } else {
     // 可以添加错误提示
-    console.error('资料更新失败:', result.error)
+    logger.error('资料更新失败:', result.error)
   }
 }
 

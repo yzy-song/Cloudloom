@@ -44,7 +44,7 @@ export function useApi() {
       return response.data
     } catch (err: any) {
       error.value = err.message || '请求失败'
-      console.error('API Error:', err)
+      logger.error('API Error:', err)
       return null
     } finally {
       loading.value = false

@@ -109,7 +109,7 @@ export const useProductStore = defineStore('product', () => {
       }
     } catch (e: any) {
       error.value = e.response?.data?.error || 'Failed to fetch products'
-      console.error('Fetch products error:', e)
+      logger.error('Fetch products error:', e)
       return { list: [], total: 0 }
     } finally {
       loading.value = false

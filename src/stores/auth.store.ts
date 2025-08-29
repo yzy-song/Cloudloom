@@ -180,7 +180,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await api.post('/auth/logout')
     } catch (e) {
-      console.error('Logout error:', e)
+      logger.error('Logout error:', e)
     } finally {
       user.value = null
       token.value = null

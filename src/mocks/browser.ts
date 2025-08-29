@@ -18,8 +18,8 @@ export const startMockServiceWorker = async () => {
       },
       quiet: false, // 显示日志信息
     })
-    console.log('MSW worker started successfully')
+    logger.log('MSW worker started successfully')
   } catch (error) {
-    console.warn('MSW worker failed to start:', error)
+    logger.warn('MSW worker failed to start:', error)
   }
 }

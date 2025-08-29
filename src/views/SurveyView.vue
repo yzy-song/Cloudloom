@@ -443,7 +443,7 @@ const submitSurvey = () => {
   showSuccessMessage.value = false
 
   // 模拟 API 提交
-  console.log('提交的问卷数据:', answers.value)
+  logger.log('提交的问卷数据:', answers.value)
 
   setTimeout(() => {
     isSubmitting.value = false
