@@ -396,11 +396,6 @@ async function loginWithOAuth(provider: 'google' | 'facebook') {
 
 onMounted(() => {
   authStore.initAuth()
-  // 移除自动跳转逻辑，因为用户可能只是想切换登录/注册模式
-  // if (authStore.isAuthenticated) {
-  //   logger.debug('User is already authenticated, redirecting from Login page')
-  //   router.push('/')
-  // }
 })
 </script>
 
