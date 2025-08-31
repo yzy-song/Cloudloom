@@ -1,11 +1,15 @@
 <!-- filepath: d:\workspace\yzy_Vue\Cloudloom\src\views\surveySteps\Service.vue -->
 <template>
-  <div class="space-y-6">
-    <h2 class="text-2xl font-semibold text-emerald-800">{{ t('service.title') }}</h2>
-    <p class="text-gray-600 max-w-2xl mx-auto">{{ t('service.description') }}</p>
-    <div class="space-y-8">
+  <div class="space-y-4 sm:space-y-6">
+    <h2 class="text-xl sm:text-2xl font-semibold text-emerald-800">{{ t('service.title') }}</h2>
+    <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+      {{ t('service.description') }}
+    </p>
+    <div class="space-y-6 sm:space-y-8">
       <div>
-        <h3 class="text-xl font-medium text-gray-800 mb-4">{{ t('service.service_question') }}</h3>
+        <h3 class="text-lg sm:text-xl font-medium text-gray-800 mb-3 sm:mb-4">
+          {{ t('service.service_question') }}
+        </h3>
         <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
           <div
             v-for="service in services"
@@ -25,7 +29,7 @@
         </div>
       </div>
       <div>
-        <h3 class="text-xl font-medium text-gray-800 mb-4">
+        <h3 class="text-lg sm:text-xl font-medium text-gray-800 mb-3 sm:mb-4">
           {{ t('service.duration_question', { duration: modelValue.duration }) }}
         </h3>
         <input

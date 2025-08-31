@@ -9,7 +9,7 @@
     <div class="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
       <h1 class="text-3xl font-bold text-center mb-6 text-hanfu-red">Tailwind CSS v4 测试</h1>
 
-      <div class="space-y-6">
+      <div class="space-y-4 sm:space-y-6">
         <!-- 颜色测试 -->
         <div class="p-4 bg-hanfu-blue/10 rounded-lg">
           <h2 class="text-xl font-semibold mb-2">颜色测试</h2>
