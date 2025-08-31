@@ -11,9 +11,12 @@
       import { createApp } from 'vue'
       import SurveyView from '/src/views/SurveyView.vue'
       import '/src/assets/styles/main.css' // 确保样式被正确引入
+      import { createI18nInstance } from '/src/i18n' // 假设你有一个 i18n 实例创建文件
+
+      const i18n = createI18nInstance()
 
       // 显式创建并挂载应用
-      createApp(SurveyView).mount('#app')
+      createApp(SurveyView).use(i18n).mount('#app')
     </script>
   </body>
 </html>
