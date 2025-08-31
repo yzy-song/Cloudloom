@@ -18,6 +18,7 @@
       </router-view>
     </main>
     <Footer />
+    <DevAccessInfo></DevAccessInfo>
   </div>
 </template>
 
@@ -25,10 +26,9 @@
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
+import DevAccessInfo from './components/DevAccessInfo.vue'
 import Footer from '@/components/layout/Footer.vue'
 import Navbar from '@/components/layout/Navbar.vue'
-
-const i18n = useI18n()
 
 const route = useRoute()
 const isLoading = ref(false)

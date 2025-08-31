@@ -116,5 +116,92 @@
     "test": "测试页面",
     "notFound": "页面未找到",
     "serverError": "服务器错误"
+  },
+  "survey": {
+    "title": "汉服体验调研问卷",
+    "description": "对古风服饰感兴趣吗？欢迎参与都柏林汉服主题派对调研，帮助我们更好地策划活动！",
+    "buttons": {
+      "next": "下一步",
+      "back": "上一步",
+      "submit": "提交"
+    },
+    "recognition": {
+      "correct": "恭喜，答对了！这就是汉服。",
+      "incorrect": "不是哦，这是{alt}，汉服才是正确答案。"
+    },
+    "submitted": "感谢您的参与！"
+  },
+  "education": {
+    "title": "了解汉服",
+    "description": "汉服是汉民族的传统服饰，拥有数千年历史。它不仅仅是服装，更是文化的传承与优雅的象征。",
+    "styles": {
+      "elegant": "典雅正式",
+      "elegant_desc": "多用于正式场合与庆典。",
+      "casual": "日常休闲",
+      "casual_desc": "舒适款式，适合日常穿着。",
+      "historical": "历史风格",
+      "historical_desc": "源自古代朝代的经典设计。"
+    }
+  },
+  "preferences": {
+    "title": "您的偏好",
+    "description": "哪种汉服风格和活动最吸引您？",
+    "style_question": "最感兴趣的汉服风格",
+    "activity_question": "您希望有哪些活动？",
+    "styles": {
+      "elegant": "典雅正式",
+      "casual": "日常休闲",
+      "heroic": "英气武侠"
+    },
+    "activities": {
+      "photoshoot": "汉服写真",
+      "tea": "茶艺体验",
+      "workshop": "文化手作",
+      "games": "主题游戏"
+    }
+  },
+  "service": {
+    "title": "服务与时长",
+    "description": "您希望体验哪些服务？理想的活动时长是多少？",
+    "service_question": "感兴趣的服务",
+    "duration_question": "理想时长：{duration} 小时",
+    "services": {
+      "rental": "汉服租赁",
+      "makeup": "专业妆造",
+      "photo": "摄影套餐",
+      "performance": "文化表演"
+    },
+    "duration": {
+      "quick": "2小时（快闪）",
+      "full_day": "8小时（全天）"
+    }
+  },
+  "payment": {
+    "title": "预算区间",
+    "description": "您期望的人均体验预算是多少？",
+    "question": "请选择预算"
+  },
+  "recognition": {
+    "title": "汉服识别小测试",
+    "description": "您能认出哪一张是汉服吗？点击你认为是汉服的图片。",
+    "alts": {
+      "kimono": "日式和服",
+      "hanbok": "韩服",
+      "hanfu": "汉服",
+      "modern": "现代服饰"
+    }
+  },
+  "personal": {
+    "title": "联系方式",
+    "description": "请留下您的信息，方便我们后续联系。",
+    "name": "姓名",
+    "email": "邮箱",
+    "phone": "手机号（选填）",
+    "city": "城市/邮编"
+  },
+  "feedback": {
+    "title": "开放建议",
+    "description": "还有其他想法或建议吗？欢迎留言！",
+    "placeholder": "您的建议..."
   }
 }

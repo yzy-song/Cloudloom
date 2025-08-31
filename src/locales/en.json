@@ -116,5 +116,92 @@
     "test": "Test Page",
     "notFound": "Page Not Found",
     "serverError": "Server Error"
+  },
+  "survey": {
+    "title": "Hanfu Experience Survey",
+    "description": "Curious about ancient Chinese clothing? Join us for an unforgettable Hanfu experience and themed party in Dublin! Please help us plan by sharing your preferences below.",
+    "buttons": {
+      "next": "Next",
+      "back": "Back",
+      "submit": "Submit"
+    },
+    "recognition": {
+      "correct": "Correct! This is a Hanfu.",
+      "incorrect": "Not quite! This is a {alt}, Hanfu is the correct answer."
+    },
+    "submitted": "Thank you for completing the survey!"
+  },
+  "education": {
+    "title": "Learn About Hanfu",
+    "description": "Hanfu, the traditional clothing of the Han Chinese, has a history spanning thousands of years. It's not just a costume; it's a living part of culture. It represents grace, elegance, and history.",
+    "styles": {
+      "elegant": "Elegant & Formal",
+      "elegant_desc": "Often worn for formal occasions and celebrations.",
+      "casual": "Casual & Daily Wear",
+      "casual_desc": "Comfortable styles suitable for everyday life.",
+      "historical": "Historical Designs",
+      "historical_desc": "Based on designs from ancient dynasties."
+    }
+  },
+  "preferences": {
+    "title": "Your Preferences",
+    "description": "Which Hanfu style and activities interest you the most for our event?",
+    "style_question": "Which Hanfu style interests you most?",
+    "activity_question": "What activities would you like to see?",
+    "styles": {
+      "elegant": "Elegant & Formal",
+      "casual": "Casual & Everyday",
+      "heroic": "Heroic & Martial"
+    },
+    "activities": {
+      "photoshoot": "Hanfu Photoshoot",
+      "tea": "Traditional Tea Ceremony",
+      "workshop": "Cultural Workshops",
+      "games": "Themed Party Games"
+    }
+  },
+  "service": {
+    "title": "Services & Duration",
+    "description": "Please tell us more about the services and ideal duration for your experience.",
+    "service_question": "Which services are you interested in?",
+    "duration_question": "Ideal Duration: {duration} Hours",
+    "services": {
+      "rental": "Hanfu Rental",
+      "makeup": "Professional Makeup & Hair",
+      "photo": "Photography Package",
+      "performance": "Cultural Performance"
+    },
+    "duration": {
+      "quick": "2 Hours (Quick)",
+      "full_day": "8 Hours (Full-Day)"
+    }
+  },
+  "payment": {
+    "title": "Your Budget",
+    "description": "Please select your preferred budget per person for the experience.",
+    "question": "Preferred Budget Per Person"
+  },
+  "recognition": {
+    "title": "Hanfu Recognition",
+    "description": "Can you spot the Hanfu? Click on the image you think is an authentic Hanfu.",
+    "alts": {
+      "kimono": "Japanese Kimono",
+      "hanbok": "Korean Hanbok",
+      "hanfu": "Chinese Hanfu",
+      "modern": "Modern Chinese Dress"
+    }
+  },
+  "personal": {
+    "title": "Your Contact Details",
+    "description": "Please provide your information so we can stay in touch about the event.",
+    "name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number (Optional)",
+    "city": "City / Postal Code"
+  },
+  "feedback": {
+    "title": "Open Feedback",
+    "description": "Have any other ideas or suggestions? We'd love to hear them!",
+    "placeholder": "Your suggestions here..."
   }
 }
