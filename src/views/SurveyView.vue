@@ -5,14 +5,19 @@
     <div class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl p-6 sm:p-10 my-8">
       <!-- Header & Progress -->
       <div class="text-center mb-8">
-        <h1
-          class="text-4xl sm:text-5xl font-extrabold text-emerald-800 tracking-tight leading-tight"
-        >
-          {{ t('survey.title') }}
-        </h1>
-        <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-          {{ t('survey.description') }}
-        </p>
+        <!-- v-if 控制：只在第一步显示 -->
+        <div v-if="currentStep === 0">
+          <h1
+            class="text-4xl sm:text-5xl font-extrabold text-emerald-800 tracking-tight leading-tight"
+          >
+            {{ t('survey.title') }}
+          </h1>
+          <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+            {{ t('survey.description') }}
+          </p>
+        </div>
+
+        <!-- 进度条始终显示 -->
         <div class="mt-8 bg-gray-200 rounded-full h-2">
           <div
             class="bg-emerald-500 h-2 rounded-full transition-all duration-500"

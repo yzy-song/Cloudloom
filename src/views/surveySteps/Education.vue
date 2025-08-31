@@ -1,8 +1,7 @@
-<!-- filepath: d:\workspace\yzy_Vue\Cloudloom\src\views\surveySteps\Education.vue -->
 <template>
-  <div class="space-y-6">
-    <h2 class="text-2xl font-semibold text-emerald-800">{{ t('education.title') }}</h2>
-    <p class="text-gray-600 max-w-2xl mx-auto">
+  <div class="space-y-4 sm:space-y-6">
+    <h2 class="text-xl sm:text-2xl font-semibold text-emerald-800">{{ t('education.title') }}</h2>
+    <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
       {{ t('education.description') }}
     </p>
     <div class="grid md:grid-cols-3 gap-6">

@@ -1,8 +1,10 @@
 <!-- filepath: d:\workspace\yzy_Vue\Cloudloom\src\views\surveySteps\Personal.vue -->
 <template>
-  <div class="space-y-6">
-    <h2 class="text-2xl font-semibold text-emerald-800">{{ t('personal.title') }}</h2>
-    <p class="text-gray-600 max-w-2xl mx-auto">{{ t('personal.description') }}</p>
+  <div class="space-y-4 sm:space-y-6">
+    <h2 class="text-xl sm:text-2xl font-semibold text-emerald-800">{{ t('personal.title') }}</h2>
+    <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+      {{ t('personal.description') }}
+    </p>
     <form class="space-y-4" @submit.prevent>
       <div>
         <label class="block text-sm font-medium text-gray-700">{{ t('personal.name') }}</label>
