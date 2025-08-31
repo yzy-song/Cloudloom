@@ -92,7 +92,7 @@
 import { useHead } from '@vueuse/head'
 
 useHead({
-  title: '服务器错误 - 云锦轩',
+  title: '服务器错误 - 云织',
 })
 
 function reloadPage() {

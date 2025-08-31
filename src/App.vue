@@ -1,66 +1,48 @@
-<!--
- * @Author: yzy
- * @Date: 2025-08-16 10:23:53
- * @LastEditors: yzy
- * @LastEditTime: 2025-08-29 09:09:22
--->
 <template>
-  <div class="min-h-screen flex flex-col">
-    <!-- 全局加载指示器 -->
-    <div v-if="isLoading" class="global-loading"></div>
-
+  <!-- 设定了更具中国风的背景色和字体 -->
+  <div class="bg-[#FBF9F6] text-[#333333] font-sans min-h-screen flex flex-col">
     <Navbar />
     <main class="flex-grow">
+      <!-- 路由视图的过渡动画，让页面切换更平滑 -->
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
         </transition>
       </router-view>
     </main>
+    <!-- 页脚组件暂时移除，以便我们专注于首页和导航栏的核心体验 -->
     <Footer />
-    <DevAccessInfo></DevAccessInfo>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
-import DevAccessInfo from './components/DevAccessInfo.vue'
 import Footer from '@/components/layout/Footer.vue'
 import Navbar from '@/components/layout/Navbar.vue'
-
-const route = useRoute()
-const isLoading = ref(false)
-
-// 监听路由变化显示加载状态
-watch(
-  () => route.path,
-  () => {
-    isLoading.value = true
-    setTimeout(() => {
-      isLoading.value = false
-    }, 300)
-  },
-)
 </script>
 
 <style>
-/* 增强路由过渡动画 */
+/* 引入更优雅的衬线字体，提升设计感 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
+
+body {
+  font-family:
+    'Helvetica Neue', 'Helvetica', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    'WenQuanYi Micro Hei', sans-serif;
+}
+
+/* 定义标题和特殊文本的字体 */
+.font-serif {
+  font-family: 'Noto Serif SC', serif;
+}
+
+/* 页面切换的淡入淡出效果 */
 .fade-enter-active,
 .fade-leave-active {
-  transition:
-    opacity 0.3s ease,
-    transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition: opacity 0.4s ease;
 }
 
-.fade-enter-from {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
+.fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-  transform: translateY(-20px);
 }
 </style>
