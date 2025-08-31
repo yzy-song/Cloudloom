@@ -17,7 +17,7 @@
       <div class="prose prose-lg max-w-none">
         <h2 class="text-2xl md:text-3xl font-display text-gray-900 border-b pb-4">我们的故事</h2>
         <p>
-          云锦轩汉服体验馆诞生于对中华传统服饰文化的热爱与尊重。创始人张先生旅居爱尔兰多年，深感海外同胞对传统文化的渴望，以及外国友人对东方美学的浓厚兴趣。怀着对汉服文化的执着，我们决定在都柏林创立爱尔兰首家专业汉服体验馆。
+          云织汉服体验馆诞生于对中华传统服饰文化的热爱与尊重。创始人张先生旅居爱尔兰多年，深感海外同胞对传统文化的渴望，以及外国友人对东方美学的浓厚兴趣。怀着对汉服文化的执着，我们决定在都柏林创立爱尔兰首家专业汉服体验馆。
         </p>
 
         <div class="my-8 p-6 bg-hanfu-blue/5 rounded-xl border-l-4 border-hanfu-blue">

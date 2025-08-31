@@ -1,6 +1,6 @@
 {
   "brand":{
-    "name": "云锦轩"
+    "name": "云织"
   },
   "navbar": {
     "home": "首页",
@@ -23,11 +23,11 @@
     "terms": "服务条款"
   },
   "home": {
-    "bannerTitle": "云锦轩汉服体验馆",
+    "bannerTitle": "云织汉服体验馆",
     "bannerSlogan": "在爱尔兰邂逅汉服之美",
     "bookNow": "立即预约",
-    "aboutTitle": "关于云锦轩",
-    "aboutDesc": "云锦轩将正宗汉服体验带到爱尔兰，和我们一起探索中国传统服饰与文化。",
+    "aboutTitle": "关于云织",
+    "aboutDesc": "云织将正宗汉服体验带到爱尔兰，和我们一起探索中国传统服饰与文化。",
     "stepsTitle": "体验流程",
     "step1Title": "选择汉服",
     "step1Desc": "浏览我们的汉服系列，挑选你喜欢的款式。",

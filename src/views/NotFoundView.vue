@@ -79,7 +79,7 @@
 import { useHead } from '@vueuse/head'
 
 useHead({
-  title: '页面未找到 - 云锦轩',
+  title: '页面未找到 - 云织',
 })
 </script>
 

@@ -1,337 +1,361 @@
+<!--
+ * @Author: yzy
+ * @Date: 2025-08-29 09:09:22
+ * @LastEditors: yzy
+ * @LastEditTime: 2025-08-31 16:20:11
+ * @Description: 全新设计的首页，已将原有版块以新风格恢复
+-->
 <template>
-  <div class="home bg-gray-50 font-sans text-gray-800">
-    <!-- Banner Section -->
-    <section
-      class="hero relative h-screen w-full overflow-hidden flex items-center justify-center text-center bg-cover bg-center"
-      style="
-        background-image: url('https://placehold.co/1920x1080/E5E7EB/4B5563?text=Hanfu+Banner');
-      "
-    >
-      <div class="absolute inset-0 bg-black opacity-40"></div>
-      <div class="z-10 text-white p-6 md:p-10">
-        <h1
-          class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 animate__animated animate__fadeInDown animate__fast"
-        >
-          {{ t('home.bannerTitle') }}
-        </h1>
-        <p
-          class="text-lg md:text-2xl lg:text-3xl mb-8 animate__animated animate__fadeInUp animate__fast animate__delay-1s"
-        >
-          {{ t('home.bannerSlogan') }}
-        </p>
-        <div class="relative w-full max-w-lg mx-auto">
-          <img
-            src="https://placehold.co/800x400/D1D5DB/1F2937?text=Hanfu+Models"
-            alt="Hanfu Models"
-            class="rounded-3xl shadow-2xl w-full animate__animated animate__zoomIn animate__fast animate__delay-2s"
-          />
-          <div
-            class="absolute -bottom-4 right-4 md:-bottom-8 md:right-8 bg-white p-2 rounded-full shadow-lg transform rotate-6 animate-pulse"
-          >
-            <svg
-              class="w-8 h-8 md:w-12 md:h-12 text-pink-500"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5A5.5 5.5 0 017.5 3c2.25 0 4.16 1.15 5.5 3.5.55-.9 1.15-1.78 1.83-2.58A5.5 5.5 0 0122 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-              ></path>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Services Section with Card Effect -->
-    <section class="services py-20 px-4 md:px-20 bg-gray-50">
-      <h2
-        class="text-3xl md:text-4xl font-extrabold text-center mb-12 text-gray-900 animate__animated animate__fadeInUp"
-      >
-        {{ t('home.featuresTitle') }}
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div
-          v-for="(feature, index) in features"
-          :key="feature.title"
-          class="service-card group bg-white rounded-3xl shadow-xl p-8 flex flex-col items-center text-center transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl animate__animated animate__fadeInUp"
-          :style="{ 'animation-delay': `${index * 0.2}s` }"
-        >
-          <div
-            class="mb-6 p-4 rounded-full bg-blue-100 transition-colors duration-300 group-hover:bg-blue-200"
-          >
-            <component
-              :is="feature.icon"
-              class="w-12 h-12 text-blue-600 transition-transform duration-300 group-hover:rotate-6"
-            />
-          </div>
-          <h3 class="text-xl font-semibold mb-2 text-gray-900">{{ t(feature.title) }}</h3>
-          <p class="text-gray-600 text-sm">{{ t(feature.desc) }}</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- About Us Section with Parallax Effect -->
-    <section
-      class="about relative flex flex-col md:flex-row items-center justify-between gap-10 py-20 px-4 md:px-20 bg-gray-100 overflow-hidden"
-    >
-      <div
-        class="flex-1 z-10 animate__animated animate__fadeInLeft animate__fast"
-        style="animation-delay: 0.5s"
-      >
-        <h2 class="text-3xl md:text-4xl font-extrabold mb-4 text-gray-900">
-          {{ t('home.aboutTitle') }}
-        </h2>
-        <p class="text-gray-700 text-lg leading-relaxed">{{ t('home.aboutDesc') }}</p>
-      </div>
-      <img
-        src="https://placehold.co/600x600/D1D5DB/1F2937?text=About+Hanfu"
-        alt="About Hanfu"
-        class="flex-1 rounded-3xl shadow-xl max-w-md object-cover transform translate-y-12 opacity-0 animate-slide-up-fade-in"
-      />
-    </section>
-
-    <!-- Experience Steps Section -->
-    <section class="steps py-20 bg-white px-4 md:px-20">
-      <h2
-        class="text-3xl md:text-4xl font-extrabold text-center mb-12 text-gray-900 animate__animated animate__fadeInUp"
-      >
-        {{ t('home.stepsTitle') }}
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div
-          v-for="(step, index) in steps"
-          :key="step.title"
-          class="step-item bg-gray-50 rounded-3xl shadow-lg p-8 flex flex-col items-center transition-transform duration-300 ease-in-out hover:-translate-y-2 animate__animated animate__fadeInUp"
-          :style="{ 'animation-delay': `${index * 0.2}s` }"
-        >
-          <img
-            :src="`https://placehold.co/240x240?text=Step+${index + 1}`"
-            :alt="t(step.title)"
-            class="w-32 h-32 mb-6 object-cover rounded-full border-4 border-blue-200 transition-transform duration-500 hover:scale-110"
-          />
-          <h3 class="text-xl font-semibold mb-2 text-gray-900">{{ t(step.title) }}</h3>
-          <p class="text-gray-600 text-center text-sm">{{ t(step.desc) }}</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Gallery Section with Grid and Hover Effects -->
-    <section class="gallery py-20 px-4 md:px-20 bg-gray-100">
-      <h2
-        class="text-3xl md:text-4xl font-extrabold text-center mb-12 text-gray-900 animate__animated animate__fadeInUp"
-      >
-        {{ t('home.galleryTitle') }}
-      </h2>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+  <div class="home-view overflow-x-hidden bg-[#FBF9F6]">
+    <!-- Section 1: Hero Banner -->
+    <section class="relative h-screen w-full flex items-center justify-center text-white">
+      <div class="absolute inset-0 bg-black overflow-hidden">
         <img
-          v-for="i in 4"
-          :key="i"
-          :src="`https://placehold.co/400x300/D1D5DB/1F2937?text=Hanfu+${i}`"
-          class="rounded-2xl shadow-lg object-cover w-full h-56 transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl animate__animated animate__fadeIn"
-          :style="{ 'animation-delay': `${i * 0.2}s` }"
+          src="https://images.unsplash.com/photo-1589363198130-a02862494165?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
+          alt="汉服背景"
+          class="w-full h-full object-cover opacity-60"
         />
       </div>
-    </section>
-
-    <!-- Testimonials Section with Carousel Effect -->
-    <section class="testimonials py-20 bg-white px-4 md:px-20">
-      <h2
-        class="text-3xl md:text-4xl font-extrabold text-center mb-12 text-gray-900 animate__animated animate__fadeInUp"
-      >
-        {{ t('home.testimonialsTitle') }}
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div
-          v-for="(item, index) in testimonials"
-          :key="item.name"
-          class="testimonial-card group bg-blue-50 rounded-3xl shadow-lg p-8 flex flex-col items-center text-center transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl animate__animated animate__fadeInUp"
-          :style="{ 'animation-delay': `${index * 0.2}s` }"
+      <div class="relative z-10 text-center px-4">
+        <h1
+          class="font-serif text-5xl md:text-7xl lg:text-8xl font-bold tracking-wider mb-4 animate-fade-in-down"
+          style="text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5)"
         >
-          <img
-            :src="`https://placehold.co/120x120/D1D5DB/1F2937?text=Avatar`"
-            :alt="item.name"
-            class="w-16 h-16 mb-4 rounded-full object-cover border-4 border-blue-200 transition-transform duration-500 group-hover:scale-110"
+          云织汉服
+        </h1>
+        <p
+          class="text-lg md:text-xl max-w-2xl mx-auto mb-8 animate-fade-in-up"
+          style="animation-delay: 0.3s; text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5)"
+        >
+          在翡翠岛国，邂逅千年华裳。我们提供汉服租赁、销售及文化体验，连接传统与现代之美。
+        </p>
+        <router-link
+          to="/booking"
+          class="inline-block bg-[#C0392B] text-white font-semibold tracking-wider px-8 py-3 rounded-full text-lg hover:bg-[#a53125] transition-transform hover:scale-105 duration-300 animate-fade-in-up"
+          style="animation-delay: 0.6s"
+        >
+          {{ t('navbar.bookNow') }}
+        </router-link>
+      </div>
+      <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+        <svg class="w-8 h-8 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 14l-7 7m0 0l-7-7m7 7V3"
           />
-          <p class="text-gray-700 italic mb-2">"{{ t(item.text) }}"</p>
-          <span class="text-blue-700 font-semibold text-lg">{{ item.name }}</span>
-        </div>
+        </svg>
       </div>
     </section>
 
-    <!-- FAQ Section -->
-    <section class="faq py-20 px-4 md:px-20 bg-gray-100">
-      <h2
-        class="text-3xl md:text-4xl font-extrabold text-center mb-12 text-gray-900 animate__animated animate__fadeInUp"
-      >
-        {{ t('home.faqTitle') }}
-      </h2>
-      <div class="max-w-3xl mx-auto space-y-6">
-        <div
-          v-for="(faq, idx) in faqs"
-          :key="idx"
-          class="border-b-2 border-gray-200 pb-4 animate__animated animate__fadeInUp"
-          :style="{ 'animation-delay': `${idx * 0.2}s` }"
-        >
-          <button
-            @click="toggleFaq(idx)"
-            class="flex justify-between items-center w-full text-left text-lg md:text-xl font-medium text-blue-700 focus:outline-none py-2"
+    <!-- Section 2: Our Services -->
+    <section class="py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-screen-xl mx-auto">
+        <div class="text-center mb-16" v-observe-animation>
+          <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
+            雅集·我们的服务
+          </h2>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            从个人写真到团体派对，我们为您量身打造独一无二的汉服文化体验。
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div
+            v-for="(feature, index) in features"
+            :key="index"
+            class="service-card p-8 bg-white rounded-lg shadow-lg text-center transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+            v-observe-animation
+            :style="{ 'animation-delay': `${index * 150}ms` }"
           >
-            <span class="flex-1">{{ t(faq.q) }}</span>
-            <svg
-              :class="openFaq === idx ? 'rotate-180' : ''"
-              class="w-6 h-6 ml-2 text-blue-500 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
-          <transition
-            enter-active-class="transition-all duration-300 ease-out"
-            enter-from-class="opacity-0 max-h-0"
-            enter-to-class="opacity-100 max-h-96"
-            leave-active-class="transition-all duration-300 ease-in"
-            leave-from-class="opacity-100 max-h-96"
-            leave-to-class="opacity-0 max-h-0"
-          >
-            <div v-show="openFaq === idx" class="mt-2 text-gray-600 text-sm md:text-base">
-              {{ t(faq.a) }}
+            <div class="flex justify-center items-center mb-5">
+              <component :is="feature.icon" class="w-12 h-12 text-[#C0392B]" />
             </div>
-          </transition>
+            <h3 class="font-serif text-2xl font-semibold mb-3">{{ t(feature.title) }}</h3>
+            <p class="text-gray-500">{{ t(feature.desc) }}</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Contact Section -->
-    <section class="contact py-20 px-4 md:px-20 bg-gray-50 flex flex-col items-center">
-      <h2
-        class="text-3xl md:text-4xl font-extrabold mb-6 text-gray-900 animate__animated animate__fadeInUp"
-      >
-        {{ t('home.contactTitle') }}
-      </h2>
-      <p
-        class="mb-8 text-gray-700 text-center animate__animated animate__fadeInUp"
-        style="animation-delay: 0.2s"
-      >
-        {{ t('home.contactDesc') }}
-      </p>
-      <div
-        class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8 animate__animated animate__fadeInUp"
-        style="animation-delay: 0.4s"
-      >
-        <a
-          href="mailto:info@cloudloom.com"
-          class="text-blue-600 underline text-lg md:text-xl transition-colors duration-300 hover:text-blue-800"
-          >info@cloudloom.com</a
-        >
-        <span class="text-gray-700 text-lg md:text-xl">+353 874853709</span>
-        <span class="text-gray-700 text-lg md:text-xl">{{ t('footer.address') }}</span>
+    <!-- Section 3: Gallery -->
+    <section class="py-24 sm:py-32 bg-white px-4 sm:px-6 lg:px-8">
+      <div class="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="text-center lg:text-left" v-observe-animation="'animate-fade-in-right'">
+          <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
+            风华·刹那惊鸿
+          </h2>
+          <p class="text-lg text-gray-600 mb-8">
+            每一件汉服都承载着历史的温度，每一次回眸都定格了东方的神韵。
+          </p>
+          <router-link to="/gallery" class="text-[#C0392B] font-semibold text-lg group">
+            <span>探索更多</span>
+            <span class="inline-block transition-transform duration-300 group-hover:translate-x-2"
+              >→</span
+            >
+          </router-link>
+        </div>
+        <div class="grid grid-cols-2 gap-4" v-observe-animation="'animate-fade-in-left'">
+          <img
+            src="https://images.unsplash.com/photo-1614204424391-924545393896?q=80&w=870&auto=format&fit=crop"
+            alt="Hanfu Gallery 1"
+            class="rounded-lg shadow-xl aspect-[3/4] object-cover transition-transform duration-500 hover:scale-105"
+          />
+          <img
+            src="https://images.unsplash.com/photo-1629806934479-715d555c4d29?q=80&w=930&auto=format&fit=crop"
+            alt="Hanfu Gallery 2"
+            class="rounded-lg shadow-xl aspect-[3/4] object-cover mt-8 transition-transform duration-500 hover:scale-105"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Experience Steps (Restored) -->
+    <section class="py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-screen-xl mx-auto">
+        <div class="text-center mb-16" v-observe-animation>
+          <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
+            流程·体验之旅
+          </h2>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            仅需三步，即可开启您的汉服穿越之旅，简单而纯粹。
+          </p>
+        </div>
+        <div class="relative">
+          <!-- Dashed line for desktop -->
+          <div
+            class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-repeat-x bg-center"
+            style="
+              background-image: linear-gradient(to right, #ccc 60%, transparent 40%);
+              background-size: 20px 2px;
+            "
+          ></div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-16 relative">
+            <div
+              v-for="(step, index) in steps"
+              :key="index"
+              class="step-item text-center flex flex-col items-center"
+              v-observe-animation
+              :style="{ 'animation-delay': `${index * 150}ms` }"
+            >
+              <div
+                class="w-24 h-24 rounded-full bg-white shadow-lg flex items-center justify-center text-4xl font-serif font-bold text-[#C0392B] mb-6 border-4 border-red-100"
+              >
+                {{ index + 1 }}
+              </div>
+              <h3 class="font-serif text-2xl font-semibold mb-3">{{ t(step.title) }}</h3>
+              <p class="text-gray-500">{{ t(step.desc) }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Testimonials (Restored) -->
+    <section class="py-24 sm:py-32 bg-white px-4 sm:px-6 lg:px-8">
+      <div class="max-w-screen-xl mx-auto">
+        <div class="text-center mb-16" v-observe-animation>
+          <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
+            回响·佳人佳话
+          </h2>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            听听那些曾与我们一同追寻古典之美的朋友们怎么说。
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div
+            v-for="(item, index) in testimonials"
+            :key="index"
+            class="testimonial-card p-8 bg-gray-50 rounded-lg"
+            v-observe-animation
+            :style="{ 'animation-delay': `${index * 150}ms` }"
+          >
+            <p class="text-gray-600 italic mb-6">"{{ t(item.text) }}"</p>
+            <div class="flex items-center">
+              <img
+                :src="`https://source.unsplash.com/100x100/?portrait,${item.name}`"
+                :alt="item.name"
+                class="w-12 h-12 rounded-full object-cover mr-4"
+              />
+              <span class="font-semibold text-gray-800">{{ item.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: FAQ (Restored) -->
+    <section class="py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-16" v-observe-animation>
+          <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
+            解惑·常见问题
+          </h2>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">为您解答关于汉服体验的常见疑惑。</p>
+        </div>
+        <div class="space-y-4">
+          <div
+            v-for="(faq, idx) in faqs"
+            :key="idx"
+            class="faq-item bg-white rounded-lg shadow-sm overflow-hidden"
+            v-observe-animation
+            :style="{ 'animation-delay': `${idx * 100}ms` }"
+          >
+            <button
+              @click="toggleFaq(idx)"
+              class="flex justify-between items-center w-full p-6 text-left font-semibold text-lg text-gray-800"
+            >
+              <span>{{ t(faq.q) }}</span>
+              <ChevronUpIcon
+                class="w-6 h-6 text-gray-500 transition-transform duration-300"
+                :class="openFaq === idx ? 'rotate-0' : 'rotate-180'"
+              />
+            </button>
+            <transition
+              enter-active-class="transition-all duration-300 ease-out"
+              leave-active-class="transition-all duration-200 ease-in"
+              enter-from-class="max-h-0 opacity-0"
+              enter-to-class="max-h-96 opacity-100"
+              leave-from-class="max-h-96 opacity-100"
+              leave-to-class="max-h-0 opacity-0"
+            >
+              <div v-if="openFaq === idx" class="px-6 pb-6 text-gray-600">
+                {{ t(faq.a) }}
+              </div>
+            </transition>
+          </div>
+        </div>
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { AcademicCapIcon, CameraIcon, SparklesIcon, MapPinIcon } from '@heroicons/vue/24/outline'
+import { ref, type Directive } from 'vue'
+import {
+  SparklesIcon,
+  CameraIcon,
+  UserGroupIcon,
+  BuildingStorefrontIcon,
+  ChevronUpIcon,
+} from '@heroicons/vue/24/outline'
 import { useI18n } from 'vue-i18n'
-import 'animate.css' // 保留这个 import
 
 const { t } = useI18n()
 
+// 服务特色数据
 const features = [
-  { icon: AcademicCapIcon, title: 'home.feature1Title', desc: 'home.feature1Desc' },
+  { icon: SparklesIcon, title: 'home.feature1Title', desc: 'home.feature1Desc' },
   { icon: CameraIcon, title: 'home.feature2Title', desc: 'home.feature2Desc' },
-  { icon: SparklesIcon, title: 'home.feature3Title', desc: 'home.feature3Desc' },
-  { icon: MapPinIcon, title: 'home.feature4Title', desc: 'home.feature4Desc' },
+  { icon: UserGroupIcon, title: 'home.feature3Title', desc: 'home.feature3Desc' },
+  { icon: BuildingStorefrontIcon, title: 'home.feature4Title', desc: 'home.feature4Desc' },
 ]
 
+// 体验流程数据
 const steps = [
   { title: 'home.step1Title', desc: 'home.step1Desc' },
   { title: 'home.step2Title', desc: 'home.step2Desc' },
   { title: 'home.step3Title', desc: 'home.step3Desc' },
 ]
 
+// 客户评价数据
 const testimonials = [
   { name: 'Emily', text: 'home.testimonial1' },
   { name: 'Liam', text: 'home.testimonial2' },
   { name: 'Sophia', text: 'home.testimonial3' },
 ]
 
+// FAQ 数据
 const faqs = [
   { q: 'home.faq1Q', a: 'home.faq1A' },
   { q: 'home.faq2Q', a: 'home.faq2A' },
   { q: 'home.faq3Q', a: 'home.faq3A' },
 ]
 
-const openFaq = ref(-1)
-function toggleFaq(idx: number) {
-  openFaq.value = openFaq.value === idx ? -1 : idx
+const openFaq = ref<number | null>(null)
+const toggleFaq = (idx: number) => {
+  openFaq.value = openFaq.value === idx ? null : idx
 }
 
-onMounted(() => {
-  // Parallax effect for the about section image
-  const aboutImage = document.querySelector('.about img') as HTMLElement
-  if (aboutImage) {
-    const handleScroll = () => {
-      const scrollY = window.scrollY
-      const elementY = aboutImage.offsetTop
-      const windowHeight = window.innerHeight
-      const offset = (scrollY - (elementY - windowHeight / 2)) * 0.2
-      aboutImage.style.transform = `translateY(${offset}px)`
-    }
-    window.addEventListener('scroll', handleScroll)
-
-    // Clean up on component unmount
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }
-
-  // Animation on scroll
-  const sections = document.querySelectorAll('section')
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate__fadeInUp')
-        }
-      })
-    },
-    { threshold: 0.2 },
-  )
-
-  sections.forEach((section) => {
-    observer.observe(section)
-  })
-})
+// 自定义指令：用于元素进入视口时添加动画
+const vObserveAnimation: Directive<HTMLElement, string> = {
+  mounted(el, binding) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const animationClass = binding.value || 'animate-fade-in-up'
+            el.classList.add('opacity-100', animationClass)
+            observer.unobserve(el)
+          }
+        })
+      },
+      { threshold: 0.15 },
+    )
+    el.classList.add('opacity-0', 'transition-opacity', 'duration-1000', 'ease-out')
+    observer.observe(el)
+  },
+}
 </script>
 
 <style scoped>
-.home {
-  font-family: 'Noto Sans SC', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.animate-slide-up-fade-in {
-  animation: slide-up-fade-in 1s ease-out forwards;
-}
-
-@keyframes slide-up-fade-in {
+/* 定义各种动画效果 */
+@keyframes fadeInDown {
   from {
-    transform: translateY(100px);
     opacity: 0;
+    transform: translateY(-30px);
   }
   to {
-    transform: translateY(0);
     opacity: 1;
+    transform: translateY(0);
   }
+}
+.animate-fade-in-down {
+  animation: fadeInDown 1s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  transform: translateY(30px);
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.animate-fade-in-right {
+  transform: translateX(-50px);
+  animation: fadeInRight 1s ease-out forwards;
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.animate-fade-in-left {
+  transform: translateX(50px);
+  animation: fadeInLeft 1s ease-out forwards;
 }
 </style>
