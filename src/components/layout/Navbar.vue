@@ -1,5 +1,8 @@
 <template>
-  <nav class="bg-white shadow-sm sticky top-0 z-50">
+  <nav
+    class="bg-white shadow-sm sticky top-0 z-50 transition-transform duration-300 ease-in-out"
+    :class="{ '-translate-y-full': !isHeaderVisible }"
+  >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-20 items-center">
         <!-- Logo -->
@@ -13,7 +16,7 @@
             <div
               class="text-2xl font-display text-gray-900 tracking-wider group-hover:text-blue-600 transition-colors"
             >
-              Cloudloom
+              云织汉服
             </div>
           </router-link>
         </div>
@@ -47,7 +50,7 @@
           <div>
             <button
               @click="isUserMenuOpen = !isUserMenuOpen"
-              class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-hanfu-red"
+              class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600"
               id="user-menu-button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -128,7 +131,7 @@
         <router-link
           v-else
           to="/login"
-          class="text-gray-700 hover:text-hanfu-red transition-colors font-medium"
+          class="text-gray-700 hover:text-blue-600 transition-colors font-medium"
         >
           登录/注册
         </router-link>
@@ -155,9 +158,9 @@
           v-for="item in navItems"
           :key="item.label"
           :to="item.path"
-          class="block py-3 text-gray-700 hover:text-hanfu-red border-b"
+          class="block py-3 text-gray-700 hover:text-blue-600 border-b"
           @click="mobileMenuOpen = false"
-          :class="activePath === item.path ? 'text-hanfu-red font-semibold' : ''"
+          :class="activePath === item.path ? 'text-blue-600 font-semibold' : ''"
         >
           {{ item.label }}
         </router-link>
@@ -176,28 +179,28 @@
           </div>
           <router-link
             to="/profile"
-            class="block py-2 text-gray-700 hover:text-hanfu-red"
+            class="block py-2 text-gray-700 hover:text-blue-600"
             @click="mobileMenuOpen = false"
           >
             个人资料
           </router-link>
           <router-link
             to="/orders"
-            class="block py-2 text-gray-700 hover:text-hanfu-red"
+            class="block py-2 text-gray-700 hover:text-blue-600"
             @click="mobileMenuOpen = false"
           >
             我的预约
           </router-link>
           <router-link
             to="/favorites"
-            class="block py-2 text-gray-700 hover:text-hanfu-red"
+            class="block py-2 text-gray-700 hover:text-blue-600"
             @click="mobileMenuOpen = false"
           >
             我的收藏
           </router-link>
           <button
             @click="logout"
-            class="block w-full text-left py-2 text-gray-700 hover:text-hanfu-red"
+            class="block w-full text-left py-2 text-gray-700 hover:text-blue-600"
           >
             退出登录
           </button>
@@ -206,7 +209,7 @@
         <router-link
           v-else
           to="/login"
-          class="block py-3 text-gray-700 hover:text-hanfu-red border-b"
+          class="block py-3 text-gray-700 hover:text-blue-600 border-b"
           @click="mobileMenuOpen = false"
         >
           登录/注册
@@ -224,8 +227,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Bars3Icon, ChevronDownIcon } from '@heroicons/vue/24/outline'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ChevronDownIcon } from '@heroicons/vue/24/outline'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import LanguageSwitcher from '../ui/LanguageSwitcher.vue'
@@ -248,6 +251,23 @@ const navItems = [
 ]
 const activePath = computed(() => route.path)
 
+const isHeaderVisible = ref(true)
+let lastScrollPosition = 0
+
+const handleScroll = () => {
+  const currentScrollPosition = window.scrollY || document.documentElement.scrollTop
+  if (currentScrollPosition > 60) {
+    if (currentScrollPosition < lastScrollPosition) {
+      isHeaderVisible.value = true // 向上滚动时显示
+    } else {
+      isHeaderVisible.value = false // 向下滚动时隐藏
+    }
+  } else {
+    isHeaderVisible.value = true // 滚动到顶部时始终显示
+  }
+  lastScrollPosition = currentScrollPosition
+}
+
 // 退出登录
 const logout = async () => {
   try {
@@ -255,15 +275,13 @@ const logout = async () => {
     isUserMenuOpen.value = false
     mobileMenuOpen.value = false
 
-    // 强制刷新页面以确保状态完全重置
     if (route.path !== '/') {
       router.push('/')
     } else {
-      // 如果已经在首页，强制重新加载
       window.location.reload()
     }
   } catch (error) {
-    logger.error('Logout failed:', error)
+    console.error('Logout failed:', error)
   }
 }
 
@@ -272,41 +290,36 @@ watch(
   () => authStore.isAuthenticated,
   (newValue) => {
     if (!newValue) {
-      // 用户登出时关闭所有菜单
       isUserMenuOpen.value = false
       mobileMenuOpen.value = false
     }
   },
 )
 
-// 预约体验
 const navigateToBooking = () => {
   if (!authStore.isAuthenticated) {
-    // 如果未登录，跳转到登录页，并携带重定向参数
     router.push({ path: '/login', query: { redirect: '/booking' } })
   } else {
     router.push('/booking')
   }
 }
 
-// 点击外部关闭用户菜单
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement
-  if (!target.closest('#user-menu-button')) {
+  const userMenuButton = document.getElementById('user-menu-button')
+  if (userMenuButton && !userMenuButton.contains(target)) {
     isUserMenuOpen.value = false
   }
 }
 
 onMounted(() => {
-  // 初始化用户状态
   authStore.initAuth()
-
-  // 添加全局点击监听
+  window.addEventListener('scroll', handleScroll)
   document.addEventListener('click', handleClickOutside)
 })
 
-// 移除监听
 onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
   document.removeEventListener('click', handleClickOutside)
 })
 </script>
