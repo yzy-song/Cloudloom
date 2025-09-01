@@ -1,218 +1,179 @@
 <template>
-  <div class="bg-white min-h-screen relative">
-    <div class="relative h-64 md:h-96 overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-r from-hanfu-blue/70 to-hanfu-red/40"></div>
-      <div class="absolute inset-0 bg-gray-200 border-2 border-dashed rounded-xl w-full h-full" />
-      <div class="absolute bottom-8 left-8 text-white max-w-2xl">
-        <h1 class="text-3xl md:text-5xl font-display">汉服珍藏馆</h1>
-        <p class="mt-2 md:mt-4 text-lg md:text-xl opacity-90">
-          探索跨越千年的服饰艺术，每一件都承载着华夏文明的精髓
-        </p>
-      </div>
-    </div>
+  <div class="bg-gray-100 min-h-screen relative">
+    <!-- 顶部填充块，为导航栏预留空间 -->
+    <div class="h-[148px] md:h-[100px] lg:h-[100px]"></div>
 
-    <div
-      class="sticky-filter-bar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:sticky md:top-0 bg-white z-10 border-b"
-    >
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div class="flex flex-wrap gap-2">
-          <button
-            v-for="(filter, index) in filters"
-            :key="index"
-            :class="[
-              'px-4 py-2 rounded-full transition transform hover:-translate-y-0.5',
-              activeFilter === filter.key
-                ? 'bg-hanfu-red text-white shadow-md'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-            ]"
-            @click="setFilter(filter.key)"
-          >
-            {{ filter.label }}
-          </button>
-        </div>
-
-        <div class="flex items-center space-x-4">
-          <span class="text-gray-600">排序:</span>
-          <select
-            v-model="sortOption"
-            class="border border-gray-300 rounded-full px-4 py-2 focus:ring-hanfu-red focus:border-hanfu-red bg-white"
-          >
-            <option v-for="option in sortOptions" :key="option.value" :value="option.value">
-              {{ option.label }}
-            </option>
-          </select>
+    <!-- Banner -->
+    <div class="relative h-[40vh] md:h-[50vh] overflow-hidden">
+      <div
+        class="absolute inset-0 bg-[url('https://placehold.co/1920x1080/DCC5AC/3A332A?text=Hanfu+Collection')] bg-cover bg-center"
+      ></div>
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-hanfu-dark-blue to-transparent opacity-60"
+      ></div>
+      <div class="absolute inset-0 flex items-center justify-center text-white text-center">
+        <div class="p-4 md:p-8 rounded-lg animate-fade-in-up">
+          <h1 class="text-3xl md:text-6xl font-display font-bold tracking-wide drop-shadow-md">
+            {{ t('gallery.bannerTitle') }}
+          </h1>
+          <p class="mt-2 md:mt-4 text-sm md:text-xl opacity-90 drop-shadow-md">
+            {{ t('gallery.bannerDesc') }}
+          </p>
         </div>
       </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div v-if="loading" class="flex justify-center py-12">
+    <!-- 过滤和排序栏 -->
+    <div class="relative -top-8 z-10">
+      <div class="bg-white rounded-3xl shadow-lg mx-4 md:mx-auto max-w-7xl px-6 py-4">
         <div
-          class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-hanfu-red"
-        ></div>
-      </div>
-
-      <div v-else-if="filteredProducts.length === 0" class="text-center py-12">
-        <div class="text-gray-500 text-xl">没有找到匹配的产品</div>
-        <button class="mt-4 btn-outline" @click="setFilter('all')">查看所有产品</button>
-      </div>
-
-      <div v-else class="columns-1 sm:columns-2 lg:columns-3 gap-6">
-        <div
-          v-for="(product, index) in filteredProducts"
-          :key="product.id"
-          class="mb-6 break-inside-avoid"
+          class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-8"
         >
-          <div
-            class="overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl cursor-pointer"
-            @click="$router.push(`/product/${product.id}`)"
-          >
-            <img
-              v-if="product.images && product.images.length > 0"
-              :src="product.images[0]"
-              :alt="product.title"
-              class="w-full aspect-[3/4] object-cover transform group-hover:scale-105 transition-transform duration-300"
-            />
-            <div v-else class="bg-gray-200 border-2 border-dashed aspect-[3/4] w-full" />
-            <div class="p-4 bg-red">
-              <div class="flex justify-between">
-                <h3 class="font-display text-lg font-medium">{{ product.title }}</h3>
-                <span class="text-hanfu-red font-medium">{{ product.dynastyLabel }}</span>
-              </div>
-              <p class="mt-2 text-gray-600 text-sm line-clamp-2">
-                {{ product.description }}
-              </p>
-              <div class="mt-4 flex justify-between items-center">
-                <span class="text-hanfu-red font-medium">€{{ product.price.toFixed(2) }}</span>
-                <span class="text-hanfu-blue hover:underline flex items-center">
-                  查看详情
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-4 w-4 ml-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </span>
-              </div>
+          <!-- 过滤器 -->
+          <div class="flex flex-wrap gap-2 justify-center md:justify-start">
+            <button
+              v-for="(filter, index) in filters"
+              :key="index"
+              :class="[
+                'px-4 py-2 text-sm rounded-full transition-all duration-300 transform',
+                activeFilter === filter.value
+                  ? 'bg-hanfu-red text-white shadow-md scale-105'
+                  : 'bg-gray-200 text-gray-700 hover:bg-hanfu-red/20 hover:text-hanfu-red hover:scale-105',
+              ]"
+              @click="setFilter(filter.value)"
+            >
+              {{ t(filter.label) }}
+            </button>
+          </div>
+
+          <!-- 排序 -->
+          <div class="relative w-full md:w-auto">
+            <select
+              v-model="sortOption"
+              @change="updateQuery"
+              class="block w-full px-4 py-2 pr-8 rounded-full bg-gray-200 text-gray-700 appearance-none focus:outline-none focus:ring-2 focus:ring-hanfu-red transition-shadow cursor-pointer"
+            >
+              <option value="newest">{{ t('gallery.sort.newest') }}</option>
+              <option value="popular">{{ t('gallery.sort.popular') }}</option>
+              <option value="price-asc">{{ t('gallery.sort.priceAsc') }}</option>
+              <option value="price-desc">{{ t('gallery.sort.priceDesc') }}</option>
+            </select>
+            <div
+              class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+            >
+              <svg
+                class="fill-current h-4 w-4"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                />
+              </svg>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div v-if="!loading && hasMore" class="mt-12 text-center">
-        <button
-          @click="loadMore"
-          class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-full text-gray-700 hover:bg-gray-50 transition bg-white shadow-sm"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 mr-2"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          加载更多汉服
-        </button>
-      </div>
-
-      <div
-        v-if="!hasMore && !loading && filteredProducts.length > 0"
-        class="mt-12 text-center text-gray-500"
+    <!-- 产品画廊网格 -->
+    <div
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+    >
+      <router-link
+        v-for="product in paginatedProducts"
+        :key="product.id"
+        :to="{ name: 'ProductDetail', params: { id: product.id } }"
+        class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group relative cursor-pointer block"
       >
-        已展示所有汉服藏品
-      </div>
+        <div class="relative pb-[125%] overflow-hidden">
+          <img
+            :src="product.images[0]"
+            :alt="product.title"
+            class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+          <div
+            class="absolute top-4 right-4 bg-hanfu-red text-white text-xs font-semibold px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          >
+            {{ product.dynasty }}
+          </div>
+        </div>
+        <div class="p-6 relative z-10">
+          <h3 class="text-xl font-semibold text-gray-900 line-clamp-1">{{ product.title }}</h3>
+          <p class="mt-1 text-sm text-gray-500 line-clamp-2">
+            {{ product.description }}
+          </p>
+          <div class="mt-4 flex justify-between items-center">
+            <span class="text-lg font-bold text-hanfu-red">{{ formatPrice(product.price) }}</span>
+            <button
+              class="px-4 py-2 bg-hanfu-red text-white rounded-full text-sm font-semibold shadow-md hover:bg-hanfu-red/90 transition-colors transform hover:-translate-y-0.5"
+            >
+              {{ t('gallery.addToCart') }}
+            </button>
+          </div>
+        </div>
+      </router-link>
+    </div>
+
+    <!-- 加载更多按钮 -->
+    <div v-if="hasMore" class="text-center py-8">
+      <button
+        @click="loadMore"
+        class="px-8 py-3 bg-hanfu-red text-white rounded-full font-semibold shadow-lg hover:bg-hanfu-red/90 transition-colors transform hover:-translate-y-1"
+      >
+        {{ t('gallery.loadMore') }}
+      </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
 import { useProductStore } from '@/stores/product.store'
 
-const productStore = useProductStore()
+const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
+const productStore = useProductStore()
 
-// 筛选条件
-const filters = [
-  { label: '全部汉服', key: 'all' },
-  { label: '唐制', key: 'tang' },
-  { label: '宋制', key: 'song' },
-  { label: '明制', key: 'ming' },
-  { label: '男装', key: 'male' },
-  { label: '女装', key: 'female' },
-  { label: '儿童装', key: 'kids' },
-  { label: '婚服系列', key: 'wedding' },
-  { label: '汉服周边', key: 'accessories' },
-  { label: '文创产品', key: 'cultural' },
-]
+// 过滤和排序
+const activeFilter = ref<string>((route.query.filter as string) || 'all')
+const sortOption = ref<string>((route.query.sort as string) || 'newest')
+const filters = ref([
+  { label: 'gallery.filter.all', value: 'all' },
+  { label: 'gallery.filter.ming', value: 'Ming' },
+  { label: 'gallery.filter.song', value: 'Song' },
+  { label: 'gallery.filter.tang', value: 'Tang' },
+  { label: 'gallery.filter.qin', value: 'Qin' },
+])
 
-// 排序选项
-const sortOption = ref('newest')
-const sortOptions = [
-  { label: '最新添加', value: 'newest' },
-  { label: '人气最高', value: 'popular' },
-  { label: '价格从低到高', value: 'price-asc' },
-  { label: '价格从高到低', value: 'price-desc' },
-]
+// 价格格式化
+const formatPrice = (price: number) => {
+  return `$${price.toFixed(2)}`
+}
 
-// 当前激活的筛选条件
-const activeFilter = ref('all')
+// 设置过滤器并更新 URL
+const setFilter = (filter: string) => {
+  activeFilter.value = filter
+  updateQuery()
+}
 
-// 监听路由变化
-watch(
-  () => route.query.filter,
-  (newFilter) => {
-    if (newFilter && filters.some((f) => f.key === newFilter)) {
-      activeFilter.value = newFilter as string
-    } else {
-      activeFilter.value = 'all'
-    }
-  },
-  { immediate: true },
-)
-
-// 设置筛选条件并更新URL
-function setFilter(filterKey: string) {
-  activeFilter.value = filterKey
-  // 更新URL参数
-  const query = { ...route.query }
-
-  if (filterKey === 'all') {
-    delete query.filter
-  } else {
-    query.filter = filterKey
+// 更新URL查询参数
+const updateQuery = () => {
+  const newQuery: Record<string, any> = {
+    ...route.query,
+    filter: activeFilter.value,
+    sort: sortOption.value,
   }
-
-  // 过滤并转换 query 对象，确保所有值都是字符串
-  const normalizedQuery: Record<string, string> = {}
-  Object.entries(query).forEach(([key, value]) => {
-    if (typeof value === 'string') {
-      normalizedQuery[key] = value
-    } else if (Array.isArray(value)) {
-      normalizedQuery[key] = value.join(',')
+  Object.keys(newQuery).forEach((key) => {
+    const value = newQuery[key]
+    if (value === 'all' || value === 'newest') {
+      delete newQuery[key]
     }
   })
-
-  // 使用replaceState避免添加历史记录
-  window.history.replaceState(
-    {},
-    '',
-    `${window.location.pathname}?${new URLSearchParams(normalizedQuery).toString()}`,
-  )
+  router.replace({ query: newQuery })
 }
 
 // 分页
@@ -242,6 +203,7 @@ const filteredProducts = computed(() => {
   if (sortOption.value === 'newest') {
     result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
   } else if (sortOption.value === 'popular') {
+    // 随机排序模拟人气
     result.sort(() => Math.random() - 0.5)
   } else if (sortOption.value === 'price-asc') {
     result.sort((a, b) => a.price - b.price)
@@ -249,20 +211,36 @@ const filteredProducts = computed(() => {
     result.sort((a, b) => b.price - a.price)
   }
 
-  return result.slice(0, visibleCount.value)
+  return result
 })
 
-const loading = computed(() => productStore.loading)
+// 分页产品
+const paginatedProducts = computed(() => {
+  return filteredProducts.value.slice(0, visibleCount.value)
+})
+
+// 监听路由变化来同步状态
+watch(
+  () => route.query,
+  (newQuery) => {
+    activeFilter.value = (newQuery.filter as string) || 'all'
+    sortOption.value = (newQuery.sort as string) || 'newest'
+  },
+  { immediate: true },
+)
 </script>
-
 <style scoped>
-.sticky-filter-bar {
-  top: 5rem; /* 适配导航栏高度 */
-}
-
-@media (max-width: 768px) {
-  .sticky-filter-bar {
-    top: 4rem; /* 移动端适配 */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
 }
 </style>

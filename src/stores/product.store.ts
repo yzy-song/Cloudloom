@@ -26,12 +26,12 @@ export const useProductStore = defineStore('product', () => {
 
   // Actions
   const fetchProducts = async (filters?: {
-    category?: ProductCategory
+    subcategoryId?: string | string[]
     page?: number
     limit?: number
   }) => {
     const params: Record<string, any> = {}
-    if (filters?.category) params.category = filters.category
+    if (filters?.subcategoryId) params.subcategoryId = filters.subcategoryId
     if (filters?.page) params.page = filters.page
     if (filters?.limit) params.limit = filters.limit
 
@@ -98,7 +98,6 @@ export const useProductStore = defineStore('product', () => {
     error.value = null
     try {
       const response = await api.get('/products', params)
-      // 兼容 data 可能不存在的情况
       const list = Array.isArray(response.data) ? response.data : []
       return {
         list: list.map((p) => ({

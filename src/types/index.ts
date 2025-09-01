@@ -25,16 +25,27 @@ export interface Product {
   rentalPeriods: RentalPeriod[]
   details: string[]
   reviews: number
+  subcategoryId: string
+  subcategory?: Subcategory // 详情页可选返回
+}
+
+export interface Subcategory {
+  id: string
+  name: string
+  categoryId: string
+  category?: Category // 可选，详情页展示用
 }
 
 // 分类类型
 export interface Category {
   id: number
+  name: string
   description: string
   productCount: number
   image: string
-  title: string
   filterKey: string
+
+  subcategories: Subcategory[]
 }
 
 export interface HeroSlide {
