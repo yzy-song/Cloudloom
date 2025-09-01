@@ -25,51 +25,86 @@
 
     <!-- 过滤和排序栏 -->
     <div class="relative -top-8 z-10">
-      <div class="bg-white rounded-3xl shadow-lg mx-4 md:mx-auto max-w-7xl px-6 py-4">
-        <div
-          class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-8"
-        >
-          <!-- 过滤器 -->
-          <div class="flex flex-wrap gap-2 justify-center md:justify-start">
-            <button
-              v-for="(filter, index) in filters"
-              :key="index"
-              :class="[
-                'px-4 py-2 text-sm rounded-full transition-all duration-300 transform',
-                activeFilter === filter.value
-                  ? 'bg-hanfu-red text-white shadow-md scale-105'
-                  : 'bg-gray-200 text-gray-700 hover:bg-hanfu-red/20 hover:text-hanfu-red hover:scale-105',
-              ]"
-              @click="setFilter(filter.value)"
-            >
-              {{ t(filter.label) }}
-            </button>
+      <div
+        class="bg-white rounded-3xl shadow-lg mx-2 md:mx-auto max-w-7xl px-2 sm:px-6 py-3 sm:py-4"
+      >
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-6">
+          <!-- 过滤器：移动端横向滚动，桌面端横向排列 -->
+          <div class="w-full overflow-x-auto">
+            <div class="flex gap-2 sm:gap-3 md:gap-4 min-w-max">
+              <button
+                v-for="(filter, index) in filters"
+                :key="index"
+                :class="[
+                  'whitespace-nowrap px-4 py-2 text-sm rounded-full transition-all duration-300',
+                  activeFilter === filter.value
+                    ? 'bg-hanfu-red text-white shadow-md scale-105'
+                    : 'bg-gray-200 text-gray-700 hover:bg-hanfu-red/20 hover:text-hanfu-red hover:scale-105',
+                ]"
+                @click="setFilter(filter.value)"
+              >
+                {{ t(filter.label) }}
+              </button>
+            </div>
           </div>
 
-          <!-- 排序 -->
-          <div class="relative w-full md:w-auto">
-            <select
-              v-model="sortOption"
-              @change="updateQuery"
-              class="block w-full px-4 py-2 pr-8 rounded-full bg-gray-200 text-gray-700 appearance-none focus:outline-none focus:ring-2 focus:ring-hanfu-red transition-shadow cursor-pointer"
-            >
-              <option value="newest">{{ t('gallery.sort.newest') }}</option>
-              <option value="popular">{{ t('gallery.sort.popular') }}</option>
-              <option value="price-asc">{{ t('gallery.sort.priceAsc') }}</option>
-              <option value="price-desc">{{ t('gallery.sort.priceDesc') }}</option>
-            </select>
-            <div
-              class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
-            >
-              <svg
-                class="fill-current h-4 w-4"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
+          <!-- 排序：移动端按钮弹窗，桌面端下拉 -->
+          <div class="w-full sm:w-auto flex justify-end">
+            <!-- 移动端：弹窗排序 -->
+            <div class="block sm:hidden w-full">
+              <button
+                @click="showSortSheet = true"
+                class="w-full flex items-center justify-between px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium"
               >
-                <path
-                  d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                />
-              </svg>
+                <span>{{ t('gallery.sort.' + sortOption) }}</span>
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <!-- 排序弹窗 -->
+              <transition name="fade">
+                <div
+                  v-if="showSortSheet"
+                  class="fixed inset-0 z-50 bg-black/40 flex items-end"
+                  @click.self="showSortSheet = false"
+                >
+                  <div class="w-full bg-white rounded-t-2xl p-4">
+                    <div class="flex flex-col gap-2">
+                      <button
+                        v-for="opt in sortOptions"
+                        :key="opt.value"
+                        @click="selectSort(opt.value)"
+                        :class="[
+                          'text-left px-4 py-3 rounded-lg',
+                          sortOption === opt.value
+                            ? 'bg-hanfu-red text-white'
+                            : 'bg-gray-100 text-gray-700',
+                        ]"
+                      >
+                        {{ t(opt.label) }}
+                      </button>
+                    </div>
+                    <button
+                      class="mt-4 w-full py-2 text-hanfu-red font-semibold"
+                      @click="showSortSheet = false"
+                    >
+                      关闭
+                    </button>
+                  </div>
+                </div>
+              </transition>
+            </div>
+            <!-- 桌面端：下拉排序 -->
+            <div class="hidden sm:block">
+              <select
+                v-model="sortOption"
+                @change="updateQuery"
+                class="block w-44 px-4 py-2 pr-8 rounded-full bg-gray-200 text-gray-700 appearance-none focus:outline-none focus:ring-2 focus:ring-hanfu-red transition-shadow cursor-pointer"
+              >
+                <option v-for="opt in sortOptions" :key="opt.value" :value="opt.value">
+                  {{ t(opt.label) }}
+                </option>
+              </select>
             </div>
           </div>
         </div>
@@ -131,12 +166,17 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.store'
 import { useProductStore } from '@/stores/product.store'
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const productStore = useProductStore()
+const authStore = useAuthStore()
+
+// 移动端菜单开关
+const mobileMenuOpen = ref(false)
 
 // 过滤和排序
 const activeFilter = ref<string>((route.query.filter as string) || 'all')
@@ -148,6 +188,12 @@ const filters = ref([
   { label: 'gallery.filter.tang', value: 'Tang' },
   { label: 'gallery.filter.qin', value: 'Qin' },
 ])
+const sortOptions = [
+  { value: 'newest', label: 'gallery.sort.newest' },
+  { value: 'popular', label: 'gallery.sort.popular' },
+  { value: 'price-asc', label: 'gallery.sort.priceAsc' },
+  { value: 'price-desc', label: 'gallery.sort.priceDesc' },
+]
 
 // 价格格式化
 const formatPrice = (price: number) => {
@@ -228,6 +274,14 @@ watch(
   },
   { immediate: true },
 )
+
+// 移动端排序选择
+const showSortSheet = ref(false)
+const selectSort = (val: string) => {
+  sortOption.value = val
+  updateQuery()
+  showSortSheet.value = false
+}
 </script>
 <style scoped>
 @keyframes fade-in-up {
@@ -242,5 +296,14 @@ watch(
 }
 .animate-fade-in-up {
   animation: fade-in-up 0.8s ease-out forwards;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
