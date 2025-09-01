@@ -2,41 +2,52 @@
  * @Author: yzy
  * @Date: 2025-08-29 09:09:22
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-31 16:20:11
- * @Description: 全新设计的首页，已将原有版块以新风格恢复
+ * @LastEditTime: 2025-09-01 17:20:11
+ * @Description: 全新设计的首页，已将原有版块以新风格恢复，并添加了轮播图组件
 -->
 <template>
   <div class="home-view overflow-x-hidden bg-[#FBF9F6]">
-    <!-- Section 1: Hero Banner -->
+    <!-- Section 1: Hero Banner with Swiper Carousel -->
     <section class="relative h-screen w-full flex items-center justify-center text-white">
-      <div class="absolute inset-0 bg-black overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1589363198130-a02862494165?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
-          alt="汉服背景"
-          class="w-full h-full object-cover opacity-60"
-        />
-      </div>
-      <div class="relative z-10 text-center px-4">
-        <h1
-          class="font-serif text-5xl md:text-7xl lg:text-8xl font-bold tracking-wider mb-4 animate-fade-in-down"
-          style="text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5)"
-        >
-          云织汉服
-        </h1>
-        <p
-          class="text-lg md:text-xl max-w-2xl mx-auto mb-8 animate-fade-in-up"
-          style="animation-delay: 0.3s; text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5)"
-        >
-          在翡翠岛国，邂逅千年华裳。我们提供汉服租赁、销售及文化体验，连接传统与现代之美。
-        </p>
-        <router-link
-          to="/booking"
-          class="inline-block bg-[#C0392B] text-white font-semibold tracking-wider px-8 py-3 rounded-full text-lg hover:bg-[#a53125] transition-transform hover:scale-105 duration-300 animate-fade-in-up"
-          style="animation-delay: 0.6s"
-        >
-          {{ t('navbar.bookNow') }}
-        </router-link>
-      </div>
+      <swiper
+        :modules="[Autoplay, Pagination, Navigation]"
+        :loop="true"
+        :autoplay="{ delay: 5000, disableOnInteraction: false }"
+        :pagination="{ clickable: true }"
+        :navigation="true"
+        class="absolute inset-0 w-full h-full"
+      >
+        <swiper-slide v-for="(slide, index) in homeSlides" :key="index">
+          <div class="absolute inset-0 bg-black overflow-hidden">
+            <img
+              :src="slide.image"
+              :alt="slide.title"
+              class="w-full h-full object-cover opacity-60"
+            />
+          </div>
+          <div class="relative z-10 text-center px-4">
+            <h1
+              class="font-serif text-5xl md:text-7xl lg:text-8xl font-bold tracking-wider mb-4 animate-fade-in-down"
+              style="text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5)"
+            >
+              {{ slide.title }}
+            </h1>
+            <p
+              class="text-lg md:text-xl max-w-2xl mx-auto mb-8 animate-fade-in-up"
+              style="animation-delay: 0.3s; text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5)"
+            >
+              {{ slide.description }}
+            </p>
+            <router-link
+              :to="slide.action || '/'"
+              class="inline-block bg-[#C0392B] text-white font-semibold tracking-wider px-8 py-3 rounded-full text-lg hover:bg-[#a53125] transition-transform hover:scale-105 duration-300 animate-fade-in-up"
+              style="animation-delay: 0.6s"
+            >
+              {{ slide.buttonText }}
+            </router-link>
+          </div>
+        </swiper-slide>
+      </swiper>
       <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
         <svg class="w-8 h-8 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
@@ -48,7 +59,6 @@
         </svg>
       </div>
     </section>
-    <section class="relative h-screen w-full flex items-center justify-center text-white"></section>
 
     <!-- Section 2: Our Services -->
     <section class="py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
@@ -233,6 +243,8 @@
 
 <script setup lang="ts">
 import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
 import 'swiper/css/autoplay'
 
 import { ref, type Directive } from 'vue'
@@ -244,47 +256,45 @@ import {
   ChevronUpIcon,
 } from '@heroicons/vue/24/outline'
 
-import SwiperCore from 'swiper'
 import { Autoplay, Pagination, Navigation } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 import type { HeroSlide } from '@/types'
+
 const router = useRouter()
-
-SwiperCore.use([Autoplay, Pagination])
-
 const { t } = useI18n()
 
-// 轮播图
+// 轮播图数据，用于展示在首页顶部
 const homeSlides = ref<HeroSlide[]>([
   {
     title: '盛唐风华系列',
     description: '体验大唐盛世服饰，感受千年文化魅力',
     buttonText: '查看详情',
     action: '/gallery?filter=tang',
-    image: '/images/home-banner/banner01.jpg',
+    image: '/images/home-banner/banner01.png',
   },
   {
     title: '汉服配饰精选',
     description: '团扇、发簪、荷包等传统配饰',
     buttonText: '探索周边',
     action: '/gallery?filter=accessories',
-    image: '/images/home-banner/banner02.jpg',
+    image: '/images/home-banner/banner02.png',
   },
   {
     title: '文创产品上新',
     description: '传统纹样设计的日常用品与艺术品',
     buttonText: '浏览文创',
     action: '/gallery?filter=cultural',
-    image: '/images/home-banner/banner03.jpg',
+    image: '/images/home-banner/banner03.png',
   },
   {
     title: '儿童汉服特惠',
     description: '专为儿童设计的传统服饰，传承从小开始',
     buttonText: '查看系列',
     action: '/gallery?filter=kids',
-    image: '/images/home-banner/banner04.jpg',
+    image: '/images/home-banner/banner04.png',
   },
 ])
 
@@ -409,5 +419,10 @@ function handleSlideAction(action?: string) {
 .animate-fade-in-left {
   transform: translateX(50px);
   animation: fadeInLeft 1s ease-out forwards;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
 }
 </style>
