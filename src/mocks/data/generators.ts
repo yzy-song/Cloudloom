@@ -1,16 +1,7 @@
-import { fa, faker } from '@faker-js/faker'
-import type {
-  Product,
-  ProductCategory,
-  ProductColor,
-  RentalPeriod,
-  EraInfo,
-  Booking,
-  CustomerInfo,
-  TimelineEvent,
-} from '@/types'
+import { faker } from '@faker-js/faker'
+import type { Product, ProductColor, RentalPeriod, HeroSlide } from '@/types'
 
-// 产品颜色配置
+// 颜色
 export const productColors: ProductColor[] = [
   { id: '1', name: '红色', value: '#dc2626', inStock: true },
   { id: '2', name: '蓝色', value: '#2563eb', inStock: true },
@@ -20,7 +11,7 @@ export const productColors: ProductColor[] = [
   { id: '6', name: '粉色', value: '#db2777', inStock: true },
 ]
 
-// 租赁周期配置
+// 租赁周期
 export const rentalPeriods: RentalPeriod[] = [
   { id: '1', name: '2小时', duration: 2, unit: 'hour', price: 25 },
   { id: '2', name: '4小时', duration: 4, unit: 'hour', price: 45 },
@@ -29,9 +20,9 @@ export const rentalPeriods: RentalPeriod[] = [
   { id: '5', name: '3天', duration: 3, unit: 'day', price: 210 },
 ]
 
-let productIdCounter = 1000
+// 单个产品生成器
 export const generateProduct = (): Product => {
-  const categories: ProductCategory[] = [
+  const categories = [
     'tang',
     'song',
     'ming',
@@ -39,10 +30,12 @@ export const generateProduct = (): Product => {
     'female',
     'kids',
     'wedding',
-  ]
-  const category = faker.helpers.arrayElement(categories)
+    'accessories',
+    'cultural',
+  ] as const
 
-  const eraNames = {
+  const category = faker.helpers.arrayElement(categories)
+  const dynastyLabels = {
     tang: '唐制',
     song: '宋制',
     ming: '明制',
@@ -54,84 +47,55 @@ export const generateProduct = (): Product => {
     cultural: '文创',
   }
 
-  const outfitTypes = ['齐胸襦裙', '直裾', '曲裾', '袄裙', '道袍', '比甲', '马面裙']
-
-  productIdCounter++
   return {
-    id: productIdCounter, // 使用自增ID
-    title: `${faker.helpers.arrayElement(Object.values(eraNames))} · ${faker.helpers.arrayElement(outfitTypes)}`,
-    description: faker.lorem.paragraphs(2),
-    price: parseFloat(faker.number.int({ min: 50, max: 300 }).toString()),
-    images: Array.from({ length: faker.number.int({ min: 2, max: 5 }) }, () =>
-      faker.image.urlPicsumPhotos({ width: 400, height: 600 }),
-    ),
+    id: faker.number.int({ min: 1000, max: 9999 }),
+    title: `${dynastyLabels[category]}·${faker.commerce.productName()}`,
+    description: faker.lorem.paragraph(),
+    price: faker.number.int({ min: 50, max: 300 }),
     category,
+    colors: faker.helpers.arrayElements(productColors, faker.number.int({ min: 2, max: 4 })),
+    dynasty: category,
+    dynastyLabel: dynastyLabels[category],
+    tags: [category, faker.commerce.productAdjective()],
+    images: Array.from({ length: 3 }, (_, i) => `/images/gallery-carousel/mock${i + 1}.jpg`),
+    material: faker.helpers.arrayElement(['丝绸', '棉麻', '纱绸', '锦缎']),
     sizeOptions: ['XS', 'S', 'M', 'L', 'XL'],
     careInstructions: faker.lorem.sentence(),
-    colors: faker.helpers.arrayElements(productColors, faker.number.int({ min: 2, max: 4 })),
-    tags: [category, faker.helpers.arrayElement(['豪华', '经典', '新款', '限量'])],
     createdAt: faker.date.past({ years: 1 }).toISOString(),
     updatedAt: faker.date.recent().toISOString(),
-    rentalPrice: parseFloat(faker.commerce.price({ min: 20, max: 100 })),
+    rentalPrice: faker.number.int({ min: 20, max: 100 }),
     rentalPeriods: faker.helpers.arrayElements(rentalPeriods, faker.number.int({ min: 2, max: 4 })),
-
-    // 新增字段
-    dynasty: category as string,
-    dynastyLabel: eraNames[category] || '未知朝代',
-    material: faker.helpers.arrayElement(['丝绸', '棉麻', '纱绸', '锦缎']),
-    details: [faker.lorem.sentence(), faker.lorem.sentence(), faker.lorem.sentence()],
+    details: [faker.lorem.sentence(), faker.lorem.sentence()],
     reviews: faker.number.int({ min: 0, max: 5 }),
+    subcategoryId: faker.string.uuid(),
+    // subcategory 可选，不生成
   }
 }
 
-export const generateEraInfo = (): EraInfo => {
-  const eras = [
-    { name: '唐代', period: '618-907 AD', id: 'tang' },
-    { name: '宋代', period: '960-1279 AD', id: 'song' },
-    { name: '明代', period: '1368-1644 AD', id: 'ming' },
-  ]
-
-  const era = faker.helpers.arrayElement(eras)
-
-  return {
-    id: era.id,
-    name: `${era.name}汉服`,
-    period: era.period,
-    description: faker.lorem.paragraphs(2),
-    characteristics: Array.from({ length: 4 }, () => faker.lorem.words(3)),
-    typicalOutfits: Array.from({ length: 3 }, () => faker.lorem.words(2)),
-    historicalBackground: faker.lorem.paragraphs(3),
-    images: Array.from({ length: 3 }, () =>
-      faker.image.urlPicsumPhotos({ width: 600, height: 400 }),
-    ),
-    timeline: Array.from({ length: 5 }, (_, i) => ({
-      year: (i * 50 + 600).toString(),
-      event: faker.lorem.words(2),
-      description: faker.lorem.sentence(),
-    })),
-  }
-}
-
-export const generateBooking = (): Booking => ({
-  id: `booking_${faker.string.uuid()}`,
-  packageId: `package_${faker.number.int({ min: 1, max: 5 })}`,
-  customer: {
-    username: faker.person.fullName(),
-    email: faker.internet.email(),
-    phone: faker.phone.number({ style: 'international' }),
-    notes: faker.lorem.sentence(),
+// 主页轮播图生成器
+export const generateHeroSlides = (): HeroSlide[] => [
+  {
+    title: '云织汉服',
+    description: '在翡翠岛国，邂逅千年华裳。我们提供汉服租赁、销售及文化体验，连接传统与现代之美。',
+    buttonText: '立即预约',
+    action: '/booking',
+    image: '/images/home-banner/banner01.png',
   },
-  date: faker.date.future().toISOString().split('T')[0],
-  time: `${faker.number.int({ min: 9, max: 17 })}:00`,
-  participants: faker.number.int({ min: 1, max: 10 }),
-  status: faker.helpers.arrayElement(['pending', 'confirmed', 'cancelled', 'completed']),
-  totalAmount: parseFloat(faker.commerce.price({ min: 50, max: 500 })),
-  createdAt: faker.date.past().toISOString(),
-})
+  {
+    title: '正品汉服',
+    description: '所有服饰均为高品质正品汉服。',
+    buttonText: '了解更多',
+    action: '/gallery',
+    image: '/images/home-banner/banner02.png',
+  },
+  {
+    title: '专业摄影',
+    description: '每位顾客均可享受免费专业拍照。',
+    buttonText: '查看服务',
+    action: '/service',
+    image: '/images/home-banner/banner03.png',
+  },
+]
 
-export const generateCustomer = (): CustomerInfo => ({
-  username: faker.person.fullName(),
-  email: faker.internet.email(),
-  phone: faker.phone.number({ style: 'international' }),
-  notes: faker.lorem.sentence(),
-})
+export const mockProducts = Array.from({ length: 20 }, generateProduct)
+export const mockHeroSlides = generateHeroSlides()

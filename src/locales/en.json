@@ -203,7 +203,10 @@
       "ming": "Ming",
       "song": "Song",
       "tang": "Tang",
-      "qin": "Qin"
+      "qin": "Qin",
+      "dress": "Dress",
+      "set": "Set",
+      "accessories": "Accessories"
     },
     "sort": {
       "newest": "Newest",
@@ -211,7 +214,9 @@
       "priceAsc": "Price: Low to High",
       "priceDesc": "Price: High to Low"
     },
+    "sortBy": "Sort By",
     "addToCart": "Add to Cart",
-    "loadMore": "Load More"
+    "loadMore": "Load More",
+    "price": "Price"
   }
 }

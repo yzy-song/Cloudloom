@@ -203,7 +203,10 @@
       "ming": "明",
       "song": "宋",
       "tang": "唐",
-      "qin": "秦"
+      "qin": "秦",
+      "dress": "裙装",
+      "set": "套装",
+      "accessories": "配饰"
     },
     "sort": {
       "newest": "最新上架",
@@ -211,7 +214,9 @@
       "priceAsc": "价格升序",
       "priceDesc": "价格降序"
     },
+    "sortBy": "排序方式",
     "addToCart": "加入购物车",
-    "loadMore": "加载更多"
+    "loadMore": "加载更多",
+    "price": "价格"
   }
 }
