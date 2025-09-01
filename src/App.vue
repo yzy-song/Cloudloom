@@ -12,10 +12,12 @@
     </main>
     <!-- 页脚组件暂时移除，以便我们专注于首页和导航栏的核心体验 -->
     <Footer />
+    <DevAccessInfo />
   </div>
 </template>
 
 <script setup lang="ts">
+import DevAccessInfo from '@/components/DevAccessInfo.vue'
 import Footer from '@/components/layout/Footer.vue'
 import Navbar from '@/components/layout/Navbar.vue'
 </script>
