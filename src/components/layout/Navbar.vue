@@ -135,7 +135,59 @@
       </div>
     </div>
 
-    <!-- 移动端菜单面板 (此处省略，可复用您之前的代码) -->
+    <!-- 移动端菜单面板 -->
+    <transition name="slide-right-fade">
+      <div
+        v-if="mobileMenuOpen"
+        class="fixed inset-0 z-50 bg-black/40 flex justify-end md:hidden"
+        @click.self="mobileMenuOpen = false"
+      >
+        <nav class="bg-white w-64 h-full shadow-xl p-6 flex flex-col animate-slide-in-right">
+          <div class="flex items-center justify-between mb-8">
+            <span class="font-serif font-bold text-2xl text-[#C0392B]">云织</span>
+            <button @click="mobileMenuOpen = false" class="text-gray-700">
+              <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div class="flex flex-col space-y-6">
+            <router-link
+              v-for="item in navItems"
+              :key="item.path"
+              :to="item.path"
+              class="font-semibold text-lg text-gray-800 py-2"
+              @click="mobileMenuOpen = false"
+            >
+              {{ t(item.label) }}
+            </router-link>
+            <router-link
+              to="/cart"
+              class="font-semibold text-lg text-gray-800 py-2"
+              @click="mobileMenuOpen = false"
+            >
+              购物车
+            </router-link>
+            <router-link
+              v-if="!authStore.isAuthenticated"
+              to="/login"
+              class="font-semibold text-lg text-gray-800 py-2"
+              @click="mobileMenuOpen = false"
+            >
+              登录
+            </router-link>
+            <div v-else class="flex items-center space-x-3 py-2">
+              <img
+                class="h-8 w-8 rounded-full object-cover border"
+                :src="authStore.user?.avatar || 'https://source.unsplash.com/100x100/?portrait'"
+                alt="用户头像"
+              />
+              <span class="text-gray-700">{{ authStore.user?.nickName || '用户' }}</span>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </transition>
   </header>
 </template>
 
@@ -179,3 +231,25 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 </script>
+
+<style>
+.slide-right-fade-enter-active,
+.slide-right-fade-leave-active {
+  transition: opacity 0.2s;
+}
+.slide-right-fade-enter-from,
+.slide-right-fade-leave-to {
+  opacity: 0;
+}
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+</style>

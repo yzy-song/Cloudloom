@@ -1,5 +1,5 @@
 {
-  "brand":{
+  "brand": {
     "name": "Cloudloom"
   },
   "navbar": {
@@ -8,7 +8,8 @@
     "knowledge": "Knowledge",
     "about": "About",
     "collaboration": "Collaboration",
-    "bookNow": "Book Now"
+    "bookNow": "Book Now",
+    "login": "Login"
   },
   "footer": {
     "brandDesc": "Promoting Hanfu culture in Ireland. Professional Hanfu experience, rental and sales.",
@@ -23,27 +24,8 @@
     "terms": "Terms of Service"
   },
   "home": {
-    "bannerTitle": "Cloudloom Hanfu Experience",
-    "bannerSlogan": "Discover the beauty of Hanfu in Ireland",
-    "bookNow": "Book Now",
-    "aboutTitle": "About Cloudloom",
-    "aboutDesc": "Cloudloom brings authentic Hanfu experience to Ireland. Explore traditional Chinese clothing and culture with us.",
-    "stepsTitle": "How It Works",
-    "step1Title": "Choose Your Hanfu",
-    "step1Desc": "Browse our collection and pick your favorite style.",
-    "step2Title": "Book Your Experience",
-    "step2Desc": "Select a date and time that suits you.",
-    "step3Title": "Enjoy & Capture",
-    "step3Desc": "Dress up, enjoy the moment, and take beautiful photos.",
-    "galleryTitle": "Featured Hanfu",
-    "testimonialsTitle": "What Our Guests Say",
-    "testimonial1": "A wonderful experience! The Hanfu was beautiful and the staff were so friendly.",
-    "testimonial2": "I felt like I traveled back in time. Highly recommended!",
-    "testimonial3": "Amazing photos and unforgettable memories.",
-    "contactTitle": "Contact & Booking",
-    "contactDesc": "For booking or inquiries, please contact us:",
-    "footerRights": "All rights reserved.",
-    "featuresTitle": "Why Choose Us",
+    "bannerTitle": "Cloudloom Hanfu",
+    "bannerSlogan": "Meet the beauty of Hanfu in the Emerald Isle. We offer Hanfu rental, sales, and cultural experiences, connecting tradition and modernity.",
     "feature1Title": "Authentic Hanfu",
     "feature1Desc": "All costumes are genuine, high-quality Hanfu.",
     "feature2Title": "Professional Photography",
@@ -52,7 +34,15 @@
     "feature3Desc": "One-on-one dressing and styling guidance.",
     "feature4Title": "Prime Location",
     "feature4Desc": "Located in the heart of Dublin, easy to reach.",
-    "faqTitle": "Frequently Asked Questions",
+    "step1Title": "Choose Your Hanfu",
+    "step1Desc": "Browse our collection and pick your favorite style.",
+    "step2Title": "Book Your Experience",
+    "step2Desc": "Select a date and time that suits you.",
+    "step3Title": "Enjoy & Capture",
+    "step3Desc": "Dress up, enjoy the moment, and take beautiful photos.",
+    "testimonial1": "A wonderful experience! The Hanfu was beautiful and the staff were so friendly.",
+    "testimonial2": "I felt like I traveled back in time. Highly recommended!",
+    "testimonial3": "Amazing photos and unforgettable memories.",
     "faq1Q": "How do I book a Hanfu experience?",
     "faq1A": "You can book online or contact us directly via email or phone.",
     "faq2Q": "Do you provide photography service?",
@@ -203,5 +193,24 @@
     "title": "Open Feedback",
     "description": "Have any other ideas or suggestions? We'd love to hear them!",
     "placeholder": "Your suggestions here..."
+  },
+  "gallery": {
+    "bannerTitle": "Hanfu Collection",
+    "bannerDesc": "Explore the art of clothing across millennia. Each piece carries the essence of Chinese civilization.",
+    "filter": {
+      "all": "All",
+      "ming": "Ming",
+      "song": "Song",
+      "tang": "Tang",
+      "qin": "Qin"
+    },
+    "sort": {
+      "newest": "Newest",
+      "popular": "Most Popular",
+      "priceAsc": "Price: Low to High",
+      "priceDesc": "Price: High to Low"
+    },
+    "addToCart": "Add to Cart",
+    "loadMore": "Load More"
   }
 }

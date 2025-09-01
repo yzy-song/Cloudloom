@@ -1,5 +1,5 @@
 {
-  "brand":{
+  "brand": {
     "name": "云织"
   },
   "navbar": {
@@ -8,7 +8,8 @@
     "knowledge": "汉服知识",
     "about": "关于我们",
     "collaboration": "商业合作",
-    "bookNow": "立即预约"
+    "bookNow": "立即预约",
+    "login": "登录"
   },
   "footer": {
     "brandDesc": "在爱尔兰推广汉服文化。专业汉服体验、租赁与销售。",
@@ -23,27 +24,8 @@
     "terms": "服务条款"
   },
   "home": {
-    "bannerTitle": "云织汉服体验馆",
-    "bannerSlogan": "在爱尔兰邂逅汉服之美",
-    "bookNow": "立即预约",
-    "aboutTitle": "关于云织",
-    "aboutDesc": "云织将正宗汉服体验带到爱尔兰，和我们一起探索中国传统服饰与文化。",
-    "stepsTitle": "体验流程",
-    "step1Title": "选择汉服",
-    "step1Desc": "浏览我们的汉服系列，挑选你喜欢的款式。",
-    "step2Title": "预约体验",
-    "step2Desc": "选择合适的日期和时间，轻松预约。",
-    "step3Title": "穿着拍照",
-    "step3Desc": "换上汉服，享受美好时光，留下美丽照片。",
-    "galleryTitle": "精选汉服",
-    "testimonialsTitle": "用户评价",
-    "testimonial1": "非常棒的体验！汉服很美，工作人员也很友好。",
-    "testimonial2": "仿佛穿越回古代，强烈推荐！",
-    "testimonial3": "照片很美，回忆难忘。",
-    "contactTitle": "联系方式与预约",
-    "contactDesc": "如需预约或咨询，请联系我们：",
-    "footerRights": "版权所有。",
-    "featuresTitle": "我们的特色",
+    "bannerTitle": "云织汉服",
+    "bannerSlogan": "在翡翠岛国，邂逅千年华裳。我们提供汉服租赁、销售及文化体验，连接传统与现代之美。",
     "feature1Title": "正品汉服",
     "feature1Desc": "所有服饰均为高品质正品汉服。",
     "feature2Title": "专业摄影",
@@ -52,7 +34,15 @@
     "feature3Desc": "一对一着装与造型指导。",
     "feature4Title": "黄金地段",
     "feature4Desc": "位于都柏林市中心，交通便利。",
-    "faqTitle": "常见问题",
+    "step1Title": "选择汉服",
+    "step1Desc": "浏览我们的汉服系列，挑选你喜欢的款式。",
+    "step2Title": "预约体验",
+    "step2Desc": "选择合适的日期和时间，轻松预约。",
+    "step3Title": "穿着拍照",
+    "step3Desc": "换上汉服，享受美好时光，留下美丽照片。",
+    "testimonial1": "非常棒的体验！汉服很美，工作人员也很友好。",
+    "testimonial2": "仿佛穿越回古代，强烈推荐！",
+    "testimonial3": "照片很美，回忆难忘。",
     "faq1Q": "如何预约汉服体验？",
     "faq1A": "您可以在线预约或通过邮箱、电话联系我们。",
     "faq2Q": "是否提供摄影服务？",
@@ -203,5 +193,24 @@
     "title": "开放建议",
     "description": "还有其他想法或建议吗？欢迎留言！",
     "placeholder": "您的建议..."
+  },
+  "gallery": {
+    "bannerTitle": "汉服珍藏馆",
+    "bannerDesc": "探索跨越千年的服饰艺术，每一件都承载着华夏文明的精髓。",
+    "filter": {
+      "all": "全部",
+      "ming": "明",
+      "song": "宋",
+      "tang": "唐",
+      "qin": "秦"
+    },
+    "sort": {
+      "newest": "最新上架",
+      "popular": "人气优先",
+      "priceAsc": "价格升序",
+      "priceDesc": "价格降序"
+    },
+    "addToCart": "加入购物车",
+    "loadMore": "加载更多"
   }
 }

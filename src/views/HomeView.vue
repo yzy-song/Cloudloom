@@ -48,6 +48,7 @@
         </svg>
       </div>
     </section>
+    <section class="relative h-screen w-full flex items-center justify-center text-white"></section>
 
     <!-- Section 2: Our Services -->
     <section class="py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
@@ -231,6 +232,9 @@
 </template>
 
 <script setup lang="ts">
+import 'swiper/css'
+import 'swiper/css/autoplay'
+
 import { ref, type Directive } from 'vue'
 import {
   SparklesIcon,
@@ -239,9 +243,50 @@ import {
   BuildingStorefrontIcon,
   ChevronUpIcon,
 } from '@heroicons/vue/24/outline'
+
+import SwiperCore from 'swiper'
+import { Autoplay, Pagination, Navigation } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/vue'
 import { useI18n } from 'vue-i18n'
 
+import type { HeroSlide } from '@/types'
+const router = useRouter()
+
+SwiperCore.use([Autoplay, Pagination])
+
 const { t } = useI18n()
+
+// 轮播图
+const homeSlides = ref<HeroSlide[]>([
+  {
+    title: '盛唐风华系列',
+    description: '体验大唐盛世服饰，感受千年文化魅力',
+    buttonText: '查看详情',
+    action: '/gallery?filter=tang',
+    image: '/images/home-banner/banner01.jpg',
+  },
+  {
+    title: '汉服配饰精选',
+    description: '团扇、发簪、荷包等传统配饰',
+    buttonText: '探索周边',
+    action: '/gallery?filter=accessories',
+    image: '/images/home-banner/banner02.jpg',
+  },
+  {
+    title: '文创产品上新',
+    description: '传统纹样设计的日常用品与艺术品',
+    buttonText: '浏览文创',
+    action: '/gallery?filter=cultural',
+    image: '/images/home-banner/banner03.jpg',
+  },
+  {
+    title: '儿童汉服特惠',
+    description: '专为儿童设计的传统服饰，传承从小开始',
+    buttonText: '查看系列',
+    action: '/gallery?filter=kids',
+    image: '/images/home-banner/banner04.jpg',
+  },
+])
 
 // 服务特色数据
 const features = [
@@ -295,6 +340,13 @@ const vObserveAnimation: Directive<HTMLElement, string> = {
     el.classList.add('opacity-0', 'transition-opacity', 'duration-1000', 'ease-out')
     observer.observe(el)
   },
+}
+
+// 处理轮播图按钮点击
+function handleSlideAction(action?: string) {
+  if (action) {
+    router.push(action)
+  }
 }
 </script>
 
