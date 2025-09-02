@@ -19,15 +19,15 @@
       <h1 class="text-3xl font-bold text-center mb-6">图片批量处理与裁剪工具</h1>
 
       <!-- 文件上传 -->
-      <div
-        class="mb-8 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center transition-colors duration-200 cursor-pointer"
+      <label
+        for="file-upload"
+        class="mb-8 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center transition-colors duration-200 cursor-pointer block"
         :class="{ 'bg-gray-200 border-indigo-500': isDragging }"
         @dragover.prevent="isDragging = true"
         @dragleave.prevent="isDragging = false"
         @drop.prevent="handleDrop"
-        @click="openFilePicker"
       >
-        <label for="file-upload" class="flex flex-col items-center justify-center cursor-pointer">
+        <div class="flex flex-col items-center justify-center cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="w-8 h-8 mb-2 text-gray-500"
@@ -43,7 +43,7 @@
             <path d="M16 6l-4-4-4 4" />
           </svg>
           <span class="text-gray-700">点击选择文件 或 拖拽文件到此区域</span>
-        </label>
+        </div>
         <input
           id="file-upload"
           type="file"
@@ -53,7 +53,7 @@
           ref="fileInput"
           accept="image/*"
         />
-      </div>
+      </label>
 
       <!-- 批量处理 -->
       <div class="bg-gray-50 rounded-lg p-6 mb-8 shadow-inner">
@@ -235,7 +235,6 @@
                     id="modal-width"
                     type="number"
                     v-model.number="modalOutputWidth"
-                    @input="updateCropperAspectRatio"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   />
                 </div>
@@ -247,7 +246,6 @@
                     id="modal-height"
                     type="number"
                     v-model.number="modalOutputHeight"
-                    @input="updateCropperAspectRatio"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   />
                 </div>
@@ -415,7 +413,10 @@ function showNotification(message: string, type: 'success' | 'error' | 'info') {
 }
 
 function handleFiles(files: FileList | null) {
-  if (!files || files.length === 0) return
+  if (!files || files.length === 0) {
+    showNotification('请选择图片文件', 'error')
+    return
+  }
   for (const file of Array.from(files)) {
     if (file.type.startsWith('image/')) {
       const url = URL.createObjectURL(file)
@@ -432,12 +433,18 @@ function handleFiles(files: FileList | null) {
   }
 }
 
-const handleFileChange = (event: Event) => handleFiles((event.target as HTMLInputElement).files)
+const handleFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  if (target.files) {
+    handleFiles(target.files)
+    // 清空input的值，以便于用户可以重复上传相同的文件
+    target.value = ''
+  }
+}
 const handleDrop = (event: DragEvent) => {
   isDragging.value = false
   handleFiles(event.dataTransfer?.files ?? null)
 }
-const openFilePicker = () => fileInput.value?.click()
 
 function removeImage(index: number) {
   const image = images.value[index]
@@ -479,18 +486,43 @@ function openCropper(index: number) {
         cropBoxMovable: true,
         cropBoxResizable: true,
         aspectRatio:
-          maintainAspectRatioInModal.value && modalOutputWidth.value && modalOutputHeight.value
+          maintainAspectRatioInModal.value &&
+          modalOutputWidth.value > 0 &&
+          modalOutputHeight.value > 0
             ? modalOutputWidth.value / modalOutputHeight.value
             : NaN,
         crop(event) {
-          // 实时更新裁剪框的尺寸到输入框
-          modalOutputWidth.value = Math.round(event.detail.width)
-          modalOutputHeight.value = Math.round(event.detail.height)
+          // 实时更新裁剪框的尺寸到输入框，但只在用户通过拖拽改变裁剪框大小时触发
+          // 移除这一行，改为通过 watch 来反向更新
+          // modalOutputWidth.value = Math.round(event.detail.width);
+          // modalOutputHeight.value = Math.round(event.detail.height);
         },
       })
     }
   })
 }
+
+// 监听模态框内的宽高变化，并同步到裁剪框
+watch([modalOutputWidth, modalOutputHeight], ([newWidth, newHeight]) => {
+  if (cropperInstance.value) {
+    const cropBoxData = {
+      width: newWidth,
+      height: newHeight,
+    }
+    cropperInstance.value.setCropBoxData(cropBoxData)
+  }
+})
+
+// 监听主界面的比例，并同步到模态框
+watch(maintainAspectRatio, (newVal) => {
+  maintainAspectRatioInModal.value = newVal
+})
+
+// 监听模态框的比例，并同步到主界面
+watch(maintainAspectRatioInModal, (newVal) => {
+  maintainAspectRatio.value = newVal
+  updateCropperAspectRatio()
+})
 
 function applyLocalEdit() {
   if (!cropperInstance.value || currentImageIndex.value === null) return
