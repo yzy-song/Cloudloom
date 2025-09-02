@@ -1,22 +1,36 @@
 <template>
-  <div class="mt-12 p-8 font-sans antialiased text-gray-800 bg-gray-100 min-h-screen">
+  <div class="p-8 font-sans antialiased text-gray-800 bg-gray-100 min-h-screen">
+    <!-- 顶部通知栏 -->
     <div
-      class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-6"
-      @dragover.prevent
-      @drop.prevent="handleDrop"
+      v-if="notification.visible"
+      class="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-full shadow-lg transition-all duration-300"
+      :class="{
+        'bg-green-500 text-white': notification.type === 'success',
+        'bg-red-500 text-white': notification.type === 'error',
+        'bg-blue-500 text-white': notification.type === 'info',
+        'opacity-0': !notification.visible,
+        'opacity-100': notification.visible,
+      }"
     >
+      {{ notification.message }}
+    </div>
+
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-6">
       <h1 class="text-3xl font-bold text-center mb-6">图片批量处理与裁剪工具</h1>
 
+      <!-- 文件上传和参数设置 -->
       <div
-        class="mb-8 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center transition-colors duration-200 hover:border-indigo-500"
+        class="mb-8 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center transition-colors duration-200 cursor-pointer"
+        :class="{ 'bg-gray-200 border-indigo-500': isDragging }"
+        @dragover.prevent="isDragging = true"
+        @dragleave.prevent="isDragging = false"
+        @drop.prevent="handleDrop"
+        @click="openFilePicker"
       >
-        <label
-          for="file-upload"
-          class="flex flex-col items-center justify-center w-full px-4 py-6 text-sm font-medium text-white transition-colors duration-200 bg-indigo-600 rounded-lg shadow-md cursor-pointer hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
+        <label for="file-upload" class="flex flex-col items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="w-8 h-8 mr-2 mb-2"
+            class="w-8 h-8 mb-2 text-gray-500"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -28,12 +42,20 @@
             <path d="M12 2v10" />
             <path d="M16 6l-4-4-4 4" />
           </svg>
-          <span class="text-white">点击选择文件 或 拖拽文件到此区域</span>
+          <span class="text-gray-700">点击选择文件 或 拖拽文件到此区域</span>
         </label>
-        <input id="file-upload" type="file" multiple @change="handleFileChange" class="hidden" />
+        <input
+          id="file-upload"
+          type="file"
+          multiple
+          @change="handleFileChange"
+          class="hidden"
+          ref="fileInput"
+        />
       </div>
 
-      <div class="bg-gray-50 rounded-lg p-6 mb-8">
+      <!-- 批量参数设置 -->
+      <div class="bg-gray-50 rounded-lg p-6 mb-8 shadow-inner">
         <h2 class="text-xl font-semibold mb-4">批量参数设置</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
@@ -75,23 +97,25 @@
             />
             <label for="maintain-ratio" class="ml-2 text-sm text-gray-700">保持原比例</label>
           </div>
-          <button
-            @click="processAllImages"
-            :disabled="isProcessing"
-            class="w-full px-4 py-2 mt-auto text-white transition-colors duration-200 bg-green-500 rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <span v-if="isProcessing">处理中...</span>
-            <span v-else>批量处理</span>
-          </button>
         </div>
+        <button
+          @click="processAllImages"
+          :disabled="isProcessing"
+          class="w-full px-4 py-2 mt-4 text-white transition-colors duration-200 bg-green-500 rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span v-if="isProcessing">处理中...</span>
+          <span v-else>批量处理</span>
+        </button>
       </div>
 
+      <!-- 图片预览列表 -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <div
           v-for="(image, index) in images"
           :key="image.id"
           class="relative group bg-gray-50 rounded-lg shadow-md overflow-hidden"
         >
+          <!-- 删除按钮 -->
           <button
             @click="removeImage(index)"
             class="absolute top-2 right-2 p-1 text-gray-500 bg-white rounded-full shadow-md hover:text-red-500 transition-colors duration-200 z-10"
@@ -128,6 +152,7 @@
             </button>
           </div>
 
+          <!-- 标记标签和复原按钮 -->
           <span
             v-if="image.isEdited"
             class="absolute top-2 left-2 px-2 py-1 text-xs font-bold text-white bg-green-500 rounded-full shadow-md"
@@ -140,19 +165,34 @@
           >
             待处理
           </span>
+
           <div class="p-3">
             <p class="text-sm font-medium text-gray-700 truncate">{{ image.name }}</p>
           </div>
+
+          <button
+            @click="resetToOriginal(index)"
+            :disabled="!image.isEdited"
+            class="absolute bottom-2 left-2 px-3 py-1 text-xs text-white rounded-full shadow-md transition-colors duration-200"
+            :class="{
+              'bg-red-500 hover:bg-red-600': image.isEdited,
+              'bg-gray-400 cursor-not-allowed': !image.isEdited,
+            }"
+          >
+            复原
+          </button>
         </div>
       </div>
     </div>
 
+    <!-- 裁剪模态框 -->
     <div
       v-show="showCropperModal"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4 transition-opacity duration-300"
+      :class="{ 'opacity-0': !showCropperModal, 'opacity-100': showCropperModal }"
     >
       <div
-        class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl transform transition-all scale-95 duration-300"
+        class="bg-white rounded-lg shadow-2xl p-6 w-full max-w-2xl transform transition-all scale-95 duration-300"
         :class="{ 'scale-100': showCropperModal }"
       >
         <h2 class="text-2xl font-bold mb-4 text-center">图片编辑</h2>
@@ -160,6 +200,7 @@
           <img ref="cropperImgRef" :src="currentImage?.url" alt="图片预览" class="max-w-full" />
         </div>
 
+        <!-- 编辑控制区 -->
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
           <div>
             <label for="modal-width" class="block text-sm font-medium text-gray-700"
@@ -247,10 +288,10 @@
 
         <div class="flex justify-end gap-2">
           <button
-            @click="applyCrop"
+            @click="applyCroppedImage"
             class="px-4 py-2 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200"
           >
-            应用裁剪
+            应用
           </button>
           <button
             @click="closeCropper"
@@ -265,7 +306,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, onMounted, onBeforeUnmount, nextTick, reactive } from 'vue'
 import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
 
@@ -273,10 +314,11 @@ interface ImageItem {
   id: number
   name: string
   url: string
-  file: File // 保存原始文件
-  isEdited: boolean // 标记是否已被编辑或处理
+  file: File
+  isEdited: boolean
 }
 
+// State variables
 const images = ref<ImageItem[]>([])
 const showCropperModal = ref(false)
 const currentImage = ref<ImageItem | null>(null)
@@ -285,16 +327,41 @@ const cropperImgRef = ref<HTMLImageElement | null>(null)
 const cropperInstance = ref<Cropper | null>(null)
 const outputWidth = ref<number>(800)
 const outputHeight = ref<number>(600)
-const outputFormat = ref<string>('jpeg') // 新增：输出格式
+const outputFormat = ref<string>('jpeg')
 const maintainAspectRatio = ref<boolean>(true)
 const isProcessing = ref<boolean>(false)
 const rotation = ref<number>(0)
+const fileInput = ref<HTMLInputElement | null>(null)
+const isDragging = ref<boolean>(false)
+
+// Notification system state
+const notification = reactive({
+  visible: false,
+  message: '',
+  type: 'info',
+})
 
 let fileIdCounter = 0
 const flippedX = ref(1)
 const flippedY = ref(1)
 
-function handleFiles(files: FileList) {
+// Show notification
+function showNotification(message: string, type: 'success' | 'error' | 'info') {
+  notification.message = message
+  notification.type = type
+  notification.visible = true
+  setTimeout(() => {
+    notification.visible = false
+  }, 3000)
+}
+
+// Handle file drop and selection
+function handleFiles(files: FileList | null) {
+  if (!files || files.length === 0) {
+    showNotification('没有选择文件', 'info')
+    return
+  }
+
   for (let i = 0; i < files.length; i++) {
     const file = files[i]
     if (file.type.startsWith('image/')) {
@@ -306,44 +373,57 @@ function handleFiles(files: FileList) {
         file: file,
         isEdited: false,
       })
+    } else {
+      console.warn(`跳过非图片文件: ${file.name}`)
     }
   }
 }
 
 function handleFileChange(event: Event) {
   const fileList = (event.target as HTMLInputElement).files
-  if (fileList) {
-    handleFiles(fileList)
-  }
+  handleFiles(fileList)
 }
 
 function handleDrop(event: DragEvent) {
+  isDragging.value = false
   const fileList = event.dataTransfer?.files
-  if (fileList) {
-    handleFiles(fileList)
+  handleFiles(fileList ?? null)
+}
+
+function openFilePicker() {
+  if (fileInput.value) {
+    fileInput.value.click()
   }
 }
 
 function removeImage(index: number) {
-  // 移除图片时，也需要释放之前创建的 URL
   if (images.value[index]?.url) {
     URL.revokeObjectURL(images.value[index].url)
   }
   images.value.splice(index, 1)
+  showNotification('图片已移除', 'success')
 }
 
+// Cropper modal logic
 function openCropper(index: number) {
   currentImage.value = images.value[index]
   currentImageIndex.value = index
   showCropperModal.value = true
-  // Reset flip and rotation state before opening the modal
+
   flippedX.value = 1
   flippedY.value = 1
   rotation.value = 0
+
   nextTick(() => {
     if (cropperImgRef.value) {
+      if (cropperInstance.value) {
+        cropperInstance.value.destroy()
+      }
       cropperInstance.value = new Cropper(cropperImgRef.value, {
-        aspectRatio: outputWidth.value / outputHeight.value,
+        aspectRatio:
+          maintainAspectRatio.value && outputWidth.value && outputHeight.value
+            ? outputWidth.value / outputHeight.value
+            : NaN,
         viewMode: 1,
         dragMode: 'move',
         autoCropArea: 0.9,
@@ -351,7 +431,7 @@ function openCropper(index: number) {
         cropBoxMovable: false,
         cropBoxResizable: false,
         background: false,
-        rotatable: true, // 允许旋转
+        rotatable: true,
       })
     }
   })
@@ -359,51 +439,49 @@ function openCropper(index: number) {
 
 function closeCropper() {
   showCropperModal.value = false
-  cropperInstance.value?.destroy()
-  cropperInstance.value = null
+  if (cropperInstance.value) {
+    cropperInstance.value.destroy()
+    cropperInstance.value = null
+  }
   currentImage.value = null
   currentImageIndex.value = null
 }
 
-function applyCrop() {
+function applyCroppedImage() {
   if (cropperInstance.value && currentImageIndex.value !== null) {
     const croppedCanvas = cropperInstance.value.getCroppedCanvas({
       width: outputWidth.value,
       height: outputHeight.value,
     })
 
-    // Convert canvas to a blob
     croppedCanvas.toBlob(
       (blob) => {
-        if (blob && currentImage.value) {
-          // Create a new File object from the blob
-          const fileExtension = outputFormat.value === 'jpeg' ? 'jpeg' : outputFormat.value
-          const mimeType = `image/${outputFormat.value}`
-          const croppedFile = new File(
-            [blob],
-            `cropped_${currentImage.value.name}.${fileExtension}`,
-            {
-              type: mimeType,
-            },
-          )
-
-          // Update the file and url for the current image item
-          if (currentImageIndex.value !== null) {
-            // 先释放旧的 URL
-            URL.revokeObjectURL(images.value[currentImageIndex.value].url)
-            images.value[currentImageIndex.value].file = croppedFile
-            images.value[currentImageIndex.value].url = URL.createObjectURL(croppedFile)
-            images.value[currentImageIndex.value].isEdited = true
+        if (blob) {
+          // Revoke the old URL to free up memory
+          if (images.value[currentImageIndex.value!].url) {
+            URL.revokeObjectURL(images.value[currentImageIndex.value!].url)
           }
+
+          // Create a new URL for the cropped image
+          const newUrl = URL.createObjectURL(blob)
+
+          // Update the image in the array
+          images.value[currentImageIndex.value!].url = newUrl
+          images.value[currentImageIndex.value!].isEdited = true
+
+          showNotification('图片已应用裁剪效果！', 'success')
+        } else {
+          showNotification('无法裁剪图片', 'error')
         }
         closeCropper()
       },
       `image/${outputFormat.value}`,
-      0.95,
+      0.9,
     )
   }
 }
 
+// Cropper controls
 function rotateImage() {
   if (cropperInstance.value) {
     cropperInstance.value.rotateTo(rotation.value)
@@ -413,7 +491,6 @@ function rotateImage() {
 function rotateImageByDegree(degree: number) {
   if (cropperInstance.value) {
     cropperInstance.value.rotate(degree)
-    // Sync the slider with the new rotation
     const newRotation = (rotation.value + degree) % 360
     rotation.value = newRotation
   }
@@ -453,27 +530,44 @@ function resetImage() {
 }
 
 function updateCropperAspectRatio() {
-  if (cropperInstance.value && outputWidth.value > 0 && outputHeight.value > 0) {
-    cropperInstance.value.setAspectRatio(outputWidth.value / outputHeight.value)
+  if (cropperInstance.value) {
+    cropperInstance.value.setAspectRatio(
+      maintainAspectRatio.value && outputWidth.value > 0 && outputHeight.value > 0
+        ? outputWidth.value / outputHeight.value
+        : NaN,
+    )
   }
 }
 
+// Reset single image preview
+function resetToOriginal(index: number) {
+  const image = images.value[index]
+  if (image) {
+    URL.revokeObjectURL(image.url) // Revoke existing URL to free memory
+    image.url = URL.createObjectURL(image.file)
+    image.isEdited = false
+    showNotification('图片已复原', 'success')
+  }
+}
+
+// Batch processing logic
 async function processAllImages() {
-  if (images.value.length === 0) {
-    alert('没有图片可以处理，请先上传图片！')
+  const pendingImages = images.value.filter((img) => !img.isEdited)
+
+  if (pendingImages.length === 0) {
+    showNotification('没有待处理的图片！', 'info')
     return
   }
 
   isProcessing.value = true
   const formData = new FormData()
 
-  images.value.forEach((image) => {
+  pendingImages.forEach((image) => {
     formData.append('images', image.file, image.name)
   })
 
   formData.append('width', outputWidth.value.toString())
   formData.append('height', outputHeight.value.toString())
-  // 添加格式到批量处理请求
   formData.append('format', outputFormat.value)
   formData.append('quality', '95')
   formData.append('keepRatio', maintainAspectRatio.value.toString())
@@ -499,29 +593,30 @@ async function processAllImages() {
 
     const result: ProcessImagesResult = await response.json()
 
-    // 更新预览图
     result.processedImages.forEach((processedImage: ProcessedImage) => {
       const originalImage: ImageItem | undefined = images.value.find(
         (img) => img.name === processedImage.originalName,
       )
       if (originalImage) {
-        console.log('Processed image URL:', `http://localhost:3003${processedImage.newUrl}`)
+        URL.revokeObjectURL(originalImage.url)
         originalImage.url = `http://localhost:3003${processedImage.newUrl}`
-        originalImage.isEdited = true // 标记为已处理
+        originalImage.isEdited = true
       }
     })
 
-    console.log('所有图片已处理完成')
+    showNotification('所有图片已处理完成！', 'success')
   } catch (error) {
     console.error('批量处理图片时出错:', error)
-    alert('批量处理失败，请检查服务器。')
+    showNotification('批量处理失败，请检查服务器。', 'error')
   } finally {
     isProcessing.value = false
   }
 }
 
 onBeforeUnmount(() => {
-  cropperInstance.value?.destroy()
+  if (cropperInstance.value) {
+    cropperInstance.value.destroy()
+  }
 })
 </script>
 
@@ -531,4 +626,3 @@ onBeforeUnmount(() => {
   max-width: 100%;
 }
 </style>
-```eof
