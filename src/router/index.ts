@@ -100,10 +100,9 @@ const routes: Array<RouteRecordRaw> = [
     meta: { titleKey: 'router.serverError' },
   },
   {
-    path: '/image-batch-tool',
-    name: 'ImageBatchTool',
-    component: () => import('@/components/ImageProTool.vue'),
-    meta: { titleKey: 'router.imageBatchTool' },
+    path: '/image-tool',
+    name: 'ImageTool',
+    component: () => import('@/components/ImageProcessor.vue'),
   },
   {
     path: '/:pathMatch(.*)*',
