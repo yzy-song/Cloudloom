@@ -1,7 +1,9 @@
 <template>
   <div class="home-view overflow-x-hidden bg-[#FBF9F6]">
     <!-- Section 1: Hero Banner with Swiper Carousel -->
-    <section class="relative h-screen w-full flex items-center justify-center text-white">
+    <section
+      class="relative w-full h-[60vh] md:h-[800px] flex items-center justify-center text-white"
+    >
       <swiper
         :modules="[Autoplay, Pagination, Navigation]"
         :loop="true"
@@ -18,7 +20,7 @@
               class="w-full h-full object-cover opacity-60"
             />
           </div>
-          <div class="relative z-10 text-center px-4">
+          <div class="relative z-10 text-center px-4 pt-128">
             <h1
               class="font-serif text-5xl md:text-7xl lg:text-8xl font-bold tracking-wider mb-4 animate-fade-in-down"
               style="text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5)"
@@ -31,13 +33,13 @@
             >
               {{ slide.description }}
             </p>
-            <router-link
+            <!-- <router-link
               :to="slide.action || '/'"
               class="inline-block bg-[#C0392B] text-white font-semibold tracking-wider px-8 py-3 rounded-full text-lg hover:bg-[#a53125] transition-transform hover:scale-105 duration-300 animate-fade-in-up"
               style="animation-delay: 0.6s"
             >
               {{ slide.buttonText }}
-            </router-link>
+            </router-link> -->
           </div>
         </swiper-slide>
       </swiper>
@@ -240,7 +242,8 @@ import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import 'swiper/css/autoplay'
 
-import { ref, type Directive } from 'vue'
+import { ref, onMounted, computed, onUnmounted } from 'vue'
+import type { Directive } from 'vue'
 import {
   SparklesIcon,
   CameraIcon,
@@ -259,41 +262,148 @@ import type { HeroSlide } from '@/types'
 const router = useRouter()
 const { t } = useI18n()
 
-// 轮播图数据，用于展示在首页顶部
-const homeSlides = ref<HeroSlide[]>([
+// --- 修正后的轮播图数据和逻辑 ---
+
+// 响应式地判断是否为移动端
+const isMobile = ref(false)
+const checkIsMobile = () => {
+  isMobile.value = window.innerWidth < 768
+}
+
+// 基础轮播图数据，只包含文件名，不包含路径
+const baseHomeSlides = [
   {
     title: '盛唐风华系列',
     description: '体验大唐盛世服饰，感受千年文化魅力',
     buttonText: '查看详情',
     action: '/gallery?filter=tang',
-    // image: '/images/home-banner/slide1.png',
-    image: '/images/home-banner/slide1_out.jpeg',
+    imageFileName: 'slide_001.jpeg',
   },
   {
     title: '汉服配饰精选',
     description: '团扇、发簪、荷包等传统配饰',
     buttonText: '探索周边',
     action: '/gallery?filter=accessories',
-    // image: '/images/home-banner/slide2.png',
-    image: '/images/home-banner/slide2_out.jpeg',
+    imageFileName: 'slide_002.jpeg',
   },
   {
     title: '文创产品上新',
     description: '传统纹样设计的日常用品与艺术品',
     buttonText: '浏览文创',
     action: '/gallery?filter=cultural',
-    // image: '/images/home-banner/slide3.png',
-    image: '/images/home-banner/slide3_out.jpeg',
+    imageFileName: 'slide_003.jpeg',
   },
   {
     title: '儿童汉服特惠',
     description: '专为儿童设计的传统服饰，传承从小开始',
     buttonText: '查看系列',
     action: '/gallery?filter=kids',
-    // image: '/images/home-banner/slide4.png',
-    image: '/images/home-banner/slide4_out.jpeg',
+    imageFileName: 'slide_004.jpeg',
   },
-])
+  {
+    title: '盛唐风华系列',
+    description: '体验大唐盛世服饰，感受千年文化魅力',
+    buttonText: '查看详情',
+    action: '/gallery?filter=tang',
+    imageFileName: 'slide_005.jpeg',
+  },
+  {
+    title: '汉服配饰精选',
+    description: '团扇、发簪、荷包等传统配饰',
+    buttonText: '探索周边',
+    action: '/gallery?filter=accessories',
+    imageFileName: 'slide_006.jpeg',
+  },
+  {
+    title: '文创产品上新',
+    description: '传统纹样设计的日常用品与艺术品',
+    buttonText: '浏览文创',
+    action: '/gallery?filter=cultural',
+    imageFileName: 'slide_007.jpeg',
+  },
+  {
+    title: '儿童汉服特惠',
+    description: '专为儿童设计的传统服饰，传承从小开始',
+    buttonText: '查看系列',
+    action: '/gallery?filter=kids',
+    imageFileName: 'slide_008.jpeg',
+  },
+  {
+    title: '盛唐风华系列',
+    description: '体验大唐盛世服饰，感受千年文化魅力',
+    buttonText: '查看详情',
+    action: '/gallery?filter=tang',
+    imageFileName: 'slide_009.jpeg',
+  },
+  {
+    title: '汉服配饰精选',
+    description: '团扇、发簪、荷包等传统配饰',
+    buttonText: '探索周边',
+    action: '/gallery?filter=accessories',
+    imageFileName: 'slide_010.jpeg',
+  },
+  {
+    title: '文创产品上新',
+    description: '传统纹样设计的日常用品与艺术品',
+    buttonText: '浏览文创',
+    action: '/gallery?filter=cultural',
+    imageFileName: 'slide_011.jpeg',
+  },
+  {
+    title: '儿童汉服特惠',
+    description: '专为儿童设计的传统服饰，传承从小开始',
+    buttonText: '查看系列',
+    action: '/gallery?filter=kids',
+    imageFileName: 'slide_012.jpeg',
+  },
+  {
+    title: '盛唐风华系列',
+    description: '体验大唐盛世服饰，感受千年文化魅力',
+    buttonText: '查看详情',
+    action: '/gallery?filter=tang',
+    imageFileName: 'slide_013.jpeg',
+  },
+  {
+    title: '汉服配饰精选',
+    description: '团扇、发簪、荷包等传统配饰',
+    buttonText: '探索周边',
+    action: '/gallery?filter=accessories',
+    imageFileName: 'slide_014.jpeg',
+  },
+  {
+    title: '文创产品上新',
+    description: '传统纹样设计的日常用品与艺术品',
+    buttonText: '浏览文创',
+    action: '/gallery?filter=cultural',
+    imageFileName: 'slide_015.jpeg',
+  },
+]
+
+// 使用计算属性动态生成轮播图数据，确保路径正确且响应式
+const homeSlides = computed(() => {
+  const imagePath = isMobile.value ? '/images/home-banner/mobile/' : '/images/home-banner/pc/'
+  // 复制数组并打乱顺序，然后映射到新数组
+  const shuffledSlides = shuffle([...baseHomeSlides])
+  return shuffledSlides.map((slide) => ({
+    ...slide,
+    image: `${imagePath}${slide.imageFileName}`,
+  }))
+})
+
+// 组件挂载时执行
+onMounted(() => {
+  // 设置初始设备类型
+  checkIsMobile()
+  // 监听窗口大小变化
+  window.addEventListener('resize', checkIsMobile)
+})
+
+// 组件卸载时移除监听器，防止内存泄漏
+onUnmounted(() => {
+  window.removeEventListener('resize', checkIsMobile)
+})
+
+// --- 页面其他部分的数据和逻辑，保持不变 ---
 
 // 服务特色数据
 const features = [
@@ -349,11 +459,12 @@ const vObserveAnimation: Directive<HTMLElement, string> = {
   },
 }
 
-// 处理轮播图按钮点击
-function handleSlideAction(action?: string) {
-  if (action) {
-    router.push(action)
-  }
+// 洗牌函数
+function shuffle<T>(arr: T[]): T[] {
+  return arr
+    .map((item) => ({ item, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ item }) => item)
 }
 </script>
 
