@@ -1,10 +1,3 @@
-<!--
- * @Author: yzy
- * @Date: 2025-08-29 09:09:22
- * @LastEditors: yzy
- * @LastEditTime: 2025-09-01 17:20:11
- * @Description: 全新设计的首页，已将原有版块以新风格恢复，并添加了轮播图组件
--->
 <template>
   <div class="home-view overflow-x-hidden bg-[#FBF9F6]">
     <!-- Section 1: Hero Banner with Swiper Carousel -->
@@ -273,28 +266,32 @@ const homeSlides = ref<HeroSlide[]>([
     description: '体验大唐盛世服饰，感受千年文化魅力',
     buttonText: '查看详情',
     action: '/gallery?filter=tang',
-    image: '/images/home-banner/banner01.png',
+    // image: '/images/home-banner/slide1.png',
+    image: '/images/home-banner/slide1_out.jpeg',
   },
   {
     title: '汉服配饰精选',
     description: '团扇、发簪、荷包等传统配饰',
     buttonText: '探索周边',
     action: '/gallery?filter=accessories',
-    image: '/images/home-banner/banner02.png',
+    // image: '/images/home-banner/slide2.png',
+    image: '/images/home-banner/slide2_out.jpeg',
   },
   {
     title: '文创产品上新',
     description: '传统纹样设计的日常用品与艺术品',
     buttonText: '浏览文创',
     action: '/gallery?filter=cultural',
-    image: '/images/home-banner/banner03.png',
+    // image: '/images/home-banner/slide3.png',
+    image: '/images/home-banner/slide3_out.jpeg',
   },
   {
     title: '儿童汉服特惠',
     description: '专为儿童设计的传统服饰，传承从小开始',
     buttonText: '查看系列',
     action: '/gallery?filter=kids',
-    image: '/images/home-banner/banner04.png',
+    // image: '/images/home-banner/slide4.png',
+    image: '/images/home-banner/slide4_out.jpeg',
   },
 ])
 
