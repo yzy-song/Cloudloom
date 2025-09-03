@@ -192,10 +192,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed } from 'vue'
 import { MagnifyingGlassIcon, ShoppingCartIcon, Bars3Icon } from '@heroicons/vue/24/outline'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
+import { useScroll } from '@/composables/useScroll'
 import { useAuthStore } from '@/stores/auth.store'
 
 const { t } = useI18n()
@@ -203,7 +204,7 @@ const route = useRoute()
 const authStore = useAuthStore()
 
 // 响应式变量
-const isScrolled = ref(false)
+const { isScrolled } = useScroll(50)
 const mobileMenuOpen = ref(false)
 const isUserMenuOpen = ref(false)
 
@@ -216,20 +217,6 @@ const navItems = [
 ]
 
 const activePath = computed(() => route.path)
-
-// 滚动事件处理
-const handleScroll = () => {
-  isScrolled.value = window.scrollY > 50
-}
-
-// 生命周期钩子
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll, { passive: true })
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
 </script>
 
 <style>

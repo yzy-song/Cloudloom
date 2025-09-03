@@ -12,95 +12,95 @@
     "login": "Login"
   },
   "footer": {
-    "brandDesc": "Promoting Hanfu culture in Ireland. Professional Hanfu experience, rental and sales.",
+    "brandDesc": "Promoting Hanfu culture in Ireland. Professional Hanfu experience, rental, and sales.",
     "navTitle": "Navigation",
     "contactTitle": "Contact Us",
-    "address": "Dublin City Centre Cultural District",
+    "address": "Cultural Quarter, Dublin City Centre",
     "subscribeTitle": "Subscribe",
-    "subscribeDesc": "Get the latest news and event updates",
+    "subscribeDesc": "Get the latest events and news",
     "subscribeBtn": "Subscribe",
     "rights": "All rights reserved.",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service"
   },
   "home": {
-    "bookNow":"Book Now",
+    "bookNow": "Book Now",
     "bannerTitle": "Cloudloom Hanfu",
-    "bannerSlogan": "Meet the beauty of Hanfu in the Emerald Isle. We offer Hanfu rental, sales, and cultural experiences, connecting tradition and modernity.",
+    "bannerSlogan": "In the Emerald Isle, encounter a millennium of splendid attire. We offer Hanfu rental, sales, and cultural experiences, connecting the beauty of tradition and modernity.",
     "feature1Title": "Authentic Hanfu",
-    "feature1Desc": "All costumes are genuine, high-quality Hanfu.",
+    "feature1Desc": "All costumes are high-quality, authentic Hanfu.",
     "feature2Title": "Professional Photography",
-    "feature2Desc": "Free professional photo shoot for every guest.",
+    "feature2Desc": "Every customer enjoys a complimentary professional photoshoot.",
     "feature3Title": "Personalized Service",
     "feature3Desc": "One-on-one dressing and styling guidance.",
     "feature4Title": "Prime Location",
-    "feature4Desc": "Located in the heart of Dublin, easy to reach.",
-    "step1Title": "Choose Your Hanfu",
-    "step1Desc": "Browse our collection and pick your favorite style.",
-    "step2Title": "Book Your Experience",
-    "step2Desc": "Select a date and time that suits you.",
-    "step3Title": "Enjoy & Capture",
-    "step3Desc": "Dress up, enjoy the moment, and take beautiful photos.",
-    "testimonial1": "A wonderful experience! The Hanfu was beautiful and the staff were so friendly.",
-    "testimonial2": "I felt like I traveled back in time. Highly recommended!",
-    "testimonial3": "Amazing photos and unforgettable memories.",
-    "faq1Q": "How do I book a Hanfu experience?",
-    "faq1A": "You can book online or contact us directly via email or phone.",
-    "faq2Q": "Do you provide photography service?",
-    "faq2A": "Yes, every experience includes a free professional photo shoot.",
-    "faq3Q": "Can I cancel or reschedule my booking?",
+    "feature4Desc": "Located in Dublin city centre, with convenient transport.",
+    "step1Title": "Choose Hanfu",
+    "step1Desc": "Browse our Hanfu collection and pick your favorite style.",
+    "step2Title": "Book an Experience",
+    "step2Desc": "Select a suitable date and time to book easily.",
+    "step3Title": "Dress Up & Photoshoot",
+    "step3Desc": "Change into Hanfu, enjoy the moment, and capture beautiful photos.",
+    "testimonial1": "A fantastic experience! The Hanfu is beautiful, and the staff are very friendly.",
+    "testimonial2": "It felt like traveling back in time. Highly recommended!",
+    "testimonial3": "The photos are beautiful, and the memories are unforgettable.",
+    "faq1Q": "How to book a Hanfu experience?",
+    "faq1A": "You can book online or contact us via email or phone.",
+    "faq2Q": "Is a photography service provided?",
+    "faq2A": "Yes, each experience includes a complimentary professional photoshoot.",
+    "faq3Q": "Can I cancel or reschedule?",
     "faq3A": "Yes, please contact us at least 24 hours in advance."
   },
   "login": {
-    "title": "Sign in to your account",
+    "title": "Login to your account",
     "or": "or",
-    "registerNow": "Create an account",
-    "loginNow": "Login to existing account",
+    "registerNow": "Create a new account",
+    "loginNow": "Login to an existing account",
     "username": "Username",
     "usernamePlaceholder": "Enter your username",
     "emailOrUsername": "Email or Username",
-    "emailOrUsernamePlaceholder": "Enter email or username",
-    "email": "Email",
-    "emailPlaceholder": "Enter your email",
+    "emailOrUsernamePlaceholder": "Enter your email or username",
+    "email": "Email Address",
+    "emailPlaceholder": "Enter your email address",
     "password": "Password",
     "passwordPlaceholder": "Enter your password",
     "setPasswordPlaceholder": "Set your password",
     "confirmPassword": "Confirm Password",
-    "confirmPasswordPlaceholder": "Re-enter your password",
+    "confirmPasswordPlaceholder": "Enter your password again",
     "rememberMe": "Remember me",
     "forgotPassword": "Forgot password?",
     "loginBtn": "Login",
     "registerBtn": "Register",
-    "orOther": "Or sign in with",
+    "orOther": "Or login with",
     "google": "Google",
     "facebook": "Facebook",
     "loading": "Processing...",
     "errorRequired": "Please fill in all required fields.",
-    "errorPasswordMismatch": "Passwords do not match.",
-    "errorOAuth": "Third-party login failed, please try again.",
-    "errorUsernameLength": "must be at least 3 characters.",
+    "errorPasswordMismatch": "The two passwords do not match.",
+    "errorOAuth": "OAuth login failed, please try again.",
+    "errorUsernameLength": "At least 3 characters required.",
     "errorPasswordLength": "Password must be at least 6 characters.",
     "errorEmailFormat": "Invalid email format.",
-    "newToSite": "New to this site?",
+    "newToSite": "New to the site?",
     "alreadyMember": "Already a member?",
-    "loginWithGoogle": "Log in with Google",
-    "registerWithGoogle": "Sign up with Google",
-    "loginWithFacebook": "Log in with Facebook",
-    "registerWithFacebook": "Sign up with Facebook",
-    "loginWithEmail": "Log in with Email",
-    "registerWithEmail": "Sign up with Email",
-    "backToOptions": "Back to other options"
+    "loginWithGoogle": "Login with Google",
+    "registerWithGoogle": "Register with Google",
+    "loginWithFacebook": "Login with Facebook",
+    "registerWithFacebook": "Register with Facebook",
+    "loginWithEmail": "Login with Email",
+    "registerWithEmail": "Register with Email",
+    "backToOptions": "Back to other login options"
   },
   "router": {
     "home": "Home",
     "gallery": "Gallery",
     "productDetail": "Product Detail",
-    "about": "About Us",
+    "about": "About",
     "collaboration": "Collaboration",
-    "booking": "Book Experience",
-    "knowledge": "Hanfu Knowledge",
+    "booking": "Booking",
+    "knowledge": "Knowledge",
     "login": "Login",
-    "profile": "My Profile",
+    "profile": "Profile",
     "orders": "My Bookings",
     "favorites": "My Favorites",
     "survey": "Market Survey",
@@ -110,94 +110,107 @@
   },
   "survey": {
     "title": "Hanfu Experience Survey",
-    "description": "Curious about ancient Chinese clothing? Join us for an unforgettable Hanfu experience and themed party in Dublin! Please help us plan by sharing your preferences below.",
+    "description": "Interested in traditional costumes? Participate in our Dublin Hanfu-themed party survey to help us plan better events!",
     "buttons": {
       "next": "Next",
       "back": "Back",
       "submit": "Submit"
     },
     "recognition": {
-      "correct": "Correct! This is a Hanfu.",
-      "incorrect": "Not quite! This is a {alt}, Hanfu is the correct answer."
+      "correct": "Congratulations, that's correct! This is Hanfu.",
+      "incorrect": "Not quite, this is {alt}. Hanfu is the correct answer.",
+      "thisIs": "this is"
     },
-    "submitted": "Thank you for completing the survey!"
+    "submitted": "Thank you for your participation!",
+    "step": "Step",
+    "steps": {
+      "Education": "Knowledge Level",
+      "Preferences": "Preferences",
+      "Service": "Service Expectations",
+      "Payment": "Payment Habits",
+      "Recognition": "Recognize Hanfu",
+      "Personal": "Personal Info",
+      "Feedback": "Feedback"
+    }
   },
   "education": {
-    "title": "Learn About Hanfu",
-    "description": "Hanfu, the traditional clothing of the Han Chinese, has a history spanning thousands of years. It's not just a costume; it's a living part of culture. It represents grace, elegance, and history.",
+    "title": "Understanding Hanfu",
+    "description": "Hanfu is the traditional clothing of the Han ethnic group, with a history of thousands of years. It is not just clothing, but a cultural inheritance and a symbol of elegance.",
     "styles": {
       "elegant": "Elegant & Formal",
-      "elegant_desc": "Often worn for formal occasions and celebrations.",
-      "casual": "Casual & Daily Wear",
-      "casual_desc": "Comfortable styles suitable for everyday life.",
-      "historical": "Historical Designs",
-      "historical_desc": "Based on designs from ancient dynasties."
+      "elegant_desc": "Mostly used for formal occasions and ceremonies.",
+      "casual": "Daily & Casual",
+      "casual_desc": "Comfortable styles suitable for daily wear.",
+      "historical": "Historical Styles",
+      "historical_desc": "Classic designs originating from ancient dynasties."
     }
   },
   "preferences": {
     "title": "Your Preferences",
-    "description": "Which Hanfu style and activities interest you the most for our event?",
-    "style_question": "Which Hanfu style interests you most?",
-    "activity_question": "What activities would you like to see?",
+    "description": "Which Hanfu style and activities attract you the most?",
+    "style_question": "Most interesting Hanfu style",
+    "activity_question": "What activities would you like to have?",
     "styles": {
       "elegant": "Elegant & Formal",
-      "casual": "Casual & Everyday",
-      "heroic": "Heroic & Martial"
+      "casual": "Daily & Casual",
+      "heroic": "Heroic & Martial Arts"
     },
     "activities": {
       "photoshoot": "Hanfu Photoshoot",
-      "tea": "Traditional Tea Ceremony",
-      "workshop": "Cultural Workshops",
-      "games": "Themed Party Games"
+      "tea": "Tea Ceremony",
+      "workshop": "Cultural Workshop",
+      "games": "Themed Games"
     }
   },
   "service": {
     "title": "Services & Duration",
-    "description": "Please tell us more about the services and ideal duration for your experience.",
-    "service_question": "Which services are you interested in?",
-    "duration_question": "Ideal Duration: {duration} Hours",
+    "description": "What services would you like to experience? What is the ideal duration for the event?",
+    "service_question": "Interested services",
+    "duration_question": "Ideal duration: {duration} hours",
     "services": {
       "rental": "Hanfu Rental",
-      "makeup": "Professional Makeup & Hair",
+      "makeup": "Professional Makeup",
       "photo": "Photography Package",
       "performance": "Cultural Performance"
     },
     "duration": {
-      "quick": "2 Hours (Quick)",
-      "full_day": "8 Hours (Full-Day)"
+      "quick": "2 hours (Flash)",
+      "full_day": "8 hours (Full Day)"
     }
   },
   "payment": {
-    "title": "Your Budget",
-    "description": "Please select your preferred budget per person for the experience.",
-    "question": "Preferred Budget Per Person"
+    "title": "Budget Range",
+    "description": "What is your expected per-person budget for the experience?",
+    "question": "Please select your budget"
   },
   "recognition": {
-    "title": "Hanfu Recognition",
-    "description": "Can you spot the Hanfu? Click on the image you think is an authentic Hanfu.",
+    "title": "Hanfu Recognition Quiz",
+    "description": "Can you recognize which one is Hanfu? Click on the image you think is Hanfu.",
     "alts": {
       "kimono": "Japanese Kimono",
       "hanbok": "Korean Hanbok",
-      "hanfu": "Chinese Hanfu",
-      "modern": "Modern Chinese Dress"
+      "hanfu": "Hanfu",
+      "modern": "Modern Clothing",
+      "cosplay": "Cosplay",
+      "qipao": "Qipao"
     }
   },
   "personal": {
-    "title": "Your Contact Details",
-    "description": "Please provide your information so we can stay in touch about the event.",
-    "name": "Full Name",
-    "email": "Email Address",
-    "phone": "Phone Number (Optional)",
-    "city": "City / Postal Code"
+    "title": "Contact Information",
+    "description": "Please leave your information so we can contact you later.",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone (optional)",
+    "city": "City/Postcode"
   },
   "feedback": {
-    "title": "Open Feedback",
-    "description": "Have any other ideas or suggestions? We'd love to hear them!",
-    "placeholder": "Your suggestions here..."
+    "title": "Open Suggestions",
+    "description": "Any other ideas or suggestions? Feel free to leave a message!",
+    "placeholder": "Your suggestions..."
   },
   "gallery": {
-    "bannerTitle": "Hanfu Collection",
-    "bannerDesc": "Explore the art of clothing across millennia. Each piece carries the essence of Chinese civilization.",
+    "bannerTitle": "Hanfu Treasure Gallery",
+    "bannerDesc": "Explore the art of clothing that spans thousands of years, each piece carrying the essence of Chinese civilization.",
     "filter": {
       "all": "All",
       "ming": "Ming",
@@ -210,11 +223,11 @@
     },
     "sort": {
       "newest": "Newest",
-      "popular": "Most Popular",
+      "popular": "Popularity",
       "priceAsc": "Price: Low to High",
       "priceDesc": "Price: High to Low"
     },
-    "sortBy": "Sort By",
+    "sortBy": "Sort by",
     "addToCart": "Add to Cart",
     "loadMore": "Load More",
     "price": "Price"

@@ -188,6 +188,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { StarIcon, HeartIcon, CheckCircleIcon } from '@heroicons/vue/24/outline'
 import { useRoute, useRouter } from 'vue-router'
 import ProductCard from '@/components/ui/card/ProductCard.vue'
+import { useSwipe } from '@/composables/useSwipe'
 import { useFavoriteStore } from '@/stores/favorite.store'
 import { useProductStore } from '@/stores/product.store'
 
@@ -221,36 +222,6 @@ watch(
   { immediate: true },
 )
 
-const touchStartX = ref(0)
-const touchEndX = ref(0)
-
-const handleTouchStart = (e: TouchEvent) => {
-  touchStartX.value = e.touches[0].clientX
-}
-
-const handleTouchMove = (e: TouchEvent) => {
-  touchEndX.value = e.touches[0].clientX
-}
-
-const handleTouchEnd = () => {
-  if (!touchStartX.value || !touchEndX.value) return
-
-  const diff = touchStartX.value - touchEndX.value
-  const minSwipeDistance = 50 // 最小滑动距离
-
-  if (Math.abs(diff) > minSwipeDistance) {
-    if (diff > 0) {
-      nextImage() // 向左滑动，下一张
-    } else {
-      prevImage() // 向右滑动，上一张
-    }
-  }
-
-  // 重置触摸数据
-  touchStartX.value = 0
-  touchEndX.value = 0
-}
-
 const nextImage = () => {
   if (product.value?.images) {
     activeImage.value = (activeImage.value + 1) % product.value.images.length
@@ -262,6 +233,13 @@ const prevImage = () => {
       (activeImage.value - 1 + product.value.images.length) % product.value.images.length
   }
 }
+
+// 使用 useSwipe 组合式函数
+const { handleTouchStart, handleTouchMove, handleTouchEnd } = useSwipe({
+  onSwipeLeft: nextImage, // 向左滑，看下一张
+  onSwipeRight: prevImage, // 向右滑，看上一张
+  threshold: 50,
+})
 
 function toggleFavorite() {
   favoritesStore.toggleFavorite(props.id)

@@ -258,6 +258,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 import type { HeroSlide } from '@/types'
+import { useDeviceCheck } from '@/composables/useDeviceCheck'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -265,10 +266,7 @@ const { t } = useI18n()
 // --- 修正后的轮播图数据和逻辑 ---
 
 // 响应式地判断是否为移动端
-const isMobile = ref(false)
-const checkIsMobile = () => {
-  isMobile.value = window.innerWidth < 768
-}
+const { isMobile } = useDeviceCheck()
 
 // 基础轮播图数据，只包含文件名，不包含路径
 const baseHomeSlides = [
@@ -379,31 +377,18 @@ const baseHomeSlides = [
   },
 ]
 
+// 在组件设置时，只打乱一次轮播图的基础顺序
+const shuffledBaseSlides = shuffle([...baseHomeSlides])
+
 // 使用计算属性动态生成轮播图数据，确保路径正确且响应式
 const homeSlides = computed(() => {
   const imagePath = isMobile.value ? '/images/home-banner/mobile/' : '/images/home-banner/pc/'
-  // 复制数组并打乱顺序，然后映射到新数组
-  const shuffledSlides = shuffle([...baseHomeSlides])
-  return shuffledSlides.map((slide) => ({
+  // 现在只映射预先打乱好的数组，不再每次都重新shuffle
+  return shuffledBaseSlides.map((slide) => ({
     ...slide,
     image: `${imagePath}${slide.imageFileName}`,
   }))
 })
-
-// 组件挂载时执行
-onMounted(() => {
-  // 设置初始设备类型
-  checkIsMobile()
-  // 监听窗口大小变化
-  window.addEventListener('resize', checkIsMobile)
-})
-
-// 组件卸载时移除监听器，防止内存泄漏
-onUnmounted(() => {
-  window.removeEventListener('resize', checkIsMobile)
-})
-
-// --- 页面其他部分的数据和逻辑，保持不变 ---
 
 // 服务特色数据
 const features = [
