@@ -73,12 +73,12 @@ function batchRenameFiles(
 // =========================
 
 // 📂 你要处理的目录，比如 Vue 项目中的图片文件夹
-const targetDir = './public/images/home-banner/pc' // ← 请根据你的实际情况修改！
+const targetDir = './public/images/survey/example/mobile' // ← 请根据你的实际情况修改！
 
 // 🧩 重命名配置
 batchRenameFiles(
   targetDir, // 目标目录
-  'slide', // 文件名前缀，比如 'banner', 'hero', 'img'
+  'example', // 文件名前缀，比如 'banner', 'hero', 'img'
   1, // 从数字 1 开始
   3, // 序号补零到 3 位，比如 001
   ['.jpg', '.jpeg', '.png', '.webp', '.svg'], // 只处理这些格式，可以改成 [] 处理所有文件

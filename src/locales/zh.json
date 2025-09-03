@@ -109,7 +109,7 @@
     "serverError": "服务器错误"
   },
   "survey": {
-    "title": "汉服体验调研问卷",
+    "title": "汉服体验调研",
     "description": "对古风服饰感兴趣吗？欢迎参与都柏林汉服主题派对调研，帮助我们更好地策划活动！",
     "buttons": {
       "next": "下一步",
@@ -118,9 +118,20 @@
     },
     "recognition": {
       "correct": "恭喜，答对了！这就是汉服。",
-      "incorrect": "不是哦，这是{alt}，汉服才是正确答案。"
+      "incorrect": "不是哦，这是{alt}，汉服才是正确答案。",
+      "thisIs": "这就是"
     },
-    "submitted": "感谢您的参与！"
+    "submitted": "感谢您的参与！",
+    "step": "步骤",
+    "steps": {
+      "Education": "了解程度",
+      "Preferences": "偏好选择",
+      "Service": "服务期望",
+      "Payment": "消费习惯",
+      "Recognition": "识别汉服",
+      "Personal": "个人信息",
+      "Feedback": "意见反馈"
+    }
   },
   "education": {
     "title": "了解汉服",
@@ -179,7 +190,9 @@
       "kimono": "日式和服",
       "hanbok": "韩服",
       "hanfu": "汉服",
-      "modern": "现代服饰"
+      "modern": "现代服饰",
+      "cosplay": "Cosplay",
+      "qipao": "旗袍"
     }
   },
   "personal": {

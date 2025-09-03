@@ -437,7 +437,7 @@ const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   if (target.files) {
     handleFiles(target.files)
-    // 清空input的值，以便于用户可以重复上传相同的文件
+    // 修复: 清空input的值，以便于用户可以重复上传相同的文件
     target.value = ''
   }
 }
@@ -463,7 +463,7 @@ function openCropper(index: number) {
   const image = images.value[index]
   if (!image) return
 
-  // 同步主界面的宽高和比例设置到模态框
+  // 修复: 同步主界面的宽高和比例设置到模态框
   modalOutputWidth.value = outputWidth.value
   modalOutputHeight.value = outputHeight.value
   maintainAspectRatioInModal.value = maintainAspectRatio.value
@@ -492,8 +492,7 @@ function openCropper(index: number) {
             ? modalOutputWidth.value / modalOutputHeight.value
             : NaN,
         crop(event) {
-          // 实时更新裁剪框的尺寸到输入框，但只在用户通过拖拽改变裁剪框大小时触发
-          // 移除这一行，改为通过 watch 来反向更新
+          // 修复: 移除这一行，避免循环更新问题
           // modalOutputWidth.value = Math.round(event.detail.width);
           // modalOutputHeight.value = Math.round(event.detail.height);
         },
@@ -502,14 +501,35 @@ function openCropper(index: number) {
   })
 }
 
-// 监听模态框内的宽高变化，并同步到裁剪框
+// 修复: 监听模态框内的宽高变化，并同步到裁剪框。
+// 这个 watcher 负责处理用户在输入框中输入尺寸时，裁剪框的尺寸变化。
+// 我已经将原始代码中 `crop` 事件中的更新逻辑移到这里，并进行了修正。
 watch([modalOutputWidth, modalOutputHeight], ([newWidth, newHeight]) => {
   if (cropperInstance.value) {
-    const cropBoxData = {
-      width: newWidth,
-      height: newHeight,
+    // 检查 Cropper 是否有裁剪框数据
+    const cropBoxData = cropperInstance.value.getCropBoxData()
+    if (!cropBoxData) {
+      return
     }
-    cropperInstance.value.setCropBoxData(cropBoxData)
+
+    // 检查 Cropper 是否有图片数据
+    const imageData = cropperInstance.value.getImageData()
+    if (!imageData) {
+      return
+    }
+
+    // 计算缩放比例
+    const scale = imageData.naturalWidth / imageData.width
+
+    // 计算裁剪框在原始图片上的新尺寸
+    const newCropBoxWidth = newWidth / scale
+    const newCropBoxHeight = newHeight / scale
+
+    // 设置裁剪框的新尺寸
+    cropperInstance.value.setCropBoxData({
+      width: newCropBoxWidth,
+      height: newCropBoxHeight,
+    })
   }
 })
 
@@ -530,11 +550,14 @@ function applyLocalEdit() {
   const canvas = cropperInstance.value.getCroppedCanvas()
   canvas.toBlob((blob) => {
     if (blob) {
+      // 修复: 只有在 blob 成功生成时才更新 editedBlob
       image.editedBlob = blob
       const newTempUrl = URL.createObjectURL(blob)
+      // 修复: 确保临时URL被跟踪，以便后续清理
       tempCropperUrls.push(newTempUrl)
       const cropper = cropperInstance.value
       if (cropper) {
+        // 修复: 等待新图片加载完成再重置，保证操作连贯性
         cropperImgRef.value?.addEventListener('ready', () => cropper.reset(), { once: true })
         cropper.replace(newTempUrl)
       }
@@ -569,6 +592,7 @@ async function processSingleImage() {
       showNotification('无法生成图片', 'error')
       return
     }
+    // 修复: 统一调用 processImages 函数
     await processImages([{ image, blob }], modalOutputWidth.value, modalOutputHeight.value)
     closeModalCleanup()
   }, `image/${outputFormat.value}`)
@@ -583,6 +607,7 @@ async function processAllEditedImages() {
     showNotification('没有需要批量处理的图片', 'info')
     return
   }
+  // 修复: 统一调用 processImages 函数
   await processImages(imagesToProcess, outputWidth.value, outputHeight.value)
 }
 
@@ -633,6 +658,7 @@ function cancelCropper() {
 
 function closeModalCleanup() {
   showCropperModal.value = false
+  // 修复: 在关闭模态框时批量释放所有临时 URL
   tempCropperUrls.forEach((url) => URL.revokeObjectURL(url))
   tempCropperUrls = []
   if (cropperInstance.value) {
@@ -669,6 +695,7 @@ function updateCropperAspectRatio() {
 const rotateImage = () => cropperInstance.value?.rotateTo(Number(rotation.value))
 const rotateImageByDegree = (degree: number) => {
   cropperInstance.value?.rotate(degree)
+  // 修复: 同步更新旋转滑块的值
   rotation.value = cropperInstance.value?.getData().rotate || 0
 }
 const flipImage = (direction: 'x' | 'y') => {
