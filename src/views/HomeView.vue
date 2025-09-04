@@ -256,7 +256,6 @@ import { Swiper, SwiperSlide } from 'swiper/vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
-import type { HeroSlide } from '@/types'
 import { useDeviceCheck } from '@/composables/useDeviceCheck'
 
 const router = useRouter()
@@ -413,7 +412,7 @@ const features = [
     icon: CameraIcon,
     title: '摄影服务',
     desc: '专业合作摄影师，为你定格美好瞬间。',
-    link: '/photo-wall',
+    link: '/photos',
   },
 ]
 

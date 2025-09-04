@@ -112,7 +112,7 @@ const generatePlaceholder = (baseWidth: number, baseHeight: number): Photo => {
 
   return {
     src: `https://placehold.co/${width}x${height}/${randomPalette.bg}/${randomPalette.fg}?text=Hanfu`,
-    alt: '汉服摄影',
+    alt: '精彩瞬间',
     width: width,
     height: height,
   }
@@ -120,7 +120,7 @@ const generatePlaceholder = (baseWidth: number, baseHeight: number): Photo => {
 
 // Generate 30 photos with varying sizes
 const photos: Photo[] = Array.from({ length: 30 }, (_, i) => {
-  const baseWidth = Math.random() > 0.5 ? 800 : 900
+  const baseWidth = Math.random() > 0.5 ? 1080 : 800
   const baseHeight = Math.random() > 0.5 ? 1200 : 1350
   const photo = generatePlaceholder(baseWidth, baseHeight)
   photo.alt = `汉服摄影作品 ${i + 1}`
