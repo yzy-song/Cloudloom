@@ -87,7 +87,7 @@
     "registerWithGoogle": "Register with Google",
     "loginWithFacebook": "Login with Facebook",
     "registerWithFacebook": "Register with Facebook",
-    "loginWithEmail": "Login with Email",
+    "loginWithEmail": "Login with Username/Email",
     "registerWithEmail": "Register with Email",
     "backToOptions": "Back to other login options"
   },
