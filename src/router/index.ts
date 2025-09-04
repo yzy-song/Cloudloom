@@ -82,6 +82,12 @@ const routes: Array<RouteRecordRaw> = [
     meta: { titleKey: 'router.survey' },
   },
   {
+    path: '/photos',
+    name: 'PhotoWall',
+    component: () => import('../views/PhotoWallView.vue'),
+    meta: { titleKey: 'router.photoWall', requiresAuth: true },
+  },
+  {
     path: '/test',
     name: 'TestPage',
     component: () => import('../views/TestView.vue'),

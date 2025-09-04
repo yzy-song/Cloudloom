@@ -27,3 +27,30 @@ export function useScroll(scrollThreshold = 50) {
     isScrolled: readonly(isScrolled),
   }
 }
+
+/**
+ * 跟踪页面滚动方向。
+ * @returns 包含是否向下滚动 (isScrollingDown) 的响应式引用的对象。
+ */
+export function useScrollDirection() {
+  const isScrollingDown = ref(false)
+  let lastScrollY = 0
+
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY
+    isScrollingDown.value = currentScrollY > lastScrollY
+    lastScrollY = currentScrollY
+  }
+
+  onMounted(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true })
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll)
+  })
+
+  return {
+    isScrollingDown: readonly(isScrollingDown),
+  }
+}

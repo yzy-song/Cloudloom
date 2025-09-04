@@ -59,26 +59,25 @@
     <section class="py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
       <div class="max-w-screen-xl mx-auto">
         <div class="text-center mb-16" v-observe-animation>
-          <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
-            雅集·我们的服务
-          </h2>
+          <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">我们的服务</h2>
           <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            从个人写真到团体派对，我们为您量身打造独一无二的汉服文化体验。
+            从汉服租赁到主题派对，我们为您打造全方位的汉服文化体验。
           </p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div
             v-for="(feature, index) in features"
             :key="index"
-            class="service-card p-8 bg-white rounded-lg shadow-lg text-center transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+            class="service-card p-8 bg-white rounded-lg shadow-lg text-center transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 cursor-pointer"
             v-observe-animation
             :style="{ 'animation-delay': `${index * 150}ms` }"
+            @click="navigateTo(feature.link)"
           >
             <div class="flex justify-center items-center mb-5">
               <component :is="feature.icon" class="w-12 h-12 text-[#C0392B]" />
             </div>
-            <h3 class="font-serif text-2xl font-semibold mb-3">{{ t(feature.title) }}</h3>
-            <p class="text-gray-500">{{ t(feature.desc) }}</p>
+            <h3 class="font-serif text-2xl font-semibold mb-3">{{ feature.title }}</h3>
+            <p class="text-gray-500">{{ feature.desc }}</p>
           </div>
         </div>
       </div>
@@ -390,12 +389,32 @@ const homeSlides = computed(() => {
   }))
 })
 
-// 服务特色数据
+// 服务特色数据 - 已根据你的需求更新
 const features = [
-  { icon: SparklesIcon, title: 'home.feature1Title', desc: 'home.feature1Desc' },
-  { icon: CameraIcon, title: 'home.feature2Title', desc: 'home.feature2Desc' },
-  { icon: UserGroupIcon, title: 'home.feature3Title', desc: 'home.feature3Desc' },
-  { icon: BuildingStorefrontIcon, title: 'home.feature4Title', desc: 'home.feature4Desc' },
+  {
+    icon: BuildingStorefrontIcon,
+    title: '汉服租赁 & 销售',
+    desc: '多种风格，满足日常穿着和特殊场合需求。',
+    link: '/gallery',
+  },
+  {
+    icon: UserGroupIcon,
+    title: '主题派对定制',
+    desc: '为个人聚会和公司团建打造专属汉服主题体验。',
+    link: '/parties',
+  },
+  {
+    icon: SparklesIcon,
+    title: '汉服周边',
+    desc: '精致配饰与文创产品，点缀你的汉服生活。',
+    link: '/gallery',
+  },
+  {
+    icon: CameraIcon,
+    title: '摄影服务',
+    desc: '专业合作摄影师，为你定格美好瞬间。',
+    link: '/photo-wall',
+  },
 ]
 
 // 体验流程数据
@@ -422,6 +441,10 @@ const faqs = [
 const openFaq = ref<number | null>(null)
 const toggleFaq = (idx: number) => {
   openFaq.value = openFaq.value === idx ? null : idx
+}
+
+const navigateTo = (path: string) => {
+  router.push(path)
 }
 
 // 自定义指令：用于元素进入视口时添加动画
