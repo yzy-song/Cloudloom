@@ -8,7 +8,7 @@ export interface User {
   username: string
   nickName?: string
   email: string
-  avatar?: string
+  avatarUrl?: string
   phone?: string
   role: 'admin' | 'customer'
 }
@@ -263,6 +263,9 @@ export const useAuthStore = defineStore('auth', () => {
       isAuthenticated.value = true
       localStorage.setItem('cloudloom_user', JSON.stringify(response.data.user))
       localStorage.setItem('auth_token', response.data.token)
+      logger.log('OAuth Login Response:', response.data)
+      logger.log('OAuth Login avatarUrl:', user.value.avatarUrl)
+      logger.log('OAuth Login email:', user.value.email)
       return { success: true }
     } catch (e: any) {
       error.value = e.message || '第三方登录失败'

@@ -1,9 +1,7 @@
 <template>
-  <!-- 设定了更具中国风的背景色和字体 -->
-  <div class="bg-[#FBF9F6] text-[#333333] font-sans min-h-screen flex flex-col">
+  <div class="font-sans min-h-screen flex flex-col">
     <Navbar />
     <main class="flex-grow">
-      <!-- 路由视图的过渡动画，让页面切换更平滑 -->
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
@@ -12,7 +10,6 @@
     </main>
     <Footer />
 
-    <!-- 回到顶部按钮 -->
     <transition name="fade-in-up">
       <button
         v-if="showBackToTopButton"
@@ -44,29 +41,25 @@ import DevAccessInfo from '@/components/DevAccessInfo.vue'
 import Footer from '@/components/layout/Footer.vue'
 import Navbar from '@/components/layout/Navbar.vue'
 
-// “回到顶部”按钮的显示状态
+// import { useTheme } from '@/composables/useTheme' // Removed
+
+// The useTheme() call has been removed.
+// useTheme()
+
 const showBackToTopButton = ref(false)
 
-/**
- * 监听滚动事件，根据滚动位置决定是否显示按钮。
- */
 const handleScroll = () => {
   showBackToTopButton.value = window.scrollY > 300
 }
 
-/**
- * 平滑滚动到页面顶部。
- */
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-// 在组件挂载时添加滚动事件监听器
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
 })
 
-// 在组件卸载时移除事件监听器，避免内存泄漏
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
@@ -75,12 +68,6 @@ onUnmounted(() => {
 <style>
 /* 引入更优雅的衬线字体，提升设计感 */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
-
-body {
-  font-family:
-    'Helvetica Neue', 'Helvetica', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
-    'WenQuanYi Micro Hei', sans-serif;
-}
 
 /* 定义标题和特殊文本的字体 */
 .font-serif {

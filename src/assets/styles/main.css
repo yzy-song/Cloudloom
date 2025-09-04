@@ -25,7 +25,11 @@
 
 @layer base {
   body {
-    @apply font-body text-gray-700 bg-white antialiased;
+    /* Removed dark mode classes: dark:bg-gray-900 dark:text-gray-100 */
+    @apply bg-stone-100 text-neutral-900 antialiased;
+    font-family:
+      'Helvetica Neue', 'Helvetica', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+      'WenQuanYi Micro Hei', sans-serif;
   }
 
   h1,

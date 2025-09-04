@@ -88,6 +88,12 @@ const routes: Array<RouteRecordRaw> = [
     meta: { titleKey: 'router.photoWall', requiresAuth: true },
   },
   {
+    path: '/parties',
+    name: 'Patries',
+    component: () => import('../views/PartiesView.vue'),
+    meta: { titleKey: 'router.parties', requiresAuth: true },
+  },
+  {
     path: '/test',
     name: 'TestPage',
     component: () => import('../views/TestView.vue'),
