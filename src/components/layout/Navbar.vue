@@ -2,7 +2,7 @@
  * @Author: yzy
  * @Date: 2025-08-29 09:09:22
  * @LastEditors: yzy
- * @LastEditTime: 2025-09-04 15:12:35
+ * @LastEditTime: 2025-09-04 15:20:00
  * @Description: 导航栏，移除了深色模式，仅保留浅色模式，并保留主页滚动“折叠”效果
 -->
 <template>
@@ -54,7 +54,7 @@
           </span>
         </router-link>
 
-        <!-- 桌面端导航菜单 -->
+        <!-- Desktop Navigation Menu -->
         <nav class="hidden md:flex items-center space-x-10">
           <router-link
             v-for="item in navItems"
@@ -82,7 +82,7 @@
           </router-link>
         </nav>
 
-        <!-- 右侧图标区域 -->
+        <!-- Right-side Icons -->
         <div class="hidden md:flex items-center space-x-6">
           <button :class="iconColorClass" aria-label="Search">
             <MagnifyingGlassIcon class="h-6 w-6" />
@@ -153,7 +153,7 @@
           >
         </div>
 
-        <!-- 移动端菜单按钮 -->
+        <!-- Mobile Menu Button -->
         <div class="md:hidden flex items-center">
           <button
             @click="mobileMenuOpen = !mobileMenuOpen"
@@ -172,57 +172,26 @@
   <transition name="mobile-menu-fade">
     <div
       v-show="mobileMenuOpen"
-      class="fixed inset-0 z-[60] bg-white/95 backdrop-blur-lg flex flex-col items-center justify-center p-6 md:hidden"
+      class="fixed inset-0 z-[60] bg-white/95 backdrop-blur-lg flex flex-col p-6 md:hidden"
     >
-      <button
-        @click="mobileMenuOpen = false"
-        class="absolute top-6 right-6 text-gray-700 z-50"
-        aria-label="Close Menu"
-      >
-        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
+      <!-- 1. Redesigned Menu Header -->
+      <div class="flex items-center justify-between pb-4 border-b border-gray-200 mb-6">
+        <h2 class="font-serif text-2xl font-bold text-gray-800">菜单</h2>
+        <button
+          @click="mobileMenuOpen = false"
+          class="text-gray-700 z-50 p-2 -mr-2"
+          aria-label="Close Menu"
+        >
+          <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
 
-      <div class="w-full max-w-sm flex flex-col items-center space-y-8">
-        <div class="w-full flex justify-between items-center border-b border-gray-300 pb-4">
-          <div v-if="authStore.isAuthenticated" class="flex items-center">
-            <img
-              class="h-12 w-12 rounded-full object-cover mr-2 border-2 border-gray-300"
-              :src="authStore.user?.avatarUrl || 'https://source.unsplash.com/100x100/?portrait'"
-              alt="用户头像"
-            />
-            <div class="flex flex-col">
-              <span class="font-bold text-xl text-gray-800">{{
-                authStore.user?.email || 'User'
-              }}</span>
-              <router-link
-                to="/profile"
-                @click="mobileMenuOpen = false"
-                class="text-sm text-gray-500 hover:underline mt-1"
-                >查看个人资料</router-link
-              >
-            </div>
-          </div>
-          <router-link
-            v-else
-            to="/login"
-            class="flex items-center text-gray-800 font-semibold text-lg"
-            @click="mobileMenuOpen = false"
-          >
-            <UserCircleIcon class="h-10 w-10 mr-2" />登录
-          </router-link>
-          <router-link
-            to="/cart"
-            @click="mobileMenuOpen = false"
-            class="text-gray-800"
-            aria-label="Shopping Cart"
-          >
-            <ShoppingCartIcon class="h-10 w-10" />
-          </router-link>
-        </div>
-
-        <div class="relative w-full">
+      <!-- 2. Main content area -->
+      <div class="w-full max-w-sm mx-auto flex flex-col h-full">
+        <!-- Search Bar -->
+        <div class="relative w-full mb-6">
           <input
             type="text"
             placeholder="搜索..."
@@ -233,15 +202,57 @@
           />
         </div>
 
-        <router-link
-          v-for="item in navItems"
-          :key="item.path"
-          :to="item.path"
-          class="font-bold text-2xl text-gray-800 py-4 w-full text-center hover:bg-gray-100 transition-colors duration-200 rounded-lg"
-          @click="mobileMenuOpen = false"
-        >
-          {{ t(item.label) }}
-        </router-link>
+        <!-- Navigation Links -->
+        <nav class="flex-grow">
+          <router-link
+            v-for="item in navItems"
+            :key="item.path"
+            :to="item.path"
+            class="font-bold text-2xl text-gray-800 py-4 w-full text-center block hover:bg-gray-100 transition-colors duration-200 rounded-lg"
+            @click="mobileMenuOpen = false"
+          >
+            {{ t(item.label) }}
+          </router-link>
+        </nav>
+
+        <!-- User Actions & Footer -->
+        <div class="w-full border-t border-gray-200 pt-6">
+          <div v-if="authStore.isAuthenticated" class="flex items-center justify-between">
+            <div class="flex items-center">
+              <img
+                class="h-12 w-12 rounded-full object-cover mr-3 border-2 border-gray-300"
+                :src="authStore.user?.avatarUrl || 'https://source.unsplash.com/100x100/?portrait'"
+                alt="用户头像"
+              />
+              <div>
+                <span class="font-bold text-lg text-gray-800">{{
+                  authStore.user?.nickName || '用户名'
+                }}</span>
+                <router-link
+                  to="/profile"
+                  @click="mobileMenuOpen = false"
+                  class="text-sm text-gray-500 hover:underline block"
+                  >查看个人资料</router-link
+                >
+              </div>
+            </div>
+            <router-link to="/cart" @click="mobileMenuOpen = false" class="p-2">
+              <ShoppingCartIcon class="h-8 w-8 text-gray-700" />
+            </router-link>
+          </div>
+          <div v-else class="flex items-center justify-between">
+            <router-link
+              to="/login"
+              class="flex items-center text-gray-800 font-semibold text-lg"
+              @click="mobileMenuOpen = false"
+            >
+              <UserCircleIcon class="h-10 w-10 mr-2" />登录
+            </router-link>
+            <router-link to="/cart" @click="mobileMenuOpen = false" class="p-2">
+              <ShoppingCartIcon class="h-8 w-8 text-gray-700" />
+            </router-link>
+          </div>
+        </div>
       </div>
     </div>
   </transition>
