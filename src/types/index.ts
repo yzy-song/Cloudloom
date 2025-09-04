@@ -4,6 +4,13 @@
  * @LastEditors: yzy
  * @LastEditTime: 2025-08-26 00:08:38
  */
+
+// FIX: Correctly define the structure for product details
+export interface ProductDetailItem {
+  key: string
+  value: string
+}
+
 // 产品类型
 export interface Product {
   id: number
@@ -23,7 +30,7 @@ export interface Product {
   updatedAt: string
   rentalPrice: number
   rentalPeriods: RentalPeriod[]
-  details: string[]
+  details: ProductDetailItem[] | string[] // Allow both structures for flexibility
   reviews: number
   subcategoryId: string
   subcategory?: Subcategory // 详情页可选返回
