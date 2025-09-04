@@ -11,6 +11,7 @@ export interface User {
   avatarUrl?: string
   phone?: string
   role: 'admin' | 'customer'
+  description?: string
 }
 
 export interface LoginCredentials {
@@ -27,10 +28,12 @@ export interface RegisterData {
 }
 
 export interface ProfileData {
-  username: string
-  email: string
+  username?: string
+  nickName?: string
+  email?: string
   phone?: string
-  avatar?: string
+  avatarUrl?: string
+  description?: string
 }
 
 export const useAuthStore = defineStore('auth', () => {

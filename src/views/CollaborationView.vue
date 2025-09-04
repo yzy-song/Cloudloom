@@ -29,10 +29,11 @@
           </p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+          <!-- FIX: Added transition-transform and active:scale-[.98] for mobile tap feedback -->
           <div
             v-for="item in successCases"
             :key="item.title"
-            class="group bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col md:flex-row items-center"
+            class="group bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col md:flex-row items-center active:scale-[.98]"
           >
             <div class="w-full md:w-2/5 h-64 md:h-auto overflow-hidden">
               <img

@@ -90,7 +90,8 @@
           <router-link to="/cart" :class="iconColorClass" aria-label="Shopping Cart"
             ><ShoppingCartIcon class="h-6 w-6"
           /></router-link>
-          <div v-if="authStore.isAuthenticated" class="relative">
+          <!-- User Menu Dropdown -->
+          <div v-if="authStore.isAuthenticated" class="relative" ref="userMenuContainer">
             <button
               @click="isUserMenuOpen = !isUserMenuOpen"
               id="user-menu-button"
@@ -103,6 +104,49 @@
                 alt="用户头像"
               />
             </button>
+
+            <!-- Dropdown Panel -->
+            <transition
+              enter-active-class="transition ease-out duration-100"
+              enter-from-class="transform opacity-0 scale-95"
+              enter-to-class="transform opacity-100 scale-100"
+              leave-active-class="transition ease-in duration-75"
+              leave-from-class="transform opacity-100 scale-100"
+              leave-to-class="transform opacity-0 scale-95"
+            >
+              <div
+                v-if="isUserMenuOpen"
+                class="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+              >
+                <div class="px-4 py-3 border-b border-gray-200">
+                  <p class="text-sm font-semibold text-gray-800">
+                    {{ authStore.user?.nickName || '' }}
+                  </p>
+                  <p class="text-sm text-gray-500 truncate">{{ authStore.user?.email }}</p>
+                </div>
+                <div class="py-1">
+                  <router-link
+                    v-for="item in userMenuItems"
+                    :key="item.name"
+                    :to="item.path"
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    @click="isUserMenuOpen = false"
+                  >
+                    <component :is="item.icon" class="w-5 h-5 mr-3 text-gray-500" />
+                    {{ item.name }}
+                  </router-link>
+                </div>
+                <div class="py-1 border-t border-gray-200">
+                  <button
+                    @click="logout"
+                    class="w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <ArrowLeftOnRectangleIcon class="w-5 h-5 mr-3 text-gray-500" />
+                    退出登录
+                  </button>
+                </div>
+              </div>
+            </transition>
           </div>
           <router-link v-else to="/login" :class="loginLinkClass"
             ><UserCircleIcon class="h-6 w-6 mr-1" /><span>登录</span></router-link
@@ -124,7 +168,7 @@
     </div>
   </header>
 
-  <!-- FIX: Mobile menu panel moved outside of the <header> tag to avoid stacking context issues -->
+  <!-- Mobile menu panel -->
   <transition name="mobile-menu-fade">
     <div
       v-show="mobileMenuOpen"
@@ -204,21 +248,29 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onUnmounted } from 'vue'
-import { MagnifyingGlassIcon, ShoppingCartIcon, UserCircleIcon } from '@heroicons/vue/24/outline'
+import { ref, computed, watch, onUnmounted, onMounted } from 'vue'
+import {
+  MagnifyingGlassIcon,
+  ShoppingCartIcon,
+  UserCircleIcon,
+  ArchiveBoxIcon,
+  ArrowLeftOnRectangleIcon,
+} from '@heroicons/vue/24/outline'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useScroll, useScrollDirection } from '@/composables/useScroll'
 import { useAuthStore } from '@/stores/auth.store'
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 const authStore = useAuthStore()
 
 const { isScrolled } = useScroll(50)
 const { isScrollingDown } = useScrollDirection()
 const mobileMenuOpen = ref(false)
 const isUserMenuOpen = ref(false)
+const userMenuContainer = ref<HTMLElement | null>(null)
 
 const navItems = [
   { label: 'navbar.home', path: '/' },
@@ -228,9 +280,13 @@ const navItems = [
   { label: 'navbar.collaboration', path: '/collaboration' },
 ]
 
+const userMenuItems = [
+  { name: '个人资料', path: '/profile', icon: UserCircleIcon },
+  { name: '我的订单', path: '/orders', icon: ArchiveBoxIcon },
+]
+
 const isHomePage = computed(() => route.path === '/')
 const activePath = computed(() => route.path)
-
 const isLight = computed(() => isHomePage.value && !isScrolled.value)
 
 const headerClass = computed(() =>
@@ -252,6 +308,27 @@ const loginLinkClass = computed(() => [
   isLight.value ? 'text-white hover:text-white/80' : 'text-gray-700 hover:text-[#C0392B]',
 ])
 
+const logout = () => {
+  isUserMenuOpen.value = false
+  authStore.logout()
+  router.push('/')
+}
+
+// Click outside to close user dropdown
+const handleClickOutside = (event: MouseEvent) => {
+  if (userMenuContainer.value && !userMenuContainer.value.contains(event.target as Node)) {
+    isUserMenuOpen.value = false
+  }
+}
+
+watch(isUserMenuOpen, (isOpen) => {
+  if (isOpen) {
+    document.addEventListener('click', handleClickOutside)
+  } else {
+    document.removeEventListener('click', handleClickOutside)
+  }
+})
+
 watch(mobileMenuOpen, (newValue) => {
   if (newValue) {
     document.body.classList.add('overflow-hidden')
@@ -262,27 +339,12 @@ watch(mobileMenuOpen, (newValue) => {
 
 onUnmounted(() => {
   document.body.classList.remove('overflow-hidden')
+  document.removeEventListener('click', handleClickOutside)
 })
 </script>
 
 <style>
 /* Styles remain the same */
-.slide-right-fade-enter-active,
-.slide-right-fade-leave-active {
-  transition: opacity 0.2s;
-}
-.slide-right-fade-enter-from,
-.slide-right-fade-leave-to {
-  opacity: 0;
-}
-.mobile-menu-fade-enter-active,
-.mobile-menu-fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-.mobile-menu-fade-enter-from,
-.mobile-menu-fade-leave-to {
-  opacity: 0;
-}
 .mobile-menu-toggle {
   display: flex;
   flex-direction: column;
@@ -311,5 +373,13 @@ onUnmounted(() => {
 }
 .mobile-menu-toggle.open .bar:nth-child(3) {
   transform: translateY(-9px) rotate(-45deg);
+}
+.mobile-menu-fade-enter-active,
+.mobile-menu-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.mobile-menu-fade-enter-from,
+.mobile-menu-fade-leave-to {
+  opacity: 0;
 }
 </style>
