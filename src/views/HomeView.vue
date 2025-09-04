@@ -93,7 +93,6 @@
             >
           </router-link>
         </div>
-        <!-- INTERACTION UPGRADE: Each image now has its own independent hover effect -->
         <div
           class="grid grid-cols-2 gap-4"
           style="perspective: 1000px"
@@ -135,7 +134,6 @@
           </p>
         </div>
         <div class="relative">
-          <!-- Dashed line for desktop -->
           <div
             class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-repeat-x bg-center"
             style="
@@ -164,7 +162,7 @@
       </div>
     </section>
 
-    <!-- Section 5: Testimonials (Restored) -->
+    <!-- Section 5: Testimonials (REDESIGNED) -->
     <section class="py-24 sm:py-32 bg-white px-4 sm:px-6 lg:px-8">
       <div class="max-w-screen-xl mx-auto">
         <div class="text-center mb-16" v-observe-animation>
@@ -175,24 +173,66 @@
             听听那些曾与我们一同追寻古典之美的朋友们怎么说。
           </p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div
-            v-for="(item, index) in testimonials"
-            :key="index"
-            class="testimonial-card p-8 bg-gray-50 rounded-lg"
-            v-observe-animation
-            :style="{ 'animation-delay': `${index * 150}ms` }"
+
+        <div class="relative" v-observe-animation>
+          <swiper
+            :modules="[Navigation, Pagination, Autoplay]"
+            :loop="true"
+            :autoplay="{ delay: 7000, disableOnInteraction: false }"
+            :pagination="{ el: '.testimonial-pagination', clickable: true }"
+            :navigation="{ nextEl: '.testimonial-next', prevEl: '.testimonial-prev' }"
+            :slides-per-view="1"
+            :space-between="30"
+            :breakpoints="{
+              '768': { slidesPerView: 2 },
+              '1024': { slidesPerView: 3 },
+            }"
+            class="pb-16"
           >
-            <p class="text-gray-600 italic mb-6">"{{ t(item.text) }}"</p>
-            <div class="flex items-center">
-              <img
-                :src="`https://source.unsplash.com/100x100/?portrait,${item.name}`"
-                :alt="item.name"
-                class="w-12 h-12 rounded-full object-cover mr-4"
-              />
-              <span class="font-semibold text-gray-800">{{ item.name }}</span>
-            </div>
+            <swiper-slide v-for="(item, index) in testimonials" :key="index" class="h-auto">
+              <div class="testimonial-card bg-gray-50 rounded-lg p-8 h-full flex flex-col">
+                <svg
+                  class="w-12 h-12 text-red-100 mb-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M0 216C0 149.7 53.7 96 120 96h8c17.7 0 32 14.3 32 32s-14.3 32-32 32h-8c-30.9 0-56 25.1-56 56v8h112c17.7 0 32 14.3 32 32s-14.3 32-32 32H64v32c0 30.9-25.1 56-56 56h-8c-17.7 0-32-14.3-32-32s14.3-32 32-32h8c13.3 0 24-10.7 24-24v-32H0V216zm256 0c0-66.3 53.7-120 120-120h8c17.7 0 32 14.3 32 32s-14.3 32-32 32h-8c-30.9 0-56 25.1-56 56v8h112c17.7 0 32 14.3 32 32s-14.3 32-32 32H320v32c0 30.9-25.1 56-56 56h-8c-17.7 0-32-14.3-32-32s14.3-32 32-32h8c13.3 0 24-10.7 24-24v-32H256V216z"
+                  />
+                </svg>
+                <p class="text-gray-600 italic mb-6 flex-grow">"{{ t(item.text) }}"</p>
+                <div class="flex items-center mt-auto pt-4 border-t border-gray-200">
+                  <img
+                    :src="item.avatar"
+                    :alt="item.name"
+                    class="w-12 h-12 rounded-full object-cover mr-4"
+                  />
+                  <div>
+                    <span class="font-semibold text-gray-800">{{ item.name }}</span>
+                    <span class="text-sm text-gray-500 block">{{ t(item.role) }}</span>
+                  </div>
+                </div>
+              </div>
+            </swiper-slide>
+          </swiper>
+
+          <!-- Custom Navigation & Pagination -->
+          <div
+            class="absolute bottom-0 left-1/2 -translate-x-1/2 flex items-center justify-center w-full"
+          >
+            <div class="testimonial-pagination flex space-x-2"></div>
           </div>
+          <button
+            class="testimonial-prev absolute top-1/2 -left-4 md:-left-6 transform -translate-y-1/2 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition duration-300 z-10"
+          >
+            <ChevronLeftIcon class="w-6 h-6 text-gray-600" />
+          </button>
+          <button
+            class="testimonial-next absolute top-1/2 -right-4 md:-right-6 transform -translate-y-1/2 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition duration-300 z-10"
+          >
+            <ChevronRightIcon class="w-6 h-6 text-gray-600" />
+          </button>
         </div>
       </div>
     </section>
@@ -257,6 +297,8 @@ import {
   UserGroupIcon,
   BuildingStorefrontIcon,
   ChevronUpIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from '@heroicons/vue/24/outline'
 
 import { Autoplay, Pagination, Navigation } from 'swiper/modules'
@@ -423,11 +465,36 @@ const steps = [
   { title: 'home.step3Title', desc: 'home.step3Desc' },
 ]
 
-// 客户评价数据
+// 客户评价数据 (UPDATED)
 const testimonials = [
-  { name: 'Emily', text: 'home.testimonial1' },
-  { name: 'Liam', text: 'home.testimonial2' },
-  { name: 'Sophia', text: 'home.testimonial3' },
+  {
+    name: '晨曦',
+    role: 'home.testimonial1Role',
+    text: 'home.testimonial1',
+    avatar:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=464&auto=format&fit=crop',
+  },
+  {
+    name: '阿杰',
+    role: 'home.testimonial2Role',
+    text: 'home.testimonial2',
+    avatar:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=387&auto=format&fit=crop',
+  },
+  {
+    name: '思月',
+    role: 'home.testimonial3Role',
+    text: 'home.testimonial3',
+    avatar:
+      'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=461&auto=format&fit=crop',
+  },
+  {
+    name: '林老师',
+    role: 'home.testimonial4Role',
+    text: 'home.testimonial4',
+    avatar:
+      'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=387&auto=format&fit=crop',
+  },
 ]
 
 // FAQ 数据
@@ -447,61 +514,43 @@ const navigateTo = (path: string) => {
 }
 
 // --- REFACTORED: Logic for INDEPENDENT 3D Parallax Hover Effect ---
-
-// State for the first image
 const isHovered1 = ref(false)
 const rotateX1 = ref(0)
 const rotateY1 = ref(0)
-
-// State for the second image
 const isHovered2 = ref(false)
 const rotateX2 = ref(0)
 const rotateY2 = ref(0)
-
-// Computed style for the first image
 const image1Style = computed(() => ({
   transform: `rotateX(${rotateX1.value}deg) rotateY(${rotateY1.value}deg) scale(${isHovered1.value ? 1.05 : 1})`,
   transition: 'transform 0.25s cubic-bezier(0.23, 1, 0.32, 1)',
 }))
-
-// Computed style for the second image
 const image2Style = computed(() => ({
   transform: `rotateX(${rotateX2.value}deg) rotateY(${rotateY2.value}deg) scale(${isHovered2.value ? 1.05 : 1})`,
   transition: 'transform 0.25s cubic-bezier(0.23, 1, 0.32, 1)',
 }))
-
-// Generic handler function to avoid repetition
 const handleMouseMove = (e: MouseEvent, isHovered: any, rotateX: any, rotateY: any) => {
   isHovered.value = true
   const el = e.currentTarget as HTMLElement
   if (!el) return
-
   const rect = el.getBoundingClientRect()
   const x = e.clientX - rect.left
   const y = e.clientY - rect.top
-
   const { width, height } = rect
   const mouseX = x / width - 0.5
   const mouseY = y / height - 0.5
-
   const maxRotate = 10
-
   rotateY.value = mouseX * maxRotate
   rotateX.value = -mouseY * maxRotate
 }
-
 const handleMouseLeave = (isHovered: any, rotateX: any, rotateY: any) => {
   isHovered.value = false
   rotateX.value = 0
   rotateY.value = 0
 }
-
-// Specific handlers for each image
 const handleMouseMove1 = (e: MouseEvent) => handleMouseMove(e, isHovered1, rotateX1, rotateY1)
 const handleMouseLeave1 = () => handleMouseLeave(isHovered1, rotateX1, rotateY1)
 const handleMouseMove2 = (e: MouseEvent) => handleMouseMove(e, isHovered2, rotateX2, rotateY2)
 const handleMouseLeave2 = () => handleMouseLeave(isHovered2, rotateX2, rotateY2)
-
 // --- END of refactored logic ---
 
 // 自定义指令：用于元素进入视口时添加动画
@@ -533,66 +582,8 @@ function shuffle<T>(arr: T[]): T[] {
 }
 </script>
 
-<style scoped>
-/* 定义各种动画效果 */
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.animate-fade-in-down {
-  animation: fadeInDown 1s ease-out forwards;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.animate-fade-in-up {
-  transform: translateY(30px);
-  animation: fadeInUp 1s ease-out forwards;
-}
-
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    transform: translateX(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-.animate-fade-in-right {
-  transform: translateX(-50px);
-  animation: fadeInRight 1s ease-out forwards;
-}
-
-@keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-.animate-fade-in-left {
-  transform: translateX(50px);
-  animation: fadeInLeft 1s ease-out forwards;
-}
+<style>
+/* NOTE: Animations are moved to main.css */
 
 .swiper {
   width: 100%;

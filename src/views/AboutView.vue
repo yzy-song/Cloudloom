@@ -1,207 +1,177 @@
 <template>
-  <div class="bg-white min-h-screen">
-    <!-- 顶部大图 -->
-    <div class="relative h-64 md:h-96 overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-r from-hanfu-blue/70 to-hanfu-red/40"></div>
-      <div class="absolute inset-0 bg-gray-200 border-2 border-dashed rounded-xl w-full h-full" />
-      <div class="absolute bottom-8 left-8 text-white max-w-2xl">
-        <h1 class="text-3xl md:text-5xl font-display">关于我们</h1>
-        <p class="mt-2 md:mt-4 text-lg md:text-xl opacity-90">
-          传承华夏衣冠，让汉服之美在爱尔兰绽放
-        </p>
-      </div>
-    </div>
+  <div class="bg-[#FBF9F6]">
+    <!-- Spacer for the fixed navbar -->
+    <div class="h-[100px]"></div>
 
-    <!-- 内容区域 -->
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div class="prose prose-lg max-w-none">
-        <h2 class="text-2xl md:text-3xl font-display text-gray-900 border-b pb-4">我们的故事</h2>
-        <p>
-          云织汉服体验馆诞生于对中华传统服饰文化的热爱与尊重。创始人张先生旅居爱尔兰多年，深感海外同胞对传统文化的渴望，以及外国友人对东方美学的浓厚兴趣。怀着对汉服文化的执着，我们决定在都柏林创立爱尔兰首家专业汉服体验馆。
-        </p>
-
-        <div class="my-8 p-6 bg-hanfu-blue/5 rounded-xl border-l-4 border-hanfu-blue">
-          <p class="italic text-gray-700">
-            "汉服不仅是一种服饰，更是中华五千年文明的载体。我们希望通过汉服，让更多人了解真正的中国文化。"
-          </p>
-          <p class="mt-2 text-right text-gray-600">— 创始人 张先生</p>
-        </div>
-
-        <h2 class="text-2xl md:text-3xl font-display text-gray-900 border-b pb-4 mt-12">
-          我们的使命
-        </h2>
-        <p>
-          我们致力于在爱尔兰推广汉服文化，通过服饰这一载体，让更多人了解华夏文明的深厚底蕴。我们相信，汉服不仅是美丽的传统服饰，更是中华文化的重要象征。我们希望通过专业的汉服体验、文化沙龙和展览活动，搭建中爱文化交流的桥梁。
-        </p>
-
-        <h2 class="text-2xl md:text-3xl font-display text-gray-900 border-b pb-4 mt-12">
-          我们的特色
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          <div class="flex items-start p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
-            <div
-              class="flex-shrink-0 w-12 h-12 rounded-full bg-hanfu-red/10 flex items-center justify-center mr-4"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-hanfu-red"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                />
-              </svg>
-            </div>
-            <div>
-              <h3 class="font-medium text-lg text-gray-900">专业复原</h3>
-              <p class="mt-2 text-gray-600">严格考证历代汉服形制，确保服饰的历史准确性</p>
-            </div>
-          </div>
-
-          <div class="flex items-start p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
-            <div
-              class="flex-shrink-0 w-12 h-12 rounded-full bg-hanfu-blue/10 flex items-center justify-center mr-4"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-hanfu-blue"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
-              </svg>
-            </div>
-            <div>
-              <h3 class="font-medium text-lg text-gray-900">精品材质</h3>
-              <p class="mt-2 text-gray-600">精选丝绸、棉麻等天然面料，重现传统服饰质感</p>
-            </div>
-          </div>
-
-          <div class="flex items-start p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
-            <div
-              class="flex-shrink-0 w-12 h-12 rounded-full bg-hanfu-gold/10 flex items-center justify-center mr-4"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-hanfu-gold"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
-                />
-              </svg>
-            </div>
-            <div>
-              <h3 class="font-medium text-lg text-gray-900">文化解读</h3>
-              <p class="mt-2 text-gray-600">提供服饰文化背景讲解，让体验更有深度</p>
-            </div>
-          </div>
-
-          <div class="flex items-start p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
-            <div
-              class="flex-shrink-0 w-12 h-12 rounded-full bg-hanfu-green/10 flex items-center justify-center mr-4"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-hanfu-green"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </div>
-            <div>
-              <h3 class="font-medium text-lg text-gray-900">定制服务</h3>
-              <p class="mt-2 text-gray-600">为重要场合量身定制专属汉服</p>
-            </div>
-          </div>
-        </div>
-
-        <h2 class="text-2xl md:text-3xl font-display text-gray-900 border-b pb-4 mt-12">
-          团队介绍
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
-          <div class="flex items-start p-6 bg-white rounded-xl border border-gray-100 shadow-sm">
-            <div class="flex-shrink-0">
-              <div class="bg-gray-200 border-2 border-dashed rounded-full w-16 h-16"></div>
-            </div>
-            <div class="ml-4">
-              <h3 class="text-xl font-display text-gray-900 mb-1">张先生</h3>
-              <p class="text-hanfu-red mt-0">创始人 & 首席文化顾问</p>
-              <p class="text-gray-600 mt-2">
-                传统服饰研究者，拥有十年汉服复原经验，曾任国内知名汉服品牌设计总监。对唐宋明三代服饰有深入研究。
-              </p>
-            </div>
-          </div>
-
-          <div class="flex items-start p-6 bg-white rounded-xl border border-gray-100 shadow-sm">
-            <div class="flex-shrink-0">
-              <div class="bg-gray-200 border-2 border-dashed rounded-full w-16 h-16"></div>
-            </div>
-            <div class="ml-4">
-              <h3 class="text-xl font-display text-gray-900 mb-1">李女士</h3>
-              <p class="text-hanfu-red mt-0">运营总监</p>
-              <p class="text-gray-600 mt-2">
-                爱尔兰中国商会成员，拥有丰富的跨文化交流经验，致力于文化推广活动策划。曾组织多场大型中爱文化交流活动。
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 联系我们 -->
+    <!-- Section 1: The Vision -->
+    <section class="py-20 md:py-28 px-4">
       <div
-        class="mt-16 bg-gradient-to-r from-hanfu-blue/5 to-hanfu-red/5 p-8 rounded-2xl border border-gray-100"
+        class="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center"
       >
-        <h2 class="text-2xl font-display text-gray-900 mb-4">联系我们</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <p class="text-gray-700">
-              <span class="font-medium block mb-1">地址</span>
-              都柏林市中心文化区，具体位置预约后告知
-            </p>
-            <p class="text-gray-700 mt-4">
-              <span class="font-medium block mb-1">营业时间</span>
-              周二至周日 10:00-18:00
-            </p>
-          </div>
-          <div>
-            <p class="text-gray-700">
-              <span class="font-medium block mb-1">邮箱</span>
-              info@huashangjiuzhou.ie
-            </p>
-            <p class="text-gray-700 mt-4">
-              <span class="font-medium block mb-1">电话</span>
-              +353 123 456 789
-            </p>
-          </div>
+        <div class="text-center lg:text-left">
+          <p class="text-lg font-semibold text-[#C0392B] mb-2">Our Vision</p>
+          <h1
+            class="font-serif text-5xl md:text-6xl font-bold tracking-wider text-gray-900 leading-tight"
+          >
+            A Bridge Between Cultures, Woven in Silk.
+          </h1>
+          <p class="mt-6 text-lg text-gray-600">
+            We are more than just a Hanfu store. We are cultural ambassadors, dedicated to bringing
+            the timeless elegance of ancient Chinese attire to the heart of Dublin. Our mission is
+            to create an immersive space where East meets West, and history comes to life.
+          </p>
         </div>
-        <div class="mt-8">
-          <button class="btn-primary w-full py-3">预约参观</button>
+        <div class="w-full h-80 md:h-[500px] rounded-lg overflow-hidden shadow-xl">
+          <img
+            src="/images/about-me/girl.jpg"
+            alt="A quiet tea ceremony setting"
+            class="w-full h-full object-cover"
+          />
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Section 2: The Founder's Journey -->
+    <section class="bg-white py-20 md:py-28 px-4">
+      <div class="max-w-4xl mx-auto text-center">
+        <div
+          class="w-24 h-24 rounded-full mx-auto mb-6 overflow-hidden border-4 border-red-100 shadow-lg"
+        >
+          <img
+            src="/images/about-me/founder.jpeg"
+            alt="Founder's Portrait"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-6">
+          A Note from Our Founder
+        </h2>
+        <div class="prose prose-lg max-w-none text-gray-600">
+          <p>
+            "Living in Dublin for over a decade, I've always been captivated by the rich tapestry of
+            Irish culture. At the same time, I felt a deep longing to share the stories woven into
+            the silks of my own heritage. Hanfu is not just clothing; it’s a tangible piece of
+            history, a poem you can wear. I started this journey to create a welcoming space for
+            Dubliners and visitors alike to not just see, but truly experience the profound beauty
+            of Chinese culture. This is my invitation to you – to step into another world, right
+            here in Dublin."
+          </p>
+          <p class="font-serif font-semibold text-gray-800 mt-4">- Mr. Zhang, Founder</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Our Philosophy -->
+    <section class="py-20 md:py-28 px-4">
+      <div class="max-w-screen-xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
+            Our Philosophy
+          </h2>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            Three principles guide everything we do.
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div v-for="value in coreValues" :key="value.title" class="text-center p-6">
+            <div class="flex justify-center items-center mb-5">
+              <component :is="value.icon" class="w-12 h-12 text-[#C0392B]" />
+            </div>
+            <h3 class="font-serif text-2xl font-semibold mb-3">{{ value.title }}</h3>
+            <p class="text-gray-500">{{ value.description }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Meet the Team -->
+    <section class="bg-white py-20 md:py-28 px-4">
+      <div class="max-w-screen-xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
+            Meet the Curators
+          </h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+          <div
+            v-for="member in team"
+            :key="member.name"
+            class="flex flex-col sm:flex-row items-center text-center sm:text-left gap-8"
+          >
+            <div class="w-32 h-32 rounded-full shrink-0 overflow-hidden shadow-lg">
+              <img :src="member.image" :alt="member.name" class="w-full h-full object-cover" />
+            </div>
+            <div>
+              <h3 class="font-serif text-2xl font-semibold">{{ member.name }}</h3>
+              <p class="text-md font-semibold text-[#C0392B] mb-2">{{ member.role }}</p>
+              <p class="text-gray-600">{{ member.bio }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Join Us -->
+    <section class="py-20 md:py-28 px-4">
+      <div class="max-w-3xl mx-auto text-center bg-white p-12 rounded-lg shadow-xl">
+        <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-6">
+          Begin Your Journey
+        </h2>
+        <p class="text-lg text-gray-600 mb-10">
+          Follow our story on social media or book an appointment to visit our showroom in Dublin.
+          We can't wait to welcome you.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+          <button class="btn-primary px-8 py-4 rounded-full w-full sm:w-auto">
+            Book an Appointment
+          </button>
+          <button class="btn-outline px-8 py-4 rounded-full w-full sm:w-auto">
+            Follow on Instagram
+          </button>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
+
+<script setup lang="ts">
+import { BookOpenIcon, SparklesIcon, HeartIcon } from '@heroicons/vue/24/outline'
+
+const coreValues = [
+  {
+    icon: BookOpenIcon,
+    title: 'Authenticity',
+    description:
+      'We honour history. Each garment is meticulously researched to ensure its form and patterns are true to its dynasty.',
+  },
+  {
+    icon: HeartIcon,
+    title: 'Quality',
+    description:
+      'We believe in tangible beauty. We use only the finest silks, cottons, and linens to recreate the textures of the past.',
+  },
+  {
+    icon: SparklesIcon,
+    title: 'Experience',
+    description:
+      'We offer more than just clothing. We provide a cultural deep-dive, from themed parties to educational workshops.',
+  },
+]
+
+const team = [
+  {
+    name: 'Mr. Zhang',
+    role: 'Founder & Cultural Director',
+    bio: 'A historian at heart with a decade of experience in historical garment reproduction. His expertise ensures every piece tells an accurate and beautiful story.',
+    image:
+      'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=1170&auto=format&fit=crop',
+  },
+  {
+    name: 'Aoife O’Sullivan',
+    role: 'Operations & Events Manager',
+    bio: 'A Dublin native with a passion for cross-cultural events. Aoife bridges the gap, ensuring our experiences are both authentic and perfectly tailored for a local audience.',
+    image:
+      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1170&auto=format&fit=crop',
+  },
+]
+</script>
