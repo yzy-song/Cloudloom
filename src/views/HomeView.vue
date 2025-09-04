@@ -33,13 +33,6 @@
             >
               {{ slide.description }}
             </p>
-            <!-- <router-link
-              :to="slide.action || '/'"
-              class="inline-block bg-[#C0392B] text-white font-semibold tracking-wider px-8 py-3 rounded-full text-lg hover:bg-[#a53125] transition-transform hover:scale-105 duration-300 animate-fade-in-up"
-              style="animation-delay: 0.6s"
-            >
-              {{ slide.buttonText }}
-            </router-link> -->
           </div>
         </swiper-slide>
       </swiper>
@@ -100,17 +93,32 @@
             >
           </router-link>
         </div>
-        <div class="grid grid-cols-2 gap-4" v-observe-animation="'animate-fade-in-left'">
-          <img
-            src="https://images.unsplash.com/photo-1614204424391-924545393896?q=80&w=870&auto=format&fit=crop"
-            alt="Hanfu Gallery 1"
-            class="rounded-lg shadow-xl aspect-[3/4] object-cover transition-transform duration-500 hover:scale-105"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1629806934479-715d555c4d29?q=80&w=930&auto=format&fit=crop"
-            alt="Hanfu Gallery 2"
-            class="rounded-lg shadow-xl aspect-[3/4] object-cover mt-8 transition-transform duration-500 hover:scale-105"
-          />
+        <!-- INTERACTION UPGRADE: Each image now has its own independent hover effect -->
+        <div
+          class="grid grid-cols-2 gap-4"
+          style="perspective: 1000px"
+          v-observe-animation="'animate-fade-in-left'"
+        >
+          <router-link to="/gallery">
+            <img
+              src="/images/home-others/hanfu01.jpeg"
+              alt="Hanfu Gallery 1"
+              class="rounded-lg shadow-xl aspect-[3/4] object-cover w-full h-full"
+              :style="image1Style"
+              @mousemove="handleMouseMove1"
+              @mouseleave="handleMouseLeave1"
+            />
+          </router-link>
+          <router-link to="/gallery">
+            <img
+              src="/images/home-others/hanfu02.jpeg"
+              alt="Hanfu Gallery 2"
+              class="rounded-lg shadow-xl aspect-[3/4] object-cover mt-8 w-full h-full"
+              :style="image2Style"
+              @mousemove="handleMouseMove2"
+              @mouseleave="handleMouseLeave2"
+            />
+          </router-link>
         </div>
       </div>
     </section>
@@ -256,17 +264,14 @@ import { Swiper, SwiperSlide } from 'swiper/vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
+import type { HeroSlide } from '@/types'
 import { useDeviceCheck } from '@/composables/useDeviceCheck'
 
 const router = useRouter()
 const { t } = useI18n()
 
 // --- 修正后的轮播图数据和逻辑 ---
-
-// 响应式地判断是否为移动端
 const { isMobile } = useDeviceCheck()
-
-// 基础轮播图数据，只包含文件名，不包含路径
 const baseHomeSlides = [
   {
     title: '盛唐风华系列',
@@ -374,14 +379,9 @@ const baseHomeSlides = [
     imageFileName: 'slide_015.jpeg',
   },
 ]
-
-// 在组件设置时，只打乱一次轮播图的基础顺序
 const shuffledBaseSlides = shuffle([...baseHomeSlides])
-
-// 使用计算属性动态生成轮播图数据，确保路径正确且响应式
 const homeSlides = computed(() => {
   const imagePath = isMobile.value ? '/images/home-banner/mobile/' : '/images/home-banner/pc/'
-  // 现在只映射预先打乱好的数组，不再每次都重新shuffle
   return shuffledBaseSlides.map((slide) => ({
     ...slide,
     image: `${imagePath}${slide.imageFileName}`,
@@ -445,6 +445,64 @@ const toggleFaq = (idx: number) => {
 const navigateTo = (path: string) => {
   router.push(path)
 }
+
+// --- REFACTORED: Logic for INDEPENDENT 3D Parallax Hover Effect ---
+
+// State for the first image
+const isHovered1 = ref(false)
+const rotateX1 = ref(0)
+const rotateY1 = ref(0)
+
+// State for the second image
+const isHovered2 = ref(false)
+const rotateX2 = ref(0)
+const rotateY2 = ref(0)
+
+// Computed style for the first image
+const image1Style = computed(() => ({
+  transform: `rotateX(${rotateX1.value}deg) rotateY(${rotateY1.value}deg) scale(${isHovered1.value ? 1.05 : 1})`,
+  transition: 'transform 0.25s cubic-bezier(0.23, 1, 0.32, 1)',
+}))
+
+// Computed style for the second image
+const image2Style = computed(() => ({
+  transform: `rotateX(${rotateX2.value}deg) rotateY(${rotateY2.value}deg) scale(${isHovered2.value ? 1.05 : 1})`,
+  transition: 'transform 0.25s cubic-bezier(0.23, 1, 0.32, 1)',
+}))
+
+// Generic handler function to avoid repetition
+const handleMouseMove = (e: MouseEvent, isHovered: any, rotateX: any, rotateY: any) => {
+  isHovered.value = true
+  const el = e.currentTarget as HTMLElement
+  if (!el) return
+
+  const rect = el.getBoundingClientRect()
+  const x = e.clientX - rect.left
+  const y = e.clientY - rect.top
+
+  const { width, height } = rect
+  const mouseX = x / width - 0.5
+  const mouseY = y / height - 0.5
+
+  const maxRotate = 10
+
+  rotateY.value = mouseX * maxRotate
+  rotateX.value = -mouseY * maxRotate
+}
+
+const handleMouseLeave = (isHovered: any, rotateX: any, rotateY: any) => {
+  isHovered.value = false
+  rotateX.value = 0
+  rotateY.value = 0
+}
+
+// Specific handlers for each image
+const handleMouseMove1 = (e: MouseEvent) => handleMouseMove(e, isHovered1, rotateX1, rotateY1)
+const handleMouseLeave1 = () => handleMouseLeave(isHovered1, rotateX1, rotateY1)
+const handleMouseMove2 = (e: MouseEvent) => handleMouseMove(e, isHovered2, rotateX2, rotateY2)
+const handleMouseLeave2 = () => handleMouseLeave(isHovered2, rotateX2, rotateY2)
+
+// --- END of refactored logic ---
 
 // 自定义指令：用于元素进入视口时添加动画
 const vObserveAnimation: Directive<HTMLElement, string> = {
