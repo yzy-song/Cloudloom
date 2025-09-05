@@ -457,7 +457,8 @@
       }
     },
     "feedback": {
-      "q_title": "Question 5.3: Do you have any other suggestions, concerns, or brilliant ideas about opening a Hanfu experience store in Dublin?"
+      "q_title": "Question 5.3: Do you have any other suggestions, concerns, or brilliant ideas about opening a Hanfu experience store in Dublin?",
+      "placeholder": "Do you have any other suggestions, concerns, or brilliant ideas about opening a Hanfu experience store in Dublin? Please enter your valuable feedback here..."
     },
     "contact": {
       "title": "Final Step: Leave Your Contact Information (Optional)",
