@@ -408,19 +408,19 @@
       "feedback_incorrect_text": "汉服是汉民族的传统服饰，而旗袍等属于近代服饰。",
       "q2_title": "问题 1.2: 您目前主要居住在哪个城市？",
       "residenceOptions": {
-        "dublin": "都柏林 (Dublin)",
-        "other_ireland": "爱尔兰其他城市 (Other city in Ireland)",
-        "other_country": "其他国家 (I am a tourist / live in another country)"
+        "dublin": "都柏林",
+        "other_ireland": "爱尔兰其他城市",
+        "other_country": "其他国家"
       },
       "q3_title": "问题 1.3: 您是通过以下哪个渠道了解到本次问卷调查的？",
       "channelOptions": {
-        "wechat": "微信群 / 朋友圈 (WeChat Groups / Moments)",
-        "red": "小红书 (RED / Xiaohongshu)",
+        "wechat": "微信群 / 朋友圈",
+        "red": "小红书",
         "instagram": "Instagram / Facebook",
         "tiktok": "TikTok",
         "friend": "朋友推荐 (Friend's Recommendation)",
-        "university": "学校/社团通知 (University / Student Group Notice)",
-        "other": "其他 (Other)"
+        "university": "学校/社团通知",
+        "other": "其他"
       }
     },
     "education": {
@@ -464,11 +464,11 @@
     "contact": {
       "title": "最后一步：留下联系方式（可选）",
       "description": "非常感谢您参与本次调查！为了感谢您的宝贵时间，我们未来可能会通过您留下的联系方式发放优惠券或活动通知。所有信息将被严格保密。",
-      "name_label": "姓名 (Name)",
+      "name_label": "姓名",
       "name_placeholder": "请输入您的姓名",
-      "email_label": "邮箱 (Email)",
+      "email_label": "邮箱",
       "email_placeholder": "请输入您的邮箱地址",
-      "phone_label": "手机号 (Phone)",
+      "phone_label": "手机号",
       "phone_placeholder": "请输入您的手机号码"
     },
     "personal": {

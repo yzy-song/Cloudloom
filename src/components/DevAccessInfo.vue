@@ -78,7 +78,6 @@ const accessUrl = computed(() => {
 
 // 计算属性：生成二维码URL
 const qrCodeUrl = computed(() => {
-  console.log('Generating QR code for URL:', accessUrl.value)
   return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(accessUrl.value)}`
 })
 

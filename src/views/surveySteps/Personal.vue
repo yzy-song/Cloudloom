@@ -95,7 +95,7 @@ const nationality = computed({
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
       <div>
-        <label for="age" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{
+        <label for="age" class="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">{{
           t('survey.personal.age_label')
         }}</label>
         <select
@@ -112,7 +112,7 @@ const nationality = computed({
       <div>
         <label
           for="gender"
-          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          class="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1"
           >{{ t('survey.personal.gender_label') }}</label
         >
         <select
@@ -131,7 +131,7 @@ const nationality = computed({
       <div>
         <label
           for="occupation"
-          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          class="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1"
           >{{ t('survey.personal.occupation_label') }}</label
         >
         <select
@@ -148,7 +148,7 @@ const nationality = computed({
       <div>
         <label
           for="nationality"
-          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          class="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1"
           >{{ t('survey.personal.nationality_label') }}</label
         >
         <input
@@ -176,7 +176,7 @@ const nationality = computed({
           :value="item.value"
           class="h-5 w-5 text-indigo-600 border-gray-300 focus:ring-indigo-500"
         />
-        <span class="ml-4 text-gray-800 dark:text-gray-200">{{ item.text }}</span>
+        <span class="ml-4 text-gray-700 dark:text-gray-300">{{ item.text }}</span>
       </label>
     </div>
   </div>

@@ -167,7 +167,7 @@ function getBorderClass(item: ClothingItem) {
           :value="option"
           class="h-5 w-5 text-indigo-600 border-gray-300 focus:ring-indigo-500"
         />
-        <span class="ml-4 text-gray-800 dark:text-gray-200">{{ option }}</span>
+        <span class="ml-4 text-gray-700 dark:text-gray-300">{{ option }}</span>
       </label>
     </div>
 
@@ -187,7 +187,7 @@ function getBorderClass(item: ClothingItem) {
           :value="option"
           class="h-5 w-5 text-indigo-600 border-gray-300 focus:ring-indigo-500"
         />
-        <span class="ml-4 text-gray-800 dark:text-gray-200">{{ option }}</span>
+        <span class="ml-4 text-gray-700 dark:text-gray-300">{{ option }}</span>
       </label>
     </div>
   </div>

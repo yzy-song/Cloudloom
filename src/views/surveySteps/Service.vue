@@ -56,7 +56,7 @@ function updateServices(service: { id: string }) {
           class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
           @change="updateServices(service)"
         />
-        <span class="ml-4 text-gray-800 dark:text-gray-200">{{ service.text }}</span>
+        <span class="ml-4 text-gray-700 dark:text-gray-300">{{ service.text }}</span>
       </label>
     </div>
   </div>

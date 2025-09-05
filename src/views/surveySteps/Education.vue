@@ -65,7 +65,7 @@ function updateMotivations(option: { text: any }) {
           :value="level.value"
           class="h-5 w-5 text-indigo-600 border-gray-300 focus:ring-indigo-500"
         />
-        <span class="ml-4 text-gray-800 dark:text-gray-200">{{ level.text }}</span>
+        <span class="ml-4 text-gray-700 dark:text-gray-300">{{ level.text }}</span>
       </label>
     </div>
 
@@ -84,7 +84,7 @@ function updateMotivations(option: { text: any }) {
           class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
           @change="updateMotivations(option)"
         />
-        <span class="ml-4 text-gray-800 dark:text-gray-200">{{ option.text }}</span>
+        <span class="ml-4 text-gray-700 dark:text-gray-300">{{ option.text }}</span>
       </label>
     </div>
   </div>
