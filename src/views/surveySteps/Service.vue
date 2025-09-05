@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   surveyData: {
@@ -9,21 +12,15 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:surveyData'])
 
-const services = ref([
-  { id: 'rental', text: '服装租赁 (Clothing Rental)' },
-  { id: 'makeup', text: '专业化妆与发型设计 (Professional Makeup and Hairstyling)' },
-  { id: 'accessories', text: '提供精美配饰 (如发簪、团扇、油纸伞) (Accessories Provided)' },
-  { id: 'indoor', text: '室内主题布景拍摄 (Indoor Themed Set Photography)' },
-  {
-    id: 'outdoor',
-    text: '都柏林地标外景拍摄 (如圣三一学院、凤凰公园等) (Outdoor Photography at Dublin Landmarks)',
-  },
-  { id: 'photographer', text: '专业摄影师跟拍 (Professional Photographer)' },
-  {
-    id: 'activities',
-    text: '文化体验活动 (如茶艺、书法、古筝体验) (Cultural activities like tea ceremony, calligraphy)',
-  },
-  { id: 'pets', text: '允许携带宠物合影 (Allowing pets in photos)' },
+const services = computed(() => [
+  { id: 'rental', text: t('survey.service.options.rental') },
+  { id: 'makeup', text: t('survey.service.options.makeup') },
+  { id: 'accessories', text: t('survey.service.options.accessories') },
+  { id: 'indoor', text: t('survey.service.options.indoor') },
+  { id: 'outdoor', text: t('survey.service.options.outdoor') },
+  { id: 'photographer', text: t('survey.service.options.photographer') },
+  { id: 'activities', text: t('survey.service.options.activities') },
+  { id: 'pets', text: t('survey.service.options.pets') },
 ])
 
 const localSurveyData = computed({
@@ -33,11 +30,11 @@ const localSurveyData = computed({
   },
 })
 
-function updateServices(service: { text: any }) {
+function updateServices(service: { id: string }) {
   const desired = localSurveyData.value.desiredServices
-  const newDesired = desired.includes(service.text)
-    ? desired.filter((item: any) => item !== service.text)
-    : [...desired, service.text]
+  const newDesired = desired.includes(service.id)
+    ? desired.filter((item: string) => item !== service.id)
+    : [...desired, service.id]
   localSurveyData.value = { ...localSurveyData.value, desiredServices: newDesired }
 }
 </script>
@@ -45,7 +42,7 @@ function updateServices(service: { text: any }) {
 <template>
   <div class="p-4 md:p-6">
     <h2 class="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-      问题 3.1: 对于汉服体验，您最希望包含哪些服务？（可多选）
+      {{ t('survey.service.q_title') }}
     </h2>
     <div class="space-y-3">
       <label
@@ -55,7 +52,7 @@ function updateServices(service: { text: any }) {
       >
         <input
           type="checkbox"
-          :checked="localSurveyData.desiredServices.includes(service.text)"
+          :checked="localSurveyData.desiredServices.includes(service.id)"
           class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
           @change="updateServices(service)"
         />

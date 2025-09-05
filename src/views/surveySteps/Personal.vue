@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   surveyData: {
@@ -9,15 +12,32 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:surveyData'])
 
-const ageOptions = ['18岁以下', '18-24', '25-30', '31-40', '40岁以上']
-const genderOptions = ['男', '女', '其他', '不愿透露']
-const occupationOptions = ['学生', '全职工作', '兼职工作', '自由职业', '其他']
+const ageOptions = [
+  t('survey.personal.ageOptions.under18'),
+  t('survey.personal.ageOptions.18-24'),
+  t('survey.personal.ageOptions.25-30'),
+  t('survey.personal.ageOptions.31-40'),
+  t('survey.personal.ageOptions.over40'),
+]
+const genderOptions = [
+  t('survey.personal.genderOptions.male'),
+  t('survey.personal.genderOptions.female'),
+  t('survey.personal.genderOptions.other'),
+  t('survey.personal.genderOptions.prefer_not_to_say'),
+]
+const occupationOptions = [
+  t('survey.personal.occupationOptions.student'),
+  t('survey.personal.occupationOptions.full_time'),
+  t('survey.personal.occupationOptions.part_time'),
+  t('survey.personal.occupationOptions.freelancer'),
+  t('survey.personal.occupationOptions.other'),
+]
 const sharingLikelihoods = [
-  { value: 1, text: '(1) 完全不会' },
-  { value: 2, text: '(2) 不太可能' },
-  { value: 3, text: '(3) 不确定' },
-  { value: 4, text: '(4) 可能会' },
-  { value: 5, text: '(5) 非常乐意分享！' },
+  { value: 1, text: t('survey.personal.sharingLikelihoods.level1') },
+  { value: 2, text: t('survey.personal.sharingLikelihoods.level2') },
+  { value: 3, text: t('survey.personal.sharingLikelihoods.level3') },
+  { value: 4, text: t('survey.personal.sharingLikelihoods.level4') },
+  { value: 5, text: t('survey.personal.sharingLikelihoods.level5') },
 ]
 
 // 使用 computed 包装整个 surveyData 对象
@@ -70,36 +90,36 @@ const nationality = computed({
 <template>
   <div class="p-4 md:p-6">
     <h2 class="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-      问题 5.1: 为了更好地进行数据分析，我们希望了解一些您的背景信息（所有信息将严格保密）。
+      {{ t('survey.personal.q1_title') }}
     </h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
-        <label for="age" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-          >您的年龄段是？</label
-        >
+        <label for="age" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{
+          t('survey.personal.age_label')
+        }}</label>
         <select
           id="age"
           v-model="age"
           name="age"
           class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         >
-          <option disabled value="">请选择</option>
+          <option disabled value="">{{ t('survey.personal.select_placeholder') }}</option>
           <option v-for="ageOpt in ageOptions" :key="ageOpt" :value="ageOpt">{{ ageOpt }}</option>
         </select>
       </div>
 
       <div>
-        <label for="gender" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-          >您的性别是？</label
-        >
+        <label for="gender" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{
+          t('survey.personal.gender_label')
+        }}</label>
         <select
           id="gender"
           v-model="gender"
           name="gender"
           class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         >
-          <option disabled value="">请选择</option>
+          <option disabled value="">{{ t('survey.personal.select_placeholder') }}</option>
           <option v-for="genderOpt in genderOptions" :key="genderOpt" :value="genderOpt">
             {{ genderOpt }}
           </option>
@@ -107,8 +127,10 @@ const nationality = computed({
       </div>
 
       <div>
-        <label for="occupation" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-          >您的职业身份是？</label
+        <label
+          for="occupation"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >{{ t('survey.personal.occupation_label') }}</label
         >
         <select
           id="occupation"
@@ -116,14 +138,16 @@ const nationality = computed({
           name="occupation"
           class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         >
-          <option disabled value="">请选择</option>
+          <option disabled value="">{{ t('survey.personal.select_placeholder') }}</option>
           <option v-for="job in occupationOptions" :key="job" :value="job">{{ job }}</option>
         </select>
       </div>
 
       <div>
-        <label for="nationality" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-          >您的国籍是？</label
+        <label
+          for="nationality"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >{{ t('survey.personal.nationality_label') }}</label
         >
         <input
           id="nationality"
@@ -136,8 +160,7 @@ const nationality = computed({
     </div>
 
     <h2 class="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-200 mt-8 mb-4">
-      问题 5.2: 在体验结束后，您有多大可能性会在社交媒体（如Instagram, TikTok,
-      小红书）上分享您的汉服照片？
+      {{ t('survey.personal.q2_title') }}
     </h2>
     <div class="space-y-3">
       <label

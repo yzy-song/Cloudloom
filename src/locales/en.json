@@ -397,5 +397,194 @@
     "title": "Photo Wall",
     "moments": "Wonderful Moments",
     "description": "Through the lens, the beauty of Hanfu is captured forever. Every photo tells a story of elegance and romance."
+  },
+  "survey": {
+    "recognition": {
+      "q1_title": "Question 1.1: Can you identify which of the following is Hanfu (the traditional dress of the Han Chinese people)?",
+      "q1_prompt": "Please click on the images you believe are Hanfu.",
+      "feedback_correct": "Correct!",
+      "feedback_incorrect_prompt": "Hint:",
+      "feedback_incorrect_text": "Hanfu is the traditional clothing of the Han ethnic group, while Qipao and others are modern garments.",
+      "q2_title": "Question 1.2: In which city do you currently reside?",
+      "residenceOptions": {
+        "dublin": "Dublin",
+        "other_ireland": "Other city in Ireland",
+        "other_country": "I am a tourist / live in another country"
+      },
+      "q3_title": "Question 1.3: Through which channel did you learn about this survey?",
+      "channelOptions": {
+        "wechat": "WeChat Groups / Moments",
+        "red": "RED / Xiaohongshu",
+        "instagram": "Instagram / Facebook",
+        "tiktok": "TikTok",
+        "friend": "Friend's Recommendation",
+        "university": "University / Student Group Notice",
+        "other": "Other"
+      }
+    },
+    "education": {
+      "q1_title": "Question 2.1: How familiar are you with Hanfu culture?",
+      "knowledgeLevels": {
+        "level1": "(1) Not at all, I just find it beautiful.",
+        "level2": "(2) I've heard of it, but I'm not sure about specific dynasties or styles.",
+        "level3": "(3) I know some basic information.",
+        "level4": "(4) Quite familiar, I can distinguish styles from different dynasties.",
+        "level5": "(5) Very knowledgeable, I am a Hanfu enthusiast."
+      },
+      "q2_title": "Question 2.2: If you were to experience Hanfu in Dublin, what would be the most appealing reasons? (Multiple selections allowed)",
+      "motivations": {
+        "photos": "To get a unique and memorable set of photos",
+        "culture": "As a way to experience and learn about Chinese culture",
+        "occasion": "To celebrate a special occasion (e.g., birthday, anniversary, graduation)",
+        "activity": "A fun activity to do with friends, family, or a partner",
+        "roots": "To connect with my own cultural roots (mainly for people of Chinese descent)",
+        "social": "To create unique content for my social media",
+        "curious": "Just curious",
+        "other": "Other"
+      }
+    },
+    "service": {
+      "q_title": "Question 3.1: For a Hanfu experience, which services would you most like to be included? (Multiple selections allowed)",
+      "options": {
+        "rental": "Clothing Rental",
+        "makeup": "Professional Makeup and Hairstyling",
+        "accessories": "Accessories Provided (e.g., hairpins, fans, umbrellas)",
+        "indoor": "Indoor Themed Set Photography",
+        "outdoor": "Outdoor Photography at Dublin Landmarks (e.g., Trinity College, Phoenix Park)",
+        "photographer": "Professional Photographer",
+        "activities": "Cultural activities (e.g., tea ceremony, calligraphy)",
+        "pets": "Allowing pets in photos"
+      }
+    },
+    "feedback": {
+      "q_title": "Question 5.3: Do you have any other suggestions, concerns, or brilliant ideas about opening a Hanfu experience store in Dublin?"
+    },
+    "contact": {
+      "title": "Final Step: Leave Your Contact Information (Optional)",
+      "description": "Thank you for participating in this survey! To show our appreciation for your valuable time, we may send you coupons or event notifications through the contact information you provide. All information will be kept strictly confidential.",
+      "name_label": "Name",
+      "name_placeholder": "Enter your name",
+      "email_label": "Email",
+      "email_placeholder": "Enter your email address",
+      "phone_label": "Phone",
+      "phone_placeholder": "Enter your phone number"
+    },
+    "personal": {
+      "q1_title": "Question 5.1: To help with data analysis, we'd like to know some background information (all data will be kept strictly confidential).",
+      "age_label": "What is your age range?",
+      "gender_label": "What is your gender?",
+      "occupation_label": "What is your occupation?",
+      "nationality_label": "What is your nationality?",
+      "select_placeholder": "Please select",
+      "ageOptions": {
+        "under18": "Under 18",
+        "18-24": "18-24",
+        "25-30": "25-30",
+        "31-40": "31-40",
+        "over40": "Over 40"
+      },
+      "genderOptions": {
+        "male": "Male",
+        "female": "Female",
+        "other": "Other",
+        "prefer_not_to_say": "Prefer not to say"
+      },
+      "occupationOptions": {
+        "student": "Student",
+        "full_time": "Full-time employment",
+        "part_time": "Part-time employment",
+        "freelancer": "Freelancer",
+        "other": "Other"
+      },
+      "q2_title": "Question 5.2: After the experience, how likely are you to share your Hanfu photos on social media (e.g., Instagram, TikTok, RED)?",
+      "sharingLikelihoods": {
+        "level1": "(1) Not at all likely",
+        "level2": "(2) Unlikely",
+        "level3": "(3) Neutral",
+        "level4": "(4) Likely",
+        "level5": "(5) Very likely"
+      }
+    },
+    "main": {
+      "title": "Hanfu Experience Market Survey",
+      "step": "Step",
+      "of": "of",
+      "steps": {
+        "recognition": "Screening & Recognition",
+        "education": "Cultural Interest & Motivation",
+        "service": "Product & Service Preferences (1/2)",
+        "preferences": "Product & Service Preferences (2/2)",
+        "payment": "Price & Value Perception",
+        "personal": "About You",
+        "contact": "Contact Information (Optional)",
+        "feedback": "Your Valuable Feedback"
+      },
+      "buttons": {
+        "prev": "Previous",
+        "next": "Next",
+        "submit": "Complete and Submit",
+        "submitting": "Submitting..."
+      },
+      "success": {
+        "title": "Submission Successful!",
+        "message": "Thank you for your participation! Your feedback is invaluable to us.",
+        "restart": "Fill Out Again"
+      },
+      "error": {
+        "title": "Submission Failed!",
+        "unknown": "An unknown error occurred."
+      }
+    },
+    "preferences": {
+      "q1_title": "Question 3.2: Which style of Hanfu do you prefer?",
+      "q1_prompt": "Visual examples would be best if possible.",
+      "styles": {
+        "flowy": "Flowy and elegant styles (e.g., Wei-Jin, Song)",
+        "grand": "Grand and magnificent styles (e.g., Tang)",
+        "elegant": "Elegant and graceful styles (e.g., Ming)",
+        "heroic": "Heroic / Wuxia (martial arts) styles",
+        "recommend": "I don't know, I'd like a recommendation"
+      },
+      "q2_title": "Question 3.3: What is your ideal duration for a complete Hanfu experience (from arrival to departure)?",
+      "durations": {
+        "d1": "Less than 1 hour",
+        "d2": "1 - 2 hours",
+        "d3": "2 - 3 hours",
+        "d4": "Half a day or longer"
+      }
+    },
+    "payment": {
+      "q_title": "Question 4.1: Please consider the following service packages and vote for what you believe is a reasonable price point.",
+      "price_prompt": "What do you think is a reasonable price?",
+      "packages": {
+        "packageA": {
+          "title": "Package A: Basic Experience",
+          "description": "Choose one Hanfu set, includes simple hairstyling and basic accessories, 1.5 hours of free shooting in an indoor themed scene (using your own phone).",
+          "prices": {
+            "p1": "€39 - €49",
+            "p2": "€50 - €69",
+            "p3": "€70+"
+          }
+        },
+        "packageB": {
+          "title": "Package B: Professional Photoshoot",
+          "description": "Choose one Hanfu set, includes full professional makeup and hairstyling, 2-hour indoor shoot with a professional photographer, all digital proofs provided with 5 retouched photos.",
+          "prices": {
+            "p1": "€129 - €159",
+            "p2": "€160 - €199",
+            "p3": "€200+"
+          }
+        },
+        "packageC": {
+          "title": "Package C: Dublin Outdoor Photoshoot",
+          "description": "Choose one Hanfu set, includes full professional makeup and hairstyling, 3-hour follow-along shoot with a professional photographer at a chosen Dublin landmark, all digital proofs provided with 8 retouched photos.",
+          "prices": {
+            "p1": "€249 - €299",
+            "p2": "€300 - €359",
+            "p3": "€360+"
+          }
+        }
+      }
+    }
   }
 }

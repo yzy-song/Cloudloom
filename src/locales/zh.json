@@ -398,5 +398,194 @@
     "title":"摄影作品集",
     "moments":"精彩瞬间",
     "description":"镜头下，汉服之美被永久定格。每一张照片，都是一个关于风雅与浪漫的故事。"
+  },
+  "survey": {
+    "recognition": {
+      "q1_title": "问题 1.1: 您能认出以下哪些是汉服（中国汉族的传统服饰）吗？",
+      "q1_prompt": "请点击您认为是汉服的图片。",
+      "feedback_correct": "正确!",
+      "feedback_incorrect_prompt": "提示:",
+      "feedback_incorrect_text": "汉服是汉民族的传统服饰，而旗袍等属于近代服饰。",
+      "q2_title": "问题 1.2: 您目前主要居住在哪个城市？",
+      "residenceOptions": {
+        "dublin": "都柏林 (Dublin)",
+        "other_ireland": "爱尔兰其他城市 (Other city in Ireland)",
+        "other_country": "其他国家 (I am a tourist / live in another country)"
+      },
+      "q3_title": "问题 1.3: 您是通过以下哪个渠道了解到本次问卷调查的？",
+      "channelOptions": {
+        "wechat": "微信群 / 朋友圈 (WeChat Groups / Moments)",
+        "red": "小红书 (RED / Xiaohongshu)",
+        "instagram": "Instagram / Facebook",
+        "tiktok": "TikTok",
+        "friend": "朋友推荐 (Friend's Recommendation)",
+        "university": "学校/社团通知 (University / Student Group Notice)",
+        "other": "其他 (Other)"
+      }
+    },
+    "education": {
+      "q1_title": "问题 2.1: 您对汉服文化的了解程度如何？",
+      "knowledgeLevels": {
+        "level1": "(1) 完全不了解，只是觉得好看",
+        "level2": "(2) 听说过，但不清楚具体朝代和款式",
+        "level3": "(3) 了解一些基础知识",
+        "level4": "(4) 比较熟悉，能分清不同朝代的风格",
+        "level5": "(5) 非常了解，是汉服爱好者"
+      },
+      "q2_title": "问题 2.2: 如果要在都柏林体验汉服，最吸引您的原因是什么？（可多选）",
+      "motivations": {
+        "photos": "想拍一组特别的、有纪念意义的照片",
+        "culture": "作为一种了解和体验中国文化的方式",
+        "occasion": "为了庆祝某个特殊场合（如生日、纪念日、毕业）",
+        "activity": "和朋友/家人/伴侣一起进行一次有趣的活动",
+        "roots": "寻找与自己文化根源的连接（主要针对华裔）",
+        "social": "创造独特的社交媒体内容",
+        "curious": "只是单纯的好奇",
+        "other": "其他"
+      }
+    },
+    "service": {
+      "q_title": "问题 3.1: 对于汉服体验，您最希望包含哪些服务？（可多选）",
+      "options": {
+        "rental": "服装租赁",
+        "makeup": "专业化妆与发型设计",
+        "accessories": "提供精美配饰 (如发簪、团扇、油纸伞)",
+        "indoor": "室内主题布景拍摄",
+        "outdoor": "都柏林地标外景拍摄 (如圣三一学院、凤凰公园等)",
+        "photographer": "专业摄影师跟拍",
+        "activities": "文化体验活动 (如茶艺、书法、古筝体验)",
+        "pets": "允许携带宠物合影"
+      }
+    },
+    "feedback": {
+      "q_title": "问题 5.3: 对于在都柏林开设一家汉服体验馆，您还有什么其他的建议、顾虑或绝妙的想法吗？"
+    },
+    "contact": {
+      "title": "最后一步：留下联系方式（可选）",
+      "description": "非常感谢您参与本次调查！为了感谢您的宝贵时间，我们未来可能会通过您留下的联系方式发放优惠券或活动通知。所有信息将被严格保密。",
+      "name_label": "姓名 (Name)",
+      "name_placeholder": "请输入您的姓名",
+      "email_label": "邮箱 (Email)",
+      "email_placeholder": "请输入您的邮箱地址",
+      "phone_label": "手机号 (Phone)",
+      "phone_placeholder": "请输入您的手机号码"
+    },
+    "personal": {
+      "q1_title": "问题 5.1: 为了更好地进行数据分析，我们希望了解一些您的背景信息（所有信息将严格保密）。",
+      "age_label": "您的年龄段是？",
+      "gender_label": "您的性别是？",
+      "occupation_label": "您的职业身份是？",
+      "nationality_label": "您的国籍是？",
+      "select_placeholder": "请选择",
+      "ageOptions": {
+        "under18": "18岁以下",
+        "18-24": "18-24",
+        "25-30": "25-30",
+        "31-40": "31-40",
+        "over40": "40岁以上"
+      },
+      "genderOptions": {
+        "male": "男",
+        "female": "女",
+        "other": "其他",
+        "prefer_not_to_say": "不愿透露"
+      },
+      "occupationOptions": {
+        "student": "学生",
+        "full_time": "全职工作",
+        "part_time": "兼职工作",
+        "freelancer": "自由职业",
+        "other": "其他"
+      },
+      "q2_title": "问题 5.2: 在体验结束后，您有多大可能性会在社交媒体（如Instagram, TikTok, 小红书）上分享您的汉服照片？",
+      "sharingLikelihoods": {
+        "level1": "(1) 完全不会",
+        "level2": "(2) 不太可能",
+        "level3": "(3) 不确定",
+        "level4": "(4) 可能会",
+        "level5": "(5) 非常乐意分享！"
+      }
+    },
+    "main": {
+      "title": "汉服体验馆市场调查问卷",
+      "step": "步骤",
+      "of": "/",
+      "steps": {
+        "recognition": "市场筛选与认知",
+        "education": "文化兴趣与动机",
+        "service": "产品与服务偏好 (1/2)",
+        "preferences": "产品与服务偏好 (2/2)",
+        "payment": "价格与价值感知",
+        "personal": "关于您",
+        "contact": "留下联系方式 (选填)",
+        "feedback": "您的宝贵意见"
+      },
+      "buttons": {
+        "prev": "上一步",
+        "next": "下一步",
+        "submit": "完成并提交",
+        "submitting": "提交中..."
+      },
+      "success": {
+        "title": "提交成功！",
+        "message": "非常感谢您的参与！您的意见对我们至关重要。",
+        "restart": "重新填写问卷"
+      },
+      "error": {
+        "title": "提交失败!",
+        "unknown": "发生未知错误。"
+      }
+    },
+    "payment": {
+      "q_title": "问题 4.1: 请设想以下几种服务套餐，并为您认为合理的价位投票。",
+      "price_prompt": "您认为合理的价位是？",
+      "packages": {
+        "packageA": {
+          "title": "套餐A：基础体验套餐",
+          "description": "自选汉服一套，提供简单发型设计与基础配饰，1.5小时室内主题景自由拍摄（用自己的手机）。",
+          "prices": {
+            "p1": "€39 - €49",
+            "p2": "€50 - €69",
+            "p3": "€70+"
+          }
+        },
+        "packageB": {
+          "title": "套餐B：专业写真套餐",
+          "description": "自选汉服一套，全套专业化妆与发型设计，专业摄影师2小时室内拍摄，提供所有底片并含5张精修电子照片。",
+          "prices": {
+            "p1": "€129 - €159",
+            "p2": "€160 - €199",
+            "p3": "€200+"
+          }
+        },
+        "packageC": {
+          "title": "套餐C：都柏林外景套餐",
+          "description": "自选汉服一套，全套专业化妆与发型设计，专业摄影师3小时跟拍（一个自选都柏林地标），提供所有底片并含8张精修电子照片。",
+          "prices": {
+            "p1": "€249 - €299",
+            "p2": "€300 - €359",
+            "p3": "€360+"
+          }
+        }
+      }
+    },
+    "preferences": {
+      "q1_title": "问题 3.2: 您更偏爱哪种风格的汉服？",
+      "q1_prompt": "如果能配图展示效果最佳",
+      "styles": {
+        "flowy": "飘逸优雅的风格（如魏晋、宋制）",
+        "grand": "华丽大气的风格（如唐制）",
+        "elegant": "端庄秀丽的风格（如明制）",
+        "heroic": "英姿飒爽的侠客/武侠风格",
+        "recommend": "我不了解，希望店员推荐"
+      },
+      "q2_title": "问题 3.3: 您理想中的一次完整汉服体验（从进店到结束）时长是多久？",
+      "durations": {
+        "d1": "1小时以内",
+        "d2": "1 - 2 小时",
+        "d3": "2 - 3 小时",
+        "d4": "半天或更久"
+      }
+    }
   }
 }
