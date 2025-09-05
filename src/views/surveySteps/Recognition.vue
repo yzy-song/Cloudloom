@@ -80,34 +80,46 @@ function handleSelection(item: ClothingItem) {
 // 根据选择状态动态计算边框样式
 function getBorderClass(item: ClothingItem) {
   const status = selectionStatus[item.id]
-  if (status === 'correct') return 'border-green-500'
+  if (status === 'correct') return 'border-green-500 ring-2 ring-green-500/50'
 
-  if (status === 'incorrect') return 'border-red-500'
+  if (status === 'incorrect') return 'border-red-500 ring-2 ring-red-500/50'
 
-  return 'border-transparent hover:border-indigo-400'
+  // 为已选择但未判断对错的图片添加选中样式
+  if (localSurveyData.value.recognizedItems.includes(item.name)) {
+    return 'border-indigo-500 dark:border-indigo-400 ring-2 ring-indigo-500/50'
+  }
+
+  // 为未选择的图片添加默认边框和悬停效果
+  return 'border-gray-300 dark:border-gray-700 hover:border-indigo-500 dark:hover:border-indigo-400'
 }
 </script>
 
 <template>
   <div class="p-4 md:p-6">
-    <h2 class="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+    <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
       {{ t('survey.recognition.q1_title') }}
     </h2>
-    <p class="text-sm text-gray-500 mb-4">{{ t('survey.recognition.q1_prompt') }}</p>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">
+      {{ t('survey.recognition.q1_prompt') }}
+    </p>
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
       <div
         v-for="item in clothingItems"
         :key="item.id"
-        class="relative rounded-lg overflow-hidden cursor-pointer border-4 transition-all duration-200"
+        class="relative rounded-lg overflow-hidden cursor-pointer border-4 transition-all duration-200 group"
         :class="getBorderClass(item)"
         @click="handleSelection(item)"
       >
-        <img :src="item.src" :alt="item.name" class="w-full h-48 md:h-64 object-cover" />
+        <img
+          :src="item.src"
+          :alt="item.name"
+          class="w-full h-48 md:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+        />
 
         <!-- 对错反馈图标 -->
         <div
           v-if="selectionStatus[item.id]"
-          class="absolute top-2 right-2 flex items-center justify-center w-8 h-8 rounded-full text-white font-bold text-xl"
+          class="absolute top-2 right-2 flex items-center justify-center w-8 h-8 rounded-full text-white font-bold text-xl shadow-lg"
           :class="{
             'bg-green-500': selectionStatus[item.id] === 'correct',
             'bg-red-500': selectionStatus[item.id] === 'incorrect',
@@ -117,8 +129,10 @@ function getBorderClass(item: ClothingItem) {
           <span v-if="selectionStatus[item.id] === 'incorrect'">✗</span>
         </div>
 
-        <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-2">
-          <p class="text-white text-center font-semibold">
+        <div
+          class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3"
+        >
+          <p class="text-white text-center font-semibold text-base">
             {{ item.name }}
           </p>
         </div>
@@ -128,26 +142,24 @@ function getBorderClass(item: ClothingItem) {
     <!-- 反馈提示文字 -->
     <div
       v-if="Object.values(selectionStatus).some((s) => s === 'incorrect')"
-      class="mt-4 text-center"
+      class="mt-6 p-3 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 text-yellow-800 dark:text-yellow-200"
+      role="alert"
     >
-      <p class="text-sm text-gray-600 dark:text-gray-400">
-        <span class="inline-block w-3 h-3 rounded-full bg-green-500 mr-1" />
-        <span class="font-semibold">{{ t('survey.recognition.feedback_correct') }}</span>
-        <span class="inline-block w-3 h-3 rounded-full bg-red-500 mr-1 ml-4" />
-        <span class="font-semibold">{{ t('survey.recognition.feedback_incorrect_prompt') }}</span>
+      <p class="text-sm">
+        <span class="font-bold">{{ t('survey.recognition.feedback_incorrect_prompt') }}</span>
         {{ t('survey.recognition.feedback_incorrect_text') }}
       </p>
     </div>
 
     <!-- 问题 1.2 -->
-    <h2 class="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-200 mt-8 mb-4">
+    <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-gray-100 mt-8 mb-4">
       {{ t('survey.recognition.q2_title') }}
     </h2>
     <div class="space-y-3">
       <label
         v-for="option in residenceOptions"
         :key="option"
-        class="flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+        class="flex items-center p-4 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-200 has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-500 dark:has-[:checked]:bg-indigo-900/30 dark:has-[:checked]:border-indigo-600"
       >
         <input
           v-model="localSurveyData.residence"
@@ -155,19 +167,19 @@ function getBorderClass(item: ClothingItem) {
           :value="option"
           class="h-5 w-5 text-indigo-600 border-gray-300 focus:ring-indigo-500"
         />
-        <span class="ml-3 text-gray-700 dark:text-gray-300">{{ option }}</span>
+        <span class="ml-4 text-gray-800 dark:text-gray-200">{{ option }}</span>
       </label>
     </div>
 
     <!-- 问题 1.3 -->
-    <h2 class="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-200 mt-8 mb-4">
+    <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-gray-100 mt-8 mb-4">
       {{ t('survey.recognition.q3_title') }}
     </h2>
     <div class="space-y-3">
       <label
         v-for="option in channelOptions"
         :key="option"
-        class="flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+        class="flex items-center p-4 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-200 has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-500 dark:has-[:checked]:bg-indigo-900/30 dark:has-[:checked]:border-indigo-600"
       >
         <input
           v-model="localSurveyData.channel"
@@ -175,7 +187,7 @@ function getBorderClass(item: ClothingItem) {
           :value="option"
           class="h-5 w-5 text-indigo-600 border-gray-300 focus:ring-indigo-500"
         />
-        <span class="ml-3 text-gray-700 dark:text-gray-300">{{ option }}</span>
+        <span class="ml-4 text-gray-800 dark:text-gray-200">{{ option }}</span>
       </label>
     </div>
   </div>

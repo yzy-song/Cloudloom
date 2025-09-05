@@ -41,14 +41,14 @@ function updateServices(service: { id: string }) {
 
 <template>
   <div class="p-4 md:p-6">
-    <h2 class="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+    <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
       {{ t('survey.service.q_title') }}
     </h2>
     <div class="space-y-3">
       <label
         v-for="service in services"
         :key="service.id"
-        class="flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+        class="flex items-center p-4 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-200 has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-500 dark:has-[:checked]:bg-indigo-900/30 dark:has-[:checked]:border-indigo-600"
       >
         <input
           type="checkbox"
@@ -56,7 +56,7 @@ function updateServices(service: { id: string }) {
           class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
           @change="updateServices(service)"
         />
-        <span class="ml-3 text-gray-700 dark:text-gray-300">{{ service.text }}</span>
+        <span class="ml-4 text-gray-800 dark:text-gray-200">{{ service.text }}</span>
       </label>
     </div>
   </div>
