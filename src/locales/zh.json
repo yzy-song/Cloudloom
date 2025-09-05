@@ -404,15 +404,15 @@
       "q1_title": "问题 1.1: 您能认出以下哪些是汉服（中国汉族的传统服饰）吗？",
       "q1_prompt": "请点击您认为是汉服的图片。",
       "feedback_correct": "正确!",
-      "feedback_incorrect_prompt": "提示:",
-      "feedback_incorrect_text": "汉服是汉民族的传统服饰，而旗袍等属于近代服饰。",
+      "feedback_incorrect_prompt": "哎呀，这件服饰也很美，但它不是汉服哦，再试试看吧！",
+      "feedback_incorrect_text": "汉服是汉民族的传统服饰，拥有数千年的历史，与和服、韩服等其他东亚传统服饰有明显的区别。",
       "q2_title": "问题 1.2: 您目前主要居住在哪个城市？",
       "residenceOptions": {
         "dublin": "都柏林",
         "other_ireland": "爱尔兰其他城市",
         "other_country": "其他国家"
       },
-      "q3_title": "问题 1.3: 您是通过以下哪个渠道了解到本次问卷调查的？",
+      "q3_title": "问题 1.3: 您是通过以下哪个渠道了解到汉服相关内容的？",
       "channelOptions": {
         "wechat": "微信群 / 朋友圈",
         "red": "小红书",
@@ -455,6 +455,19 @@
         "photographer": "专业摄影师跟拍",
         "activities": "文化体验活动 (如茶艺、书法、古筝体验)",
         "pets": "允许携带宠物合影"
+      },
+      "q_party_interest": "问题 3.2: 我们计划未来举办汉服主题派对（如茶会、传统节日庆典），您的兴趣如何？",
+      "party_interest_options": {
+        "very_interested": "非常有兴趣",
+        "interested": "比较有兴趣",
+        "neutral": "一般",
+        "not_interested": "不太有兴趣"
+      },
+      "q_ownership": "问题 3.3: 关于汉服，您更倾向于？",
+      "ownership_options": {
+        "rent": "倾向于租赁，体验不同款式",
+        "buy": "倾向于购买，拥有一套自己的",
+        "unsure": "不确定"
       }
     },
     "feedback": {

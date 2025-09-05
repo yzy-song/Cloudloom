@@ -403,15 +403,15 @@
       "q1_title": "Question 1.1: Can you identify which of the following is Hanfu (the traditional dress of the Han Chinese people)?",
       "q1_prompt": "Please click on the images you believe are Hanfu.",
       "feedback_correct": "Correct!",
-      "feedback_incorrect_prompt": "Hint:",
-      "feedback_incorrect_text": "Hanfu is the traditional clothing of the Han ethnic group, while Qipao and others are modern garments.",
+      "feedback_incorrect_prompt": "Oops, that's a beautiful costume, but not quite Hanfu! Give it another try.",
+      "feedback_incorrect_text": "Hanfu is the traditional clothing of the Han Chinese people. It has a history of thousands of years and is distinct from other East Asian traditional attire like the Kimono or Hanbok.",
       "q2_title": "Question 1.2: In which city do you currently reside?",
       "residenceOptions": {
         "dublin": "Dublin",
         "other_ireland": "Other city in Ireland",
         "other_country": "I am a tourist / live in another country"
       },
-      "q3_title": "Question 1.3: Through which channel did you learn about this survey?",
+      "q3_title": "Question 1.3: Through which channel would you like to learn about Hanfu?",
       "channelOptions": {
         "wechat": "WeChat Groups / Moments",
         "red": "RED / Xiaohongshu",
@@ -454,6 +454,19 @@
         "photographer": "Professional Photographer",
         "activities": "Cultural activities (e.g., tea ceremony, calligraphy)",
         "pets": "Allowing pets in photos"
+      },
+      "q_party_interest": "Question 3.2: We are planning to host Hanfu-themed parties in the future (e.g., tea parties, traditional festival celebrations). How interested are you?",
+      "party_interest_options": {
+        "very_interested": "Very interested",
+        "interested": "Somewhat interested",
+        "neutral": "Neutral",
+        "not_interested": "Not very interested"
+      },
+      "q_ownership": "Question 3.3: Regarding Hanfu, what is your preference?",
+      "ownership_options": {
+        "rent": "Prefer to rent and experience different styles",
+        "buy": "Prefer to buy and own my own set",
+        "unsure": "Unsure"
       }
     },
     "feedback": {
@@ -529,7 +542,7 @@
       "success": {
         "title": "Submission Successful!",
         "message": "Thank you for your participation! Your feedback is invaluable to us.",
-        "restart": "Fill Out Again"
+        "restart": "Take the survey again"
       },
       "error": {
         "title": "Submission Failed!",
