@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed } from 'vue'
+import Contact from './surveySteps/Contact.vue' // 1. 引入新组件
 import Education from './surveySteps/Education.vue'
 import Feedback from './surveySteps/Feedback.vue'
 import Payment from './surveySteps/Payment.vue'
@@ -8,26 +8,16 @@ import Personal from './surveySteps/Personal.vue'
 import Preferences from './surveySteps/Preferences.vue'
 import Recognition from './surveySteps/Recognition.vue'
 import Service from './surveySteps/Service.vue'
+import BaseLoading from '@/components/ui/BaseLoading.vue'
 import { useApi } from '@/composables/useApi'
 
-const router = useRouter()
-const api = useApi()
-const isSubmitting = ref(false)
-const submissionError = ref<string | null>(null) // Add explicit type annotation
-
+const surveyApi = useApi()
 const currentStep = ref(0)
-const steps = [
-  { id: 'recognition', title: '市场筛选与认知', component: Recognition },
-  { id: 'education', title: '文化兴趣与动机', component: Education },
-  { id: 'service', title: '产品与服务偏好', component: Service },
-  { id: 'preferences', title: '风格与时长偏好', component: Preferences },
-  { id: 'payment', title: '价格与价值感知', component: Payment },
-  { id: 'personal', title: '用户画像与营销', component: Personal },
-  { id: 'feedback', title: '您的宝贵意见', component: Feedback },
-]
+const isLoading = ref(false)
+const submissionSuccess = ref(false)
+const submissionError = ref(null)
 
-// surveyData 保持不变
-const surveyData = reactive({
+const initialSurveyData = {
   recognizedItems: [],
   residence: '',
   channel: '',
@@ -47,91 +37,109 @@ const surveyData = reactive({
   },
   sharingLikelihood: null,
   feedback: '',
-})
+  // 新增联系信息字段
+  name: '',
+  email: '',
+  phone: '',
+}
+
+// 2. 在数据结构中添加 contact 字段
+const surveyData = ref({ ...initialSurveyData })
+
+// 3. 将新组件添加到步骤列表中
+const steps = [
+  { title: '市场筛选与认知', component: Recognition },
+  { title: '文化兴趣与动机', component: Education },
+  { title: '产品与服务偏好 (1/2)', component: Service },
+  { title: '产品与服务偏好 (2/2)', component: Preferences },
+  { title: '价格与价值感知', component: Payment },
+  { title: '关于您', component: Personal },
+  { title: '留下联系方式 (选填)', component: Contact }, // 新增的步骤
+  { title: '您的宝贵意见', component: Feedback },
+]
 
 const totalSteps = steps.length
+const progress = computed(() => ((currentStep.value + 1) / totalSteps) * 100)
 
-const progress = computed(() => {
-  return ((currentStep.value + 1) / totalSteps) * 100
-})
-
-function nextStep() {
+const nextStep = () => {
   if (currentStep.value < totalSteps - 1) currentStep.value++
 }
 
-function prevStep() {
+const prevStep = () => {
   if (currentStep.value > 0) currentStep.value--
 }
 
 async function submitSurvey() {
-  isSubmitting.value = true
+  isLoading.value = true
   submissionError.value = null
   try {
-    const response = await api.post('/survey/responses', { answers: surveyData })
-    if (response) router.push({ name: 'home', query: { survey_completed: 'true' } })
+    const response = await surveyApi.post('/survey/responses', surveyData.value)
+    if (response) submissionSuccess.value = true
+    else throw new Error('Submission failed with no specific error code.')
   } catch (error) {
-    console.error('Failed to submit survey:', error)
-    submissionError.value = '提交失败，请稍后重试。'
+    submissionError.value =
+      (error as any).response?.data?.message ||
+      (error as any).message ||
+      'An unknown error occurred.'
+    console.error('Survey submission error:', error)
   } finally {
-    isSubmitting.value = false
+    isLoading.value = false
   }
+}
+
+function restartSurvey() {
+  submissionSuccess.value = false
+  submissionError.value = null
+  currentStep.value = 0
+  surveyData.value = { ...initialSurveyData }
 }
 </script>
 
 <template>
-  <div class="bg-gray-100 dark:bg-gray-900 min-h-screen">
-    <div class="container mx-auto px-4 py-8 md:py-12">
+  <div class="bg-gray-50 dark:bg-gray-900 min-h-screen py-8 md:py-12">
+    <div class="container mx-auto px-4">
       <div
-        class="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden"
+        v-if="!submissionSuccess"
+        class="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
       >
-        <div class="px-4 py-5 sm:px-6">
-          <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-900 dark:text-white">
+        <!-- Progress Bar -->
+        <div class="bg-gray-200 dark:bg-gray-700 h-2.5">
+          <div class="bg-indigo-600 h-2.5" :style="{ width: `${progress}%` }" />
+        </div>
+
+        <div class="p-4 md:p-6 border-b border-gray-200 dark:border-gray-700">
+          <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-gray-200">
             汉服体验馆市场调查问卷
           </h1>
-          <p class="mt-2 text-center text-sm text-gray-500 dark:text-gray-400">
-            您的意见对我们至关重要！
+          <p class="text-center text-sm text-gray-500 mt-2">
+            步骤 {{ currentStep + 1 }} / {{ totalSteps }}: {{ steps[currentStep].title }}
           </p>
         </div>
 
-        <!-- Progress Bar -->
-        <div class="px-6 py-4">
-          <div class="flex justify-between mb-1">
-            <span class="text-base font-medium text-indigo-700 dark:text-white">{{
-              steps[currentStep].title
-            }}</span>
-            <span class="text-sm font-medium text-indigo-700 dark:text-white"
-              >{{ currentStep + 1 }} / {{ totalSteps }}</span
-            >
-          </div>
-          <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-            <div class="bg-indigo-600 h-2.5 rounded-full" :style="{ width: `${progress}%` }"></div>
-          </div>
-        </div>
-
-        <!-- Dynamic Component for current step -->
+        <!-- Dynamic Component for survey steps -->
         <div class="p-4 md:p-6 min-h-[400px]">
           <keep-alive>
             <component :is="steps[currentStep].component" v-model:surveyData="surveyData" />
           </keep-alive>
         </div>
 
-        <!-- Navigation Buttons -->
-        <div
-          class="bg-gray-50 dark:bg-gray-700 px-4 py-4 sm:px-6 flex justify-between items-center"
-        >
+        <!-- Navigation -->
+        <div class="bg-gray-50 dark:bg-gray-800/50 px-4 py-3 sm:px-6 flex justify-between">
           <button
             v-if="currentStep > 0"
-            class="px-6 py-2 border border-gray-300 dark:border-gray-500 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+            :disabled="isLoading"
+            class="inline-flex justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50"
             @click="prevStep"
           >
             上一步
           </button>
-          <div v-else></div>
-          <!-- Placeholder to keep Next button on the right -->
+          <div v-else />
+          <!-- Spacer -->
 
           <button
             v-if="currentStep < totalSteps - 1"
-            class="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+            :disabled="isLoading"
+            class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
             @click="nextStep"
           >
             下一步
@@ -139,16 +147,41 @@ async function submitSurvey() {
 
           <button
             v-if="currentStep === totalSteps - 1"
-            class="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
-            :disabled="isSubmitting"
+            :disabled="isLoading"
+            class="inline-flex items-center justify-center rounded-md border border-transparent bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50"
             @click="submitSurvey"
           >
-            {{ isSubmitting ? '提交中...' : '完成并提交' }}
+            <BaseLoading v-if="isLoading" class="w-5 h-5 mr-2" />
+            {{ isLoading ? '提交中...' : '完成并提交' }}
           </button>
         </div>
-        <div v-if="submissionError" class="p-4 text-center text-red-500">
-          {{ submissionError }}
-        </div>
+      </div>
+
+      <!-- Success Message -->
+      <div
+        v-if="submissionSuccess"
+        class="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 md:p-12 text-center"
+      >
+        <h2 class="text-3xl font-bold text-green-600 mb-4">提交成功！</h2>
+        <p class="text-gray-600 dark:text-gray-300 mb-8">
+          非常感谢您的参与！您的意见对我们至关重要。
+        </p>
+        <button
+          class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          @click="restartSurvey"
+        >
+          重新填写问卷
+        </button>
+      </div>
+
+      <!-- Error Message -->
+      <div
+        v-if="submissionError"
+        class="max-w-3xl mx-auto bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mt-4"
+        role="alert"
+      >
+        <strong class="font-bold">提交失败!</strong>
+        <span class="block sm:inline">{{ submissionError }}</span>
       </div>
     </div>
   </div>
