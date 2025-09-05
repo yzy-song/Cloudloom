@@ -55,7 +55,7 @@ const localSurveyData = computed({
           :value="style"
           class="h-5 w-5 text-indigo-600 border-gray-300 focus:ring-indigo-500"
         />
-        <span class="ml-4 text-gray-800 dark:text-gray-200">{{ style }}</span>
+        <span class="ml-4 text-gray-700 dark:text-gray-300">{{ style }}</span>
       </label>
     </div>
 
@@ -74,7 +74,7 @@ const localSurveyData = computed({
           :value="duration"
           class="h-5 w-5 text-indigo-600 border-gray-300 focus:ring-indigo-500"
         />
-        <span class="ml-4 text-gray-800 dark:text-gray-200">{{ duration }}</span>
+        <span class="ml-4 text-gray-700 dark:text-gray-300">{{ duration }}</span>
       </label>
     </div>
   </div>
