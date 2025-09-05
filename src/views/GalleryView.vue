@@ -125,32 +125,9 @@
     <!-- Product Grid -->
     <div
       class="max-w-screen-xl mx-auto p-4 md:p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+      v-if="!loading && !error"
     >
-      <router-link
-        v-for="product in paginatedProducts"
-        :key="product.id"
-        :to="`/product/${product.id}`"
-        class="product-card bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl group"
-      >
-        <div class="relative pb-[125%] overflow-hidden">
-          <img
-            :src="product.images[0]"
-            :alt="product.title"
-            class="absolute inset-0 w-full h-full object-cover"
-          />
-        </div>
-        <div class="p-5 text-center">
-          <h3
-            class="font-serif text-lg font-semibold text-gray-900 mb-1 group-hover:text-[#C0392B] transition-colors"
-          >
-            {{ product.title }}
-          </h3>
-          <p class="text-sm text-gray-500 mb-2">{{ product.dynasty }}</p>
-          <p class="text-lg font-bold text-[#C0392B]">
-            {{ t('gallery.price', { price: product.price }) }}
-          </p>
-        </div>
-      </router-link>
+      <ProductCard v-for="product in filteredProducts" :key="product.id" :product="product" />
     </div>
 
     <!-- Load More Button -->
@@ -172,6 +149,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import type { Product } from '@/types'
+import ProductCard from '@/components/ui/card/ProductCard.vue'
 import { useApi } from '@/composables/useApi'
 import { useScroll, useScrollDirection } from '@/composables/useScroll'
 import { mockProducts } from '@/mocks/data/generators'
