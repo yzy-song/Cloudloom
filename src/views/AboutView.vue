@@ -9,22 +9,20 @@
         class="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center"
       >
         <div class="text-center lg:text-left">
-          <p class="text-lg font-semibold text-[#C0392B] mb-2">Our Vision</p>
+          <p class="text-lg font-semibold text-[#C0392B] mb-2">{{ $t('about.vision.subtitle') }}</p>
           <h1
             class="font-serif text-5xl md:text-6xl font-bold tracking-wider text-gray-900 leading-tight"
           >
-            A Bridge Between Cultures, Woven in Silk.
+            {{ $t('about.vision.title') }}
           </h1>
           <p class="mt-6 text-lg text-gray-600">
-            We are more than just a Hanfu store. We are cultural ambassadors, dedicated to bringing
-            the timeless elegance of ancient Chinese attire to the heart of Dublin. Our mission is
-            to create an immersive space where East meets West, and history comes to life.
+            {{ $t('about.vision.desc') }}
           </p>
         </div>
         <div class="w-full h-80 md:h-[500px] rounded-lg overflow-hidden shadow-xl">
           <img
             src="/images/about-me/girl.jpg"
-            alt="A quiet tea ceremony setting"
+            :alt="$t('about.vision.imageAlt')"
             class="w-full h-full object-cover"
           />
         </div>
@@ -39,24 +37,18 @@
         >
           <img
             src="/images/about-me/founder.jpeg"
-            alt="Founder's Portrait"
+            :alt="$t('about.founder.imageAlt')"
             class="w-full h-full object-cover"
           />
         </div>
         <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-6">
-          A Note from Our Founder
+          {{ $t('about.founder.title') }}
         </h2>
         <div class="prose prose-lg max-w-none text-gray-600">
-          <p>
-            "Living in Dublin for over a decade, I've always been captivated by the rich tapestry of
-            Irish culture. At the same time, I felt a deep longing to share the stories woven into
-            the silks of my own heritage. Hanfu is not just clothing; it’s a tangible piece of
-            history, a poem you can wear. I started this journey to create a welcoming space for
-            Dubliners and visitors alike to not just see, but truly experience the profound beauty
-            of Chinese culture. This is my invitation to you – to step into another world, right
-            here in Dublin."
+          <p>"{{ $t('about.founder.quote') }}"</p>
+          <p class="font-serif font-semibold text-gray-800 mt-4">
+            {{ $t('about.founder.signature') }}
           </p>
-          <p class="font-serif font-semibold text-gray-800 mt-4">- Mr. Zhang, Founder</p>
         </div>
       </div>
     </section>
@@ -66,10 +58,10 @@
       <div class="max-w-screen-xl mx-auto">
         <div class="text-center mb-16">
           <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
-            Our Philosophy
+            {{ $t('about.philosophy.title') }}
           </h2>
           <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            Three principles guide everything we do.
+            {{ $t('about.philosophy.desc') }}
           </p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -89,7 +81,7 @@
       <div class="max-w-screen-xl mx-auto">
         <div class="text-center mb-16">
           <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
-            Meet the Curators
+            {{ $t('about.team.title') }}
           </h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
@@ -115,18 +107,17 @@
     <section class="py-20 md:py-28 px-4">
       <div class="max-w-3xl mx-auto text-center bg-white p-12 rounded-lg shadow-xl">
         <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-6">
-          Begin Your Journey
+          {{ $t('about.join.title') }}
         </h2>
         <p class="text-lg text-gray-600 mb-10">
-          Follow our story on social media or book an appointment to visit our showroom in Dublin.
-          We can't wait to welcome you.
+          {{ $t('about.join.desc') }}
         </p>
         <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
           <button class="btn-primary px-8 py-4 rounded-full w-full sm:w-auto">
-            Book an Appointment
+            {{ $t('about.join.bookBtn') }}
           </button>
           <button class="btn-outline px-8 py-4 rounded-full w-full sm:w-auto">
-            Follow on Instagram
+            {{ $t('about.join.followBtn') }}
           </button>
         </div>
       </div>
@@ -135,43 +126,44 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { BookOpenIcon, SparklesIcon, HeartIcon } from '@heroicons/vue/24/outline'
+import { useI18n } from 'vue-i18n'
 
-const coreValues = [
+const { t } = useI18n()
+
+const coreValues = computed(() => [
   {
     icon: BookOpenIcon,
-    title: 'Authenticity',
-    description:
-      'We honour history. Each garment is meticulously researched to ensure its form and patterns are true to its dynasty.',
+    title: t('about.philosophy.values.authenticity.title'),
+    description: t('about.philosophy.values.authenticity.desc'),
   },
   {
     icon: HeartIcon,
-    title: 'Quality',
-    description:
-      'We believe in tangible beauty. We use only the finest silks, cottons, and linens to recreate the textures of the past.',
+    title: t('about.philosophy.values.quality.title'),
+    description: t('about.philosophy.values.quality.desc'),
   },
   {
     icon: SparklesIcon,
-    title: 'Experience',
-    description:
-      'We offer more than just clothing. We provide a cultural deep-dive, from themed parties to educational workshops.',
+    title: t('about.philosophy.values.experience.title'),
+    description: t('about.philosophy.values.experience.desc'),
   },
-]
+])
 
-const team = [
+const team = computed(() => [
   {
-    name: 'Mr. Zhang',
-    role: 'Founder & Cultural Director',
-    bio: 'A historian at heart with a decade of experience in historical garment reproduction. His expertise ensures every piece tells an accurate and beautiful story.',
+    name: t('about.team.members.zhang.name'),
+    role: t('about.team.members.zhang.role'),
+    bio: t('about.team.members.zhang.bio'),
     image:
       'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=1170&auto=format&fit=crop',
   },
   {
-    name: 'Aoife O’Sullivan',
-    role: 'Operations & Events Manager',
-    bio: 'A Dublin native with a passion for cross-cultural events. Aoife bridges the gap, ensuring our experiences are both authentic and perfectly tailored for a local audience.',
+    name: t('about.team.members.osullivan.name'),
+    role: t('about.team.members.osullivan.role'),
+    bio: t('about.team.members.osullivan.bio'),
     image:
       'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1170&auto=format&fit=crop',
   },
-]
+])
 </script>

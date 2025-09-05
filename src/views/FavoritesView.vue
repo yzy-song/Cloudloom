@@ -7,7 +7,7 @@
 <template>
   <div class="bg-white min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 class="text-3xl font-display text-center mb-8">我的收藏</h1>
+      <h1 class="text-3xl font-display text-center mb-8">{{ t('favorites.title') }}</h1>
 
       <div v-if="favorites.length === 0" class="text-center py-12">
         <svg
@@ -24,9 +24,11 @@
             d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
           />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-gray-900">暂无收藏</h3>
-        <p class="mt-2 text-gray-500">您还没有收藏任何汉服</p>
-        <router-link to="/gallery" class="mt-4 inline-block btn-outline"> 去逛逛 </router-link>
+        <h3 class="mt-4 text-lg font-medium text-gray-900">{{ t('favorites.emptyTitle') }}</h3>
+        <p class="mt-2 text-gray-500">{{ t('favorites.emptyDesc') }}</p>
+        <router-link to="/gallery" class="mt-4 inline-block btn-outline">
+          {{ t('favorites.browse') }}
+        </router-link>
       </div>
 
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -38,10 +40,13 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { Product } from '@/types/index'
 import ProductCard from '@/components/ui/card/ProductCard.vue'
 import { useFavoriteStore } from '@/stores/favorite.store'
 import { useProductStore } from '@/stores/product.store'
+
+const { t } = useI18n()
 const favoritesStore = useFavoriteStore()
 const productsStore = useProductStore()
 

@@ -69,9 +69,7 @@
           <button
             @click="showMobileSheet = true"
             class="w-full max-w-sm px-4 py-3 rounded-full bg-gray-800 text-white font-semibold hover:bg-gray-900 transition-colors duration-300 shadow-lg"
-          >
-            {{ t('gallery.filterAndSort') }}
-          </button>
+          ></button>
         </div>
       </div>
     </div>

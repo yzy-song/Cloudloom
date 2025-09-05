@@ -10,7 +10,7 @@
       <div class="absolute inset-0 bg-black z-0">
         <img
           src="https://images.unsplash.com/photo-1542042161-d195a8b41432?q=80&w=1932&auto-format=fit-crop"
-          alt="古风派对背景"
+          :alt="t('parties.heroAlt')"
           class="w-full h-full object-cover opacity-50"
         />
       </div>
@@ -19,13 +19,13 @@
           class="font-serif text-5xl md:text-7xl font-bold tracking-wider"
           style="text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6)"
         >
-          定制您的汉服派对
+          {{ t('parties.heroTitle') }}
         </h1>
         <p
           class="mt-4 text-lg md:text-xl max-w-2xl mx-auto"
           style="text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6)"
         >
-          无论是生日庆典、团队建设还是朋友雅集，我们都为您打造独一无二的沉浸式文化体验。
+          {{ t('parties.heroDesc') }}
         </p>
       </div>
     </section>
@@ -35,10 +35,10 @@
       <div class="max-w-screen-xl mx-auto">
         <div class="text-center mb-16">
           <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
-            为何选择我们？
+            {{ t('parties.whyTitle') }}
           </h2>
           <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            我们提供的不仅是服装，更是一场穿越时空的文化盛宴。
+            {{ t('parties.whyDesc') }}
           </p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -46,8 +46,8 @@
             <div class="flex justify-center items-center mb-5">
               <component :is="feature.icon" class="w-12 h-12 text-[#C0392B]" />
             </div>
-            <h3 class="font-serif text-2xl font-semibold mb-3">{{ feature.title }}</h3>
-            <p class="text-gray-500">{{ feature.description }}</p>
+            <h3 class="font-serif text-2xl font-semibold mb-3">{{ t(feature.title) }}</h3>
+            <p class="text-gray-500">{{ t(feature.description) }}</p>
           </div>
         </div>
       </div>
@@ -58,10 +58,10 @@
       <div class="max-w-screen-xl mx-auto">
         <div class="text-center mb-16">
           <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
-            精选派对主题
+            {{ t('parties.themesTitle') }}
           </h2>
           <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            我们精心设计了多种主题，满足您不同的社交与活动需求。
+            {{ t('parties.themesDesc') }}
           </p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -73,16 +73,16 @@
             <div class="relative h-64 overflow-hidden">
               <img
                 :src="theme.image"
-                :alt="theme.title"
+                :alt="t(theme.title)"
                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
               <h3 class="absolute bottom-4 left-4 font-serif text-3xl font-bold text-white">
-                {{ theme.title }}
+                {{ t(theme.title) }}
               </h3>
             </div>
             <div class="p-6 bg-white">
-              <p class="text-gray-600 mb-4 h-24">{{ theme.description }}</p>
+              <p class="text-gray-600 mb-4 h-24">{{ t(theme.description) }}</p>
               <ul class="space-y-2 text-sm text-gray-500">
                 <li v-for="item in theme.features" :key="item" class="flex items-center">
                   <svg
@@ -96,7 +96,7 @@
                       clip-rule="evenodd"
                     ></path>
                   </svg>
-                  <span>{{ item }}</span>
+                  <span>{{ t(item) }}</span>
                 </li>
               </ul>
             </div>
@@ -109,8 +109,10 @@
     <section class="py-20 md:py-28 px-4">
       <div class="max-w-screen-xl mx-auto">
         <div class="text-center mb-16">
-          <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">预定流程</h2>
-          <p class="text-lg text-gray-600 max-w-3xl mx-auto">简单四步，轻松开启您的专属派对。</p>
+          <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
+            {{ t('parties.bookingTitle') }}
+          </h2>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">{{ t('parties.bookingDesc') }}</p>
         </div>
         <div class="relative">
           <div
@@ -131,8 +133,8 @@
               >
                 {{ index + 1 }}
               </div>
-              <h3 class="font-serif text-2xl font-semibold mb-3">{{ step.title }}</h3>
-              <p class="text-gray-500">{{ step.description }}</p>
+              <h3 class="font-serif text-2xl font-semibold mb-3">{{ t(step.title) }}</h3>
+              <p class="text-gray-500">{{ t(step.description) }}</p>
             </div>
           </div>
         </div>
@@ -143,15 +145,15 @@
     <section class="bg-white py-20 md:py-28 px-4">
       <div class="max-w-4xl mx-auto text-center">
         <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-6">
-          准备好开始了吗？
+          {{ t('parties.ctaTitle') }}
         </h2>
         <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-10">
-          立即联系我们的派对策划师，让我们一起将您的构想变为现实。无论是细节咨询还是初步报价，我们都乐意为您服务。
+          {{ t('parties.ctaDesc') }}
         </p>
         <button
           class="bg-[#C0392B] text-white font-semibold tracking-wider px-10 py-4 rounded-full text-lg hover:bg-[#a53125] transition-transform hover:scale-105 duration-300 shadow-lg"
         >
-          立即咨询
+          {{ t('parties.ctaBtn') }}
         </button>
       </div>
     </section>
@@ -160,68 +162,68 @@
 
 <script setup lang="ts">
 import { PaintBrushIcon, RectangleGroupIcon, CameraIcon } from '@heroicons/vue/24/outline'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const features = [
   {
     icon: RectangleGroupIcon,
-    title: '海量汉服选择',
-    description: '提供数百套各朝代、各风格的精美汉服，确保每位宾客都能找到心仪的款式。',
+    title: 'parties.feature1Title',
+    description: 'parties.feature1Desc',
   },
   {
     icon: PaintBrushIcon,
-    title: '专业妆造团队',
-    description: '我们合作的妆造师将为您和您的宾客打造最贴合历史与个人气质的妆容和发型。',
+    title: 'parties.feature2Title',
+    description: 'parties.feature2Desc',
   },
   {
     icon: CameraIcon,
-    title: '一站式摄影跟拍',
-    description: '无需额外寻找摄影师，我们提供专业的古风摄影服务，为您记录下每一个精彩瞬间。',
+    title: 'parties.feature3Title',
+    description: 'parties.feature3Desc',
   },
 ]
 
 const themes = [
   {
-    title: '曲水流觞·文人雅集',
+    title: 'parties.theme1Title',
     image:
       'https://images.unsplash.com/photo-1588401389246-5604b1273783?q=80&w=1740&auto-format=fit-crop',
-    description:
-      '复刻古代文人的诗酒盛会。宾客们身着晋制汉服，席地而坐，体验投壶、抚琴、品茗等风雅活动。',
-    features: ['适合团队建设、文化沙龙', '包含茶艺、古琴表演', '提供全套仿古道具'],
+    description: 'parties.theme1Desc',
+    features: ['parties.theme1Feature1', 'parties.theme1Feature2', 'parties.theme1Feature3'],
   },
   {
-    title: '上元灯会·佳节团圆',
+    title: 'parties.theme2Title',
     image:
       'https://images.unsplash.com/photo-1634433433831-29a3b198bad4?q=80&w=1804&auto-format=fit-crop',
-    description:
-      '重现元宵佳节的繁华景象。现场布置华丽灯笼，宾客可体验猜灯谜、制作花灯、品尝元宵等传统习俗。',
-    features: ['适合家庭聚会、生日庆典', '包含灯谜互动环节', '场地将进行灯笼主题布置'],
+    description: 'parties.theme2Desc',
+    features: ['parties.theme2Feature1', 'parties.theme2Feature2', 'parties.theme2Feature3'],
   },
   {
-    title: '大唐风华·及笄之礼',
+    title: 'parties.theme3Title',
     image:
       'https://images.unsplash.com/photo-1594580254394-9e36a0515124?q=80&w=1740&auto-format=fit-crop',
-    description:
-      '为女孩举办一场庄重而华美的成人礼。身着雍容的唐制汉服，在亲友的见证下，完成这一生中重要的仪式。',
-    features: ['适合成人礼、毕业纪念', '包含专业赞者（司仪）', '提供定制化仪式流程'],
+    description: 'parties.theme3Desc',
+    features: ['parties.theme3Feature1', 'parties.theme3Feature2', 'parties.theme3Feature3'],
   },
 ]
 
 const bookingSteps = [
   {
-    title: '提交需求',
-    description: '通过线上或电话告诉我们您的派对构想、人数和预算。',
+    title: 'parties.step1Title',
+    description: 'parties.step1Desc',
   },
   {
-    title: '方案定制',
-    description: '我们的策划师会为您量身打造一份专属派对方案。',
+    title: 'parties.step2Title',
+    description: 'parties.step2Desc',
   },
   {
-    title: '确认预定',
-    description: '确认方案细节并支付定金，我们将为您锁定档期。',
+    title: 'parties.step3Title',
+    description: 'parties.step3Desc',
   },
   {
-    title: '尽享派对',
-    description: '在约定之日，轻松前来，享受我们为您准备的一切。',
+    title: 'parties.step4Title',
+    description: 'parties.step4Desc',
   },
 ]
 </script>

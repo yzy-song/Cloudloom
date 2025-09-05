@@ -3,9 +3,11 @@
     <!-- 摄影作品墙标题和描述 -->
     <section class="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 text-center">
       <div class="max-w-screen-xl mx-auto">
-        <h1 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">摄影作品墙</h1>
+        <h1 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
+          {{ t('photowall.title') }}
+        </h1>
         <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-          专业摄影师的镜头下，汉服之美被永久定格。每一张照片，都是一个关于风雅与浪漫的故事。
+          {{ t('photowall.description') }}
         </p>
       </div>
     </section>
@@ -85,6 +87,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface Photo {
   src: string
@@ -112,7 +117,7 @@ const generatePlaceholder = (baseWidth: number, baseHeight: number): Photo => {
 
   return {
     src: `https://placehold.co/${width}x${height}/${randomPalette.bg}/${randomPalette.fg}?text=Hanfu`,
-    alt: '精彩瞬间',
+    alt: t('photowall.moments'),
     width: width,
     height: height,
   }
@@ -123,7 +128,7 @@ const photos: Photo[] = Array.from({ length: 30 }, (_, i) => {
   const baseWidth = Math.random() > 0.5 ? 1080 : 800
   const baseHeight = Math.random() > 0.5 ? 1200 : 1350
   const photo = generatePlaceholder(baseWidth, baseHeight)
-  photo.alt = `汉服摄影作品 ${i + 1}`
+  photo.alt = `PHOTO ${i + 1}`
   return photo
 })
 

@@ -5,11 +5,21 @@
   "navbar": {
     "home": "Home",
     "gallery": "Gallery",
+    "photos": "Photo Wall",
     "knowledge": "Knowledge",
     "about": "About",
+    "aboutUs": "About Us",
     "collaboration": "Collaboration",
-    "bookNow": "Book Now",
-    "login": "Login"
+    "login": "Login",
+    "logout": "Logout",
+    "profile": "Profile",
+    "orders": "My Orders",
+    "favorites": "My Favorites",
+    "menu": "Menu",
+    "searchPlaceholder": "Search...",
+    "viewProfile": "View Profile",
+    "search":"Search",
+    "cart":"Cart"
   },
   "footer": {
     "brandDesc": "Promoting Hanfu culture in Ireland. Professional Hanfu experience, rental, and sales.",
@@ -17,7 +27,7 @@
     "contactTitle": "Contact Us",
     "address": "Cultural Quarter, Dublin City Centre",
     "subscribeTitle": "Subscribe",
-    "subscribeDesc": "Get the latest events and news",
+    "subscribeDesc": "Get the latest events and news.",
     "subscribeBtn": "Subscribe",
     "rights": "All rights reserved.",
     "privacy": "Privacy Policy",
@@ -26,82 +36,128 @@
   "home": {
     "bookNow": "Book Now",
     "bannerTitle": "Cloudloom Hanfu",
-    "bannerSlogan": "In the Emerald Isle, encounter a millennium of splendid attire. We offer Hanfu rental, sales, and cultural experiences, connecting the beauty of tradition and modernity.",
-    "feature1Title": "Authentic Hanfu",
-    "feature1Desc": "All costumes are high-quality, authentic Hanfu.",
-    "feature2Title": "Professional Photography",
-    "feature2Desc": "Every customer enjoys a complimentary professional photoshoot.",
-    "feature3Title": "Personalized Service",
-    "feature3Desc": "One-on-one dressing and styling guidance.",
-    "feature4Title": "Prime Location",
-    "feature4Desc": "Located in Dublin city centre, with convenient transport.",
-    "step1Title": "Choose Hanfu",
-    "step1Desc": "Browse our Hanfu collection and pick your favorite style.",
-    "step2Title": "Book an Experience",
-    "step2Desc": "Select a suitable date and time to book easily.",
-    "step3Title": "Dress Up & Photoshoot",
-    "step3Desc": "Change into Hanfu, enjoy the moment, and capture beautiful photos.",
-    "testimonial1": "A fantastic experience! The Hanfu is beautiful, and the staff are very friendly.",
-    "testimonial2": "It felt like traveling back in time. Highly recommended!",
-    "testimonial3": "The photos are beautiful, and the memories are unforgettable.",
-    "faq1Q": "How to book a Hanfu experience?",
-    "faq1A": "You can book online or contact us via email or phone.",
-    "faq2Q": "Is a photography service provided?",
-    "faq2A": "Yes, each experience includes a complimentary professional photoshoot.",
-    "faq3Q": "Can I cancel or reschedule?",
-    "faq3A": "Yes, please contact us at least 24 hours in advance."
+    "bannerSlogan": "On the Emerald Isle, encounter a millennium of elegance. We offer Hanfu rental, sales, and cultural experiences, connecting traditional and modern beauty.",
+    "slides": {
+      "tang": {
+        "title": "Dreaming of Tang",
+        "description": "Experience the splendor of a golden age with the grand and open fashion of the Tang Dynasty."
+      },
+      "accessories": {
+        "title": "Exquisite Accessories",
+        "description": "From hairpins to sachets, discover classical elegance in every detail."
+      },
+      "cultural": {
+        "title": "Cultural Gatherings",
+        "description": "Join our themed events for an immersive experience of traditional culture."
+      },
+      "kids": {
+        "title": "Little Hanfu",
+        "description": "Adorable Hanfu for children, passing on culture from a young age."
+      }
+    },
+    "servicesTitle": "Our Services",
+    "servicesDesc": "From Hanfu rentals to themed parties, we offer a comprehensive cultural experience.",
+    "feature1Title": "Hanfu Rental & Sales",
+    "feature1Desc": "A variety of styles for daily wear and special occasions.",
+    "feature2Title": "Themed Party Customization",
+    "feature2Desc": "Create exclusive Hanfu-themed experiences for private and corporate events.",
+    "feature3Title": "Cultural Accessories",
+    "feature3Desc": "Exquisite accessories and creative products to adorn your Hanfu life.",
+    "feature4Title": "Photography Services",
+    "feature4Desc": "Professional partner photographers to capture your beautiful moments.",
+    "galleryTitle": "Fleeting Grace",
+    "galleryDesc": "Every piece of Hanfu carries the warmth of history, every glance captures the spirit of the East.",
+    "exploreMore": "Explore More",
+    "stepsTitle": "The Journey",
+    "stepsDesc": "Embark on your journey through time in just three simple steps.",
+    "step1Title": "Select Online",
+    "step1Desc": "Browse our Hanfu collection and choose your favorite style and size.",
+    "step2Title": "Book a Time",
+    "step2Desc": "Select a convenient time for an in-store fitting or delivery.",
+    "step3Title": "Enjoy the Experience",
+    "step3Desc": "Visit our store or receive your package to begin your Hanfu journey.",
+    "testimonialsTitle": "Echoes of Elegance",
+    "testimonialsDesc": "Hear what our friends who have sought classical beauty with us have to say.",
+    "testimonials": {
+      "names": {
+        "chenxi": "Chenxi",
+        "ajie": "A-Jay",
+        "siyue": "Siyue",
+        "lin": "Mr. Lin"
+      }
+    },
+    "testimonial1": "The Hanfu styles here are authentic and the fabric is very comfortable. I felt like I had truly traveled back in time!",
+    "testimonial1Role": "Hanfu Enthusiast",
+    "testimonial2": "We chose a Hanfu theme for our company event, and Cloudloom's service was impeccable, from costumes to event planning.",
+    "testimonial2Role": "Corporate Client",
+    "testimonial3": "My first Hanfu photoshoot exceeded all expectations. The clothes were new and clean, and the accessories were complete.",
+    "testimonial3Role": "International Student",
+    "testimonial4": "As a history teacher, I'm glad to see a platform promoting traditional culture. The garments are historically accurate and highly recommended.",
+    "testimonial4Role": "Cultural Researcher",
+    "faqTitle": "Common Questions",
+    "faqDesc": "Answering your common questions about the Hanfu experience.",
+    "faq1Q": "Is a deposit required for Hanfu rental?",
+    "faq1A": "Yes, a deposit is required to ensure the integrity of the garments. It will be fully refunded upon the safe return of the Hanfu.",
+    "faq2Q": "Do you offer makeup and styling services?",
+    "faq2A": "We currently offer basic makeup advice and accessory pairing. For complex styling, we can recommend professional partner stylists.",
+    "faq3Q": "What if the Hanfu is damaged during the rental period?",
+    "faq3A": "Please contact us immediately upon discovering any damage. Depending on the extent, a repair or replacement fee may be deducted from the deposit. Please refer to our rental agreement for details."
   },
   "login": {
-    "title": "Login to your account",
-    "or": "or",
-    "registerNow": "Create a new account",
-    "loginNow": "Login to an existing account",
+    "title": "Welcome Back",
+    "subtitle": "Sign in to continue your Cloudloom journey",
+    "emailLabel": "Email Address",
+    "passwordLabel": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "loginButton": "Sign In",
+    "noAccount": "Don't have an account?",
+    "registerNow": "Sign up now",
     "username": "Username",
     "usernamePlaceholder": "Enter your username",
     "emailOrUsername": "Email or Username",
     "emailOrUsernamePlaceholder": "Enter your email or username",
-    "email": "Email Address",
+    "email": "Email",
     "emailPlaceholder": "Enter your email address",
     "password": "Password",
     "passwordPlaceholder": "Enter your password",
     "setPasswordPlaceholder": "Set your password",
     "confirmPassword": "Confirm Password",
     "confirmPasswordPlaceholder": "Enter your password again",
-    "rememberMe": "Remember me",
-    "forgotPassword": "Forgot password?",
     "loginBtn": "Login",
-    "registerBtn": "Register",
-    "orOther": "Or login with",
+    "registerBtn": "Sign Up",
+    "orOther": "Or continue with",
     "google": "Google",
     "facebook": "Facebook",
     "loading": "Processing...",
     "errorRequired": "Please fill in all required fields.",
-    "errorPasswordMismatch": "The two passwords do not match.",
-    "errorOAuth": "OAuth login failed, please try again.",
-    "errorUsernameLength": "At least 3 characters required.",
+    "errorPasswordMismatch": "The passwords do not match.",
+    "errorOAuth": "OAuth failed. Please try again.",
+    "errorUsernameLength": "Username must be at least 3 characters.",
     "errorPasswordLength": "Password must be at least 6 characters.",
     "errorEmailFormat": "Invalid email format.",
-    "newToSite": "New to the site?",
+    "newToSite": "New to our site?",
     "alreadyMember": "Already a member?",
-    "loginWithGoogle": "Login with Google",
-    "registerWithGoogle": "Register with Google",
-    "loginWithFacebook": "Login with Facebook",
-    "registerWithFacebook": "Register with Facebook",
-    "loginWithEmail": "Login with Username/Email",
-    "registerWithEmail": "Register with Email",
+    "loginWithGoogle": "Sign in with Google",
+    "registerWithGoogle": "Sign up with Google",
+    "loginWithFacebook": "Sign in with Facebook",
+    "registerWithFacebook": "Sign up with Facebook",
+    "loginWithEmail": "Sign in with Username/Email",
+    "registerWithEmail": "Sign up with Email",
     "backToOptions": "Back to other login options"
   },
   "router": {
     "home": "Home",
     "gallery": "Gallery",
     "productDetail": "Product Detail",
-    "about": "About",
+    "about": "About Us",
     "collaboration": "Collaboration",
+    "photoWall": "Photo Wall",
     "booking": "Booking",
     "knowledge": "Knowledge",
     "login": "Login",
     "profile": "Profile",
-    "orders": "My Bookings",
+    "orders": "My Orders",
     "favorites": "My Favorites",
     "survey": "Market Survey",
     "test": "Test Page",
@@ -110,50 +166,52 @@
   },
   "survey": {
     "title": "Hanfu Experience Survey",
-    "description": "Interested in traditional costumes? Participate in our Dublin Hanfu-themed party survey to help us plan better events!",
+    "description": "Interested in ancient-style clothing? Participate in our Dublin Hanfu themed party survey to help us plan better events!",
     "buttons": {
       "next": "Next",
       "back": "Back",
       "submit": "Submit"
     },
     "recognition": {
-      "correct": "Congratulations, that's correct! This is Hanfu.",
+      "correct": "Congratulations, you're right! This is Hanfu.",
       "incorrect": "Not quite, this is {alt}. Hanfu is the correct answer.",
-      "thisIs": "this is"
+      "thisIs": "This is"
     },
     "submitted": "Thank you for your participation!",
     "step": "Step",
     "steps": {
-      "Education": "Knowledge Level",
+      "Education": "Understanding",
       "Preferences": "Preferences",
-      "Service": "Service Expectations",
-      "Payment": "Payment Habits",
-      "Recognition": "Recognize Hanfu",
+      "Service": "Expectations",
+      "Payment": "Budget",
+      "Recognition": "Recognition",
       "Personal": "Personal Info",
       "Feedback": "Feedback"
     }
   },
   "education": {
     "title": "Understanding Hanfu",
-    "description": "Hanfu is the traditional clothing of the Han ethnic group, with a history of thousands of years. It is not just clothing, but a cultural inheritance and a symbol of elegance.",
+    "description": "Hanfu is the traditional clothing of the Han Chinese people, with a history of thousands of years. It is not just clothing, but a cultural inheritance and a symbol of elegance.",
     "styles": {
       "elegant": "Elegant & Formal",
-      "elegant_desc": "Mostly used for formal occasions and ceremonies.",
+      "elegant_desc": "Often used for formal occasions and ceremonies.",
       "casual": "Daily & Casual",
-      "casual_desc": "Comfortable styles suitable for daily wear.",
+      "casual_desc": "Comfortable styles suitable for everyday wear.",
       "historical": "Historical Styles",
       "historical_desc": "Classic designs originating from ancient dynasties."
-    }
+    },
+    "prevImage": "Previous Image",
+    "nextImage": "Next Image"
   },
   "preferences": {
     "title": "Your Preferences",
-    "description": "Which Hanfu style and activities attract you the most?",
+    "description": "Which Hanfu styles and activities appeal to you the most?",
     "style_question": "Most interesting Hanfu style",
     "activity_question": "What activities would you like to have?",
     "styles": {
       "elegant": "Elegant & Formal",
       "casual": "Daily & Casual",
-      "heroic": "Heroic & Martial Arts"
+      "heroic": "Heroic & Wuxia"
     },
     "activities": {
       "photoshoot": "Hanfu Photoshoot",
@@ -174,18 +232,18 @@
       "performance": "Cultural Performance"
     },
     "duration": {
-      "quick": "2 hours (Flash)",
-      "full_day": "8 hours (Full Day)"
+      "quick": "2 hours (Flash mob)",
+      "full_day": "8 hours (Full day)"
     }
   },
   "payment": {
     "title": "Budget Range",
-    "description": "What is your expected per-person budget for the experience?",
+    "description": "What is your expected budget per person for the experience?",
     "question": "Please select your budget"
   },
   "recognition": {
     "title": "Hanfu Recognition Quiz",
-    "description": "Can you recognize which one is Hanfu? Click on the image you think is Hanfu.",
+    "description": "Can you identify which one is Hanfu? Click on the image you think is Hanfu.",
     "alts": {
       "kimono": "Japanese Kimono",
       "hanbok": "Korean Hanbok",
@@ -208,9 +266,94 @@
     "description": "Any other ideas or suggestions? Feel free to leave a message!",
     "placeholder": "Your suggestions..."
   },
+  "about": {
+    "vision": {
+      "subtitle": "Our Vision",
+      "title": "A Bridge Between Cultures, Woven in Silk.",
+      "desc": "We are more than just a Hanfu store. We are cultural ambassadors, dedicated to bringing the timeless elegance of ancient Chinese attire to the heart of Dublin. Our mission is to create an immersive space where East meets West, and history comes to life.",
+      "imageAlt": "A quiet tea ceremony setting"
+    },
+    "founder": {
+      "title": "A Note from Our Founder",
+      "imageAlt": "Founder's Portrait",
+      "quote": "Living in Dublin for over a decade, I've always been captivated by the rich tapestry of Irish culture. At the same time, I felt a deep longing to share the stories woven into the silks of my own heritage. Hanfu is not just clothing; it’s a tangible piece of history, a poem you can wear. I started this journey to create a welcoming space for Dubliners and visitors alike to not just see, but truly experience the profound beauty of Chinese culture. This is my invitation to you – to step into another world, right here in Dublin.",
+      "signature": "- Mr. Zhang, Founder"
+    },
+    "philosophy": {
+      "title": "Our Philosophy",
+      "desc": "Three principles guide everything we do.",
+      "values": {
+        "authenticity": {
+          "title": "Authenticity",
+          "desc": "We honour history. Each garment is meticulously researched to ensure its form and patterns are true to its dynasty."
+        },
+        "quality": {
+          "title": "Quality",
+          "desc": "We believe in tangible beauty. We use only the finest silks, cottons, and linens to recreate the textures of the past."
+        },
+        "experience": {
+          "title": "Experience",
+          "desc": "We offer more than just clothing. We provide a cultural deep-dive, from themed parties to educational workshops."
+        }
+      }
+    },
+    "team": {
+      "title": "Meet the Curators",
+      "members": {
+        "zhang": {
+          "name": "Mr. Zhang",
+          "role": "Founder & Cultural Director",
+          "bio": "A historian at heart with a decade of experience in historical garment reproduction. His expertise ensures every piece tells an accurate and beautiful story."
+        },
+        "osullivan": {
+          "name": "Aoife O’Sullivan",
+          "role": "Operations & Events Manager",
+          "bio": "A Dublin native with a passion for cross-cultural events. Aoife bridges the gap, ensuring our experiences are both authentic and perfectly tailored for a local audience."
+        }
+      }
+    },
+    "join": {
+      "title": "Begin Your Journey",
+      "desc": "Follow our story on social media or book an appointment to visit our showroom in Dublin. We can't wait to welcome you.",
+      "bookBtn": "Book an Appointment",
+      "followBtn": "Follow on Instagram"
+    }
+  },
+  "collaboration": {
+    "headerTitle": "Partner With Us",
+    "headerDesc": "Introduce an unforgettable touch of ancient culture to your Dublin-based business. We provide unique Hanfu-themed experiences that captivate audiences and create lasting memories. Let's collaborate.",
+    "trackRecordTitle": "Our Track Record",
+    "trackRecordDesc": "We've already created amazing experiences with fantastic local partners.",
+    "case1Partner": "Collaboration with \"Dublin Creatives\" Studio",
+    "case1Title": "\"Dynasty Portraits\" Photoshoot",
+    "case1Desc": "We provided a full range of Tang Dynasty costumes for their quarterly feature project. The series gained over 50k likes on Instagram and was featured in a local art blog.",
+    "case2Partner": "Themed Night at \"The Temple Bar\"",
+    "case2Title": "Hanfu Culture Night",
+    "case2Desc": "We co-hosted a cultural theme night, providing costumes and interactive activities. The event was sold out and increased the venue's social media engagement by 300% that week.",
+    "partnerModelsTitle": "Ways to Partner",
+    "partnerModelsDesc": "We offer two core partnership programs designed for mutual success.",
+    "photographerTitle": "For Creators & Photographers",
+    "photographerDesc": "Elevate your portfolio with the timeless beauty of Hanfu. We provide access to our extensive collection, helping you create stunning, culturally rich visuals that stand out.",
+    "photographerBenefit1": "Exclusive discounts on our entire Hanfu collection for your shoots.",
+    "photographerBenefit2": "First access to our newest and most elaborate outfits.",
+    "photographerBenefit3": "Co-promotion opportunities on our social media channels.",
+    "photographerBenefit4": "Priority consideration for our official commercial projects.",
+    "photographerBtn": "Become a Photo Partner",
+    "venueTitle": "For Pubs & Event Venues",
+    "venueDesc": "Host a unique \"Hanfu Night\" and offer your patrons an extraordinary experience. We provide a turnkey themed party package, driving new footfall and generating buzz for your venue.",
+    "venueBenefit1": "A complete, all-inclusive event package: costumes, host, and activities.",
+    "venueBenefit2": "Attract new customers and significantly boost your venue's profile.",
+    "venueBenefit3": "Cross-promotion on our platforms to a culturally-engaged audience.",
+    "venueBenefit4": "A generous revenue-sharing model.",
+    "venueBtn": "Host a Hanfu Night",
+    "ctaTitle": "Start Your Journey With Us",
+    "ctaDesc": "Ready to explore a partnership? Leave your email below, and our collaboration specialist will get in touch within 24 hours.",
+    "ctaPlaceholder": "Enter your email address",
+    "ctaSubmit": "Submit"
+  },
   "gallery": {
-    "bannerTitle": "Hanfu Treasure Gallery",
-    "bannerDesc": "Explore the art of clothing that spans thousands of years, each piece carrying the essence of Chinese civilization.",
+    "bannerTitle": "Hanfu Collection",
+    "bannerDesc": "Explore the art of clothing across millennia, each piece embodying the essence of Chinese civilization.",
     "filter": {
       "all": "All",
       "ming": "Ming",
@@ -231,5 +374,129 @@
     "addToCart": "Add to Cart",
     "loadMore": "Load More",
     "price": "Price"
+  },
+  "favorites": {
+    "title": "My Favorites",
+    "emptyTitle": "No Favorites Yet",
+    "emptyDesc": "You haven't added any items to your favorites.",
+    "browse": "Start Browsing"
+  },
+  "knowledge": {
+    "header": {
+      "subtitle": "A Journey Through Time",
+      "title": "The Story of Hanfu",
+      "desc": "Discover the rich history and elegant forms of traditional Chinese clothing. Hanfu is not just a garment; it's a legacy of artistry and philosophy worn through dynasties."
+    },
+    "timeline": {
+      "title": "An Evolving Silhouette",
+      "desc": "Journey through the major dynasties and witness how Hanfu transformed over centuries. Click on a dynasty to learn more.",
+      "dynasty": "{dynasty} Dynasty",
+      "han": {
+        "name": "Han Dynasty",
+        "period": "206 BC - 220 AD",
+        "desc": "The Han Dynasty established the foundational aesthetics of Hanfu. Garments were often voluminous and flowing, emphasizing grace and modesty. The 'Shenyi' (deep robe) was a signature one-piece garment for both men and women.",
+        "feature1": "Long, wrap-around robes (Shenyi)",
+        "feature2": "Wide sleeves and elegant silhouettes.",
+        "feature3": "Layering was common for formal wear."
+      },
+      "tang": {
+        "name": "Tang Dynasty",
+        "period": "618 - 907 AD",
+        "desc": "A golden age of culture, the Tang Dynasty saw a more open and diverse style. Influenced by the Silk Road, fabrics were vibrant and designs were bolder. Women's fashion, in particular, became more relaxed and expressive.",
+        "feature1": "High-waisted skirts (Qixiong Ruqun)",
+        "feature2": "Low-cut necklines and short jackets for women.",
+        "feature3": "Bold colors and luxurious fabrics."
+      },
+      "song": {
+        "name": "Song Dynasty",
+        "period": "960 - 1279 AD",
+        "desc": "The Song Dynasty favored a more reserved and refined aesthetic. The clothing became more slender and simple, reflecting the era's neo-Confucian philosophies. The Beizi, a straight-cut overcoat, was popular.",
+        "feature1": "Subtle, elegant, and slender silhouettes.",
+        "feature2": "Popularity of the 'Beizi' (parallel-collar overcoat).",
+        "feature3": "Use of delicate and natural colors."
+      },
+      "ming": {
+        "name": "Ming Dynasty",
+        "period": "1368 - 1644 AD",
+        "desc": "The Ming Dynasty revived and developed upon earlier styles, especially from the Tang. It featured a wide variety of clothing, from majestic court robes to practical daily wear, known for its intricate patterns and buttons.",
+        "feature1": "Pleated skirts and jackets with buttons.",
+        "feature2": "Diverse styles for different social classes.",
+        "feature3": "Rich embroidery and detailed patterns."
+      }
+    },
+    "styles": {
+      "title": "Iconic Styles of Hanfu",
+      "desc": "While there are hundreds of variations, here are a few fundamental styles that form the basis of Hanfu.",
+      "ruqun": {
+        "name": "Ruqun (襦裙)",
+        "desc": "A two-piece outfit consisting of a top (Ru) and a skirt (Qun). The height of the waistband varied by dynasty, with the high-waisted Tang style being particularly famous."
+      },
+      "shenyi": {
+        "name": "Shenyi (深衣)",
+        "desc": "A long, one-piece robe that wraps around the body, symbolizing the harmony of heaven and earth. It was a formal garment, common in the Han Dynasty."
+      },
+      "beizi": {
+        "name": "Beizi (褙子)",
+        "desc": "A versatile overcoat with a straight, parallel collar, worn by both men and women. It was particularly popular during the Song and Ming Dynasties for its simple elegance."
+      }
+    },
+    "faq": {
+      "title": "Common Questions",
+      "q1": "What is the main difference between Hanfu and a Kimono?",
+      "a1": "While they share a common ancestor, they are very different. Hanfu is a broad category of historical Chinese clothing with many styles, typically featuring a cross-collar closed to the right and sashes. A Kimono is the traditional Japanese garment, which has a much more standardized T-shape, a wider obi (sash), and distinct sleeve styles.",
+      "q2": "Is it okay for non-Chinese people to wear Hanfu?",
+      "a2": "Absolutely! Wearing Hanfu is a form of cultural appreciation. We welcome everyone to experience its beauty, as long as it is worn with respect for its history and cultural significance. It's a wonderful way to engage with Chinese culture.",
+      "q3": "What does 'Hanfu' actually mean?",
+      "a3": "The term translates to 'clothing of the Han people.' It refers to the historical clothing system of the Han ethnic majority in China, spanning thousands of years before the Qing Dynasty."
+    },
+    "keyFeature": "Key Feature:"
+  },
+  "parties": {
+    "heroAlt": "Ancient style party background",
+    "heroTitle": "Customize Your Hanfu Party",
+    "heroDesc": "Whether it's a birthday celebration, team building, or a gathering of friends, we create a unique and immersive cultural experience for you.",
+    "whyTitle": "Why Choose Us?",
+    "whyDesc": "We offer more than just costumes; we provide a cultural feast that travels through time.",
+    "feature1Title": "Vast Hanfu Selection",
+    "feature1Desc": "Hundreds of exquisite Hanfu from various dynasties and styles to ensure every guest finds their perfect outfit.",
+    "feature2Title": "Professional Styling Team",
+    "feature2Desc": "Our partner stylists will create historically fitting and personally tailored makeup and hairstyles for you and your guests.",
+    "feature3Title": "One-Stop Photography",
+    "feature3Desc": "No need to find a photographer. We offer professional photography services to capture every wonderful moment.",
+    "themesTitle": "Featured Party Themes",
+    "themesDesc": "We have meticulously designed a variety of themes to meet your different social and event needs.",
+    "theme1Title": "Poets' Gathering by the Winding Stream",
+    "theme1Desc": "Recreate the elegant gatherings of ancient scholars. Guests wear Jin-style Hanfu, sit on the floor, and experience activities like pitch-pot, zither playing, and tea tasting.",
+    "theme1Feature1": "Ideal for team building, cultural salons",
+    "theme1Feature2": "Includes tea ceremony and zither performance",
+    "theme1Feature3": "Provides a full set of antique-style props",
+    "theme2Title": "Lantern Festival Reunion",
+    "theme2Desc": "Relive the bustling scene of the Lantern Festival. The venue is decorated with gorgeous lanterns, and guests can enjoy riddle guessing, lantern making, and eating sweet dumplings.",
+    "theme2Feature1": "Perfect for family gatherings, birthday parties",
+    "theme2Feature2": "Includes interactive riddle games",
+    "theme2Feature3": "Venue decorated with a lantern theme",
+    "theme3Title": "Tang Splendor: Coming-of-Age Ceremony",
+    "theme3Desc": "Hold a solemn and magnificent coming-of-age ceremony for a young lady. Dressed in opulent Tang-style Hanfu, she completes this important life ritual witnessed by family and friends.",
+    "theme3Feature1": "Suitable for coming-of-age, graduation",
+    "theme3Feature2": "Includes a professional master of ceremonies",
+    "theme3Feature3": "Offers a customizable ceremony process",
+    "bookingTitle": "Booking Process",
+    "bookingDesc": "Four simple steps to easily start your exclusive party.",
+    "step1Title": "Submit Inquiry",
+    "step1Desc": "Tell us your party idea, number of guests, and budget online or by phone.",
+    "step2Title": "Custom Plan",
+    "step2Desc": "Our planner will create a tailor-made party plan just for you.",
+    "step3Title": "Confirm Booking",
+    "step3Desc": "Confirm the plan details and pay the deposit to secure your date.",
+    "step4Title": "Enjoy the Party",
+    "step4Desc": "On the scheduled day, simply arrive and enjoy everything we've prepared for you.",
+    "ctaTitle": "Ready to Get Started?",
+    "ctaDesc": "Contact our party planner now and let's turn your vision into reality. We are happy to assist with detailed consultations or initial quotes.",
+    "ctaBtn": "Inquire Now"
+  },
+  "photowall": {
+    "title": "Photo Wall",
+    "moments": "Wonderful Moments",
+    "description": "Through the lens, the beauty of Hanfu is captured forever. Every photo tells a story of elegance and romance."
   }
 }

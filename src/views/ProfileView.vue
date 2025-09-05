@@ -14,7 +14,7 @@
                   :src="
                     authStore.user?.avatarUrl || 'https://source.unsplash.com/100x100/?portrait'
                   "
-                  alt="用户头像"
+                  :alt="t('profile.avatarAlt')"
                   class="h-24 w-24 rounded-full object-cover"
                 />
                 <button
@@ -58,61 +58,63 @@
             <div :key="activeTab">
               <!-- Edit Profile Content -->
               <div v-if="activeTab === 'profile'" class="bg-white rounded-lg shadow p-6 sm:p-8">
-                <h2 class="text-2xl font-bold font-serif text-gray-900 mb-6">编辑个人资料</h2>
+                <h2 class="text-2xl font-bold font-serif text-gray-900 mb-6">
+                  {{ t('profile.edit.title') }}
+                </h2>
                 <form @submit.prevent="updateProfile">
                   <div class="space-y-6">
                     <div>
-                      <label for="username" class="block text-sm font-medium text-gray-700 mb-1"
-                        >姓名</label
-                      >
+                      <label for="username" class="block text-sm font-medium text-gray-700 mb-1">{{
+                        t('profile.edit.nameLabel')
+                      }}</label>
                       <input
                         id="username"
                         v-model="profileData.nickName"
                         type="text"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-[#C0392B] focus:border-[#C0392B]"
                         required
-                        placeholder="您的姓名"
+                        :placeholder="t('profile.edit.namePlaceholder')"
                       />
                     </div>
 
                     <div>
-                      <label for="email" class="block text-sm font-medium text-gray-700 mb-1"
-                        >邮箱</label
-                      >
+                      <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{
+                        t('profile.edit.emailLabel')
+                      }}</label>
                       <input
                         id="email"
                         v-model="profileData.email"
                         type="email"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
                         required
-                        placeholder="您的邮箱"
+                        :placeholder="t('profile.edit.emailPlaceholder')"
                         disabled
                       />
                     </div>
 
                     <div>
-                      <label for="phone" class="block text-sm font-medium text-gray-700 mb-1"
-                        >手机号码</label
-                      >
+                      <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">{{
+                        t('profile.edit.phoneLabel')
+                      }}</label>
                       <input
                         id="phone"
                         v-model="profileData.phone"
                         type="tel"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-[#C0392B] focus:border-[#C0392B]"
-                        placeholder="您的手机号码 (可选)"
+                        :placeholder="t('profile.edit.phonePlaceholder')"
                       />
                     </div>
 
                     <div>
-                      <label for="bio" class="block text-sm font-medium text-gray-700 mb-1"
-                        >个人简介</label
-                      >
+                      <label for="bio" class="block text-sm font-medium text-gray-700 mb-1">{{
+                        t('profile.edit.bioLabel')
+                      }}</label>
                       <textarea
                         id="bio"
                         v-model="profileData.description"
                         rows="4"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-[#C0392B] focus:border-[#C0392B]"
-                        placeholder="简单介绍一下自己..."
+                        :placeholder="t('profile.edit.bioPlaceholder')"
                       ></textarea>
                     </div>
                   </div>
@@ -123,7 +125,9 @@
                       :disabled="authStore.loading"
                       class="btn-primary px-6 py-3 disabled:opacity-50"
                     >
-                      {{ authStore.loading ? '保存中...' : '保存更改' }}
+                      {{
+                        authStore.loading ? t('profile.edit.saving') : t('profile.edit.saveChanges')
+                      }}
                     </button>
                   </div>
                 </form>
@@ -134,36 +138,48 @@
                 v-if="activeTab === 'orders'"
                 class="bg-white rounded-lg shadow p-6 sm:p-8 text-center"
               >
-                <h2 class="text-2xl font-bold font-serif text-gray-900 mb-6">我的订单</h2>
+                <h2 class="text-2xl font-bold font-serif text-gray-900 mb-6">
+                  {{ t('profile.orders.title') }}
+                </h2>
                 <div class="flex flex-col items-center text-gray-500">
                   <ArchiveBoxIcon class="h-16 w-16 text-gray-300 mb-4" />
-                  <p>您还没有任何订单。</p>
+                  <p>{{ t('profile.orders.emptyText') }}</p>
                   <router-link
                     to="/gallery"
                     class="mt-2 text-[#C0392B] font-semibold hover:underline"
-                    >去逛逛</router-link
+                    >{{ t('profile.orders.browseLink') }}</router-link
                   >
                 </div>
               </div>
 
               <!-- Account Settings Placeholder -->
               <div v-if="activeTab === 'settings'" class="bg-white rounded-lg shadow p-6 sm:p-8">
-                <h2 class="text-2xl font-bold font-serif text-gray-900 mb-6">账户设置</h2>
+                <h2 class="text-2xl font-bold font-serif text-gray-900 mb-6">
+                  {{ t('profile.settings.title') }}
+                </h2>
                 <div class="space-y-6">
                   <div>
-                    <h3 class="text-lg font-medium">修改密码</h3>
-                    <p class="text-sm text-gray-500 mt-1">为了您的账户安全，建议您定期修改密码。</p>
-                    <button class="mt-3 btn-outline text-sm px-4 py-2">修改密码</button>
+                    <h3 class="text-lg font-medium">
+                      {{ t('profile.settings.changePasswordTitle') }}
+                    </h3>
+                    <p class="text-sm text-gray-500 mt-1">
+                      {{ t('profile.settings.changePasswordDesc') }}
+                    </p>
+                    <button class="mt-3 btn-outline text-sm px-4 py-2">
+                      {{ t('profile.settings.changePasswordBtn') }}
+                    </button>
                   </div>
                   <div class="border-t pt-6">
-                    <h3 class="text-lg font-medium text-red-600">删除账户</h3>
+                    <h3 class="text-lg font-medium text-red-600">
+                      {{ t('profile.settings.deleteAccountTitle') }}
+                    </h3>
                     <p class="text-sm text-gray-500 mt-1">
-                      请注意：此操作不可逆，将永久删除您的所有数据。
+                      {{ t('profile.settings.deleteAccountDesc') }}
                     </p>
                     <button
                       class="mt-3 btn-outline border-red-500 text-red-500 hover:bg-red-50 text-sm px-4 py-2"
                     >
-                      删除我的账户
+                      {{ t('profile.settings.deleteAccountBtn') }}
                     </button>
                   </div>
                 </div>
@@ -184,15 +200,17 @@ import {
   Cog6ToothIcon,
   PencilIcon,
 } from '@heroicons/vue/24/outline'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth.store'
 
+const { t } = useI18n()
 const authStore = useAuthStore()
 const activeTab = ref('profile')
 
 const tabs = [
-  { id: 'profile', name: '个人资料', icon: UserCircleIcon },
-  { id: 'orders', name: '我的订单', icon: ArchiveBoxIcon },
-  { id: 'settings', name: '账户设置', icon: Cog6ToothIcon },
+  { id: 'profile', name: t('profile.tabs.profile'), icon: UserCircleIcon },
+  { id: 'orders', name: t('profile.tabs.orders'), icon: ArchiveBoxIcon },
+  { id: 'settings', name: t('profile.tabs.settings'), icon: Cog6ToothIcon },
 ]
 
 const profileData = reactive({
@@ -214,9 +232,9 @@ const updateProfile = async () => {
   }
   const result = await authStore.updateProfile(dataToUpdate)
   if (result.success) {
-    alert('资料更新成功！')
+    alert(t('profile.updateSuccess'))
   } else {
-    alert(`资料更新失败: ${result.error}`)
+    alert(t('profile.updateFailed', { error: result.error }))
   }
 }
 

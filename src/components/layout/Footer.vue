@@ -9,7 +9,7 @@
             <div class="w-12 h-12 rounded-full bg-hanfu-red flex items-center justify-center mr-3">
               <span class="text-white font-display text-xl">C</span>
             </div>
-            <div class="text-2xl font-display tracking-wider">云织汉服</div>
+            <div class="text-2xl font-display tracking-wider">{{ t('brand.name') }}</div>
           </div>
           <p class="mt-4 text-gray-300">
             {{ t('footer.brandDesc') }}
@@ -169,7 +169,7 @@
       </div>
       <!-- 版权信息 -->
       <div class="mt-12 pt-8 border-t border-gray-700 text-center text-gray-400 text-sm">
-        <p>&copy; 2025 云织汉服体验. {{ t('footer.rights') }}</p>
+        <p>&copy; 2025 {{ t('brand.name') }}. {{ t('footer.rights') }}</p>
         <div class="mt-2 flex justify-center space-x-4">
           <router-link to="/privacy" class="hover:text-white transition">{{
             t('footer.privacy')
