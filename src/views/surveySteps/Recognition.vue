@@ -61,19 +61,18 @@ function handleSelection(item: ClothingItem) {
     delete selectionStatus[key]
   }
 
-  const recognized = localSurveyData.value.recognizedItems
-  const isSelected = recognized.includes(item.name)
+  const isAlreadySelected =
+    localSurveyData.value.recognizedItems.length === 1 &&
+    localSurveyData.value.recognizedItems[0] === item.name
 
-  if (isSelected) {
-    // 如果已选择，则取消选择
-    const newRecognized = recognized.filter((name: string) => name !== item.name)
-    localSurveyData.value = { ...localSurveyData.value, recognizedItems: newRecognized }
-    delete selectionStatus[item.id] // 移除视觉状态
+  if (isAlreadySelected) {
+    // 如果点击的已经是当前唯一选中的图片，则取消选择
+    localSurveyData.value = { ...localSurveyData.value, recognizedItems: [] }
+    delete selectionStatus[item.id]
   } else {
-    // 如果未选择，则进行选择
-    const newRecognized = [...recognized, item.name]
-    localSurveyData.value = { ...localSurveyData.value, recognizedItems: newRecognized }
-    selectionStatus[item.id] = item.isHanfu ? 'correct' : 'incorrect' // 设置视觉状态
+    // 否则，直接将当前点击的图片设为唯一选择
+    localSurveyData.value = { ...localSurveyData.value, recognizedItems: [item.name] }
+    selectionStatus[item.id] = item.isHanfu ? 'correct' : 'incorrect'
   }
 }
 

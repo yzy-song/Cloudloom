@@ -26,6 +26,9 @@ const initialSurveyData = {
   hanfuKnowledge: null,
   motivation: [],
   desiredServices: [],
+  // 新增字段
+  partyInterest: '',
+  ownershipPreference: '',
   stylePreference: '',
   durationPreference: '',
   pricePackageA: '',
@@ -75,7 +78,8 @@ async function submitSurvey() {
   isLoading.value = true
   submissionError.value = null
   try {
-    const response = await surveyApi.post('/survey/responses', surveyData.value)
+    const surveyId = 1 // 未来可以动态获取
+    const response = await surveyApi.post(`/survey/${surveyId}/responses`, surveyData.value)
     if (response) submissionSuccess.value = true
     else throw new Error('Submission failed with no specific error code.')
   } catch (error) {
