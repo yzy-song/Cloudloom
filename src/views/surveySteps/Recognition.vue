@@ -65,12 +65,12 @@ function handleSelection(item: ClothingItem) {
     // 如果已选择，则取消选择
     const newRecognized = recognized.filter((name: string) => name !== item.name)
     localSurveyData.value = { ...localSurveyData.value, recognizedItems: newRecognized }
-    // 此时 selectionStatus 已被清空，无需额外操作
+    delete selectionStatus[item.id] // 移除视觉状态
   } else {
     // 如果未选择，则进行选择
     const newRecognized = [...recognized, item.name]
     localSurveyData.value = { ...localSurveyData.value, recognizedItems: newRecognized }
-    selectionStatus[item.id] = item.isHanfu ? 'correct' : 'incorrect' // 仅设置当前项的视觉状态
+    selectionStatus[item.id] = item.isHanfu ? 'correct' : 'incorrect' // 设置视觉状态
   }
 }
 
