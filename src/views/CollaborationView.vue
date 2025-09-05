@@ -7,12 +7,10 @@
     <section class="py-20 md:py-28 text-center px-4">
       <div class="max-w-3xl mx-auto">
         <h1 class="font-serif text-5xl md:text-7xl font-bold tracking-wider text-gray-900">
-          Partner With Us
+          {{ t('collaboration.headerTitle') }}
         </h1>
         <p class="mt-6 text-lg md:text-xl text-gray-600">
-          Introduce an unforgettable touch of ancient culture to your Dublin-based business. We
-          provide unique Hanfu-themed experiences that captivate audiences and create lasting
-          memories. Let's collaborate.
+          {{ t('collaboration.headerDesc') }}
         </p>
       </div>
     </section>
@@ -22,10 +20,10 @@
       <div class="max-w-screen-xl mx-auto">
         <div class="text-center mb-16">
           <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
-            Our Track Record
+            {{ t('collaboration.trackRecordTitle') }}
           </h2>
           <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            We've already created amazing experiences with fantastic local partners.
+            {{ t('collaboration.trackRecordDesc') }}
           </p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
@@ -38,14 +36,14 @@
             <div class="w-full md:w-2/5 h-64 md:h-auto overflow-hidden">
               <img
                 :src="item.image"
-                :alt="item.title"
+                :alt="t(item.title)"
                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
             </div>
             <div class="p-8 w-full md:w-3/5">
-              <p class="text-sm font-semibold text-[#C0392B] mb-2">{{ item.partner }}</p>
-              <h3 class="font-serif text-2xl font-bold mb-3">{{ item.title }}</h3>
-              <p class="text-gray-600">{{ item.description }}</p>
+              <p class="text-sm font-semibold text-[#C0392B] mb-2">{{ t(item.partner) }}</p>
+              <h3 class="font-serif text-2xl font-bold mb-3">{{ t(item.title) }}</h3>
+              <p class="text-gray-600">{{ t(item.description) }}</p>
             </div>
           </div>
         </div>
@@ -57,10 +55,10 @@
       <div class="max-w-screen-xl mx-auto">
         <div class="text-center mb-16">
           <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
-            Ways to Partner
+            {{ t('collaboration.partnerModelsTitle') }}
           </h2>
           <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            We offer two core partnership programs designed for mutual success.
+            {{ t('collaboration.partnerModelsDesc') }}
           </p>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -69,11 +67,11 @@
             <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mb-6">
               <CameraIcon class="w-10 h-10 text-[#C0392B]" />
             </div>
-            <h3 class="font-serif text-3xl font-semibold mb-4">For Creators & Photographers</h3>
+            <h3 class="font-serif text-3xl font-semibold mb-4">
+              {{ t('collaboration.photographerTitle') }}
+            </h3>
             <p class="text-gray-600 mb-6">
-              Elevate your portfolio with the timeless beauty of Hanfu. We provide access to our
-              extensive collection, helping you create stunning, culturally rich visuals that stand
-              out.
+              {{ t('collaboration.photographerDesc') }}
             </p>
             <ul class="space-y-3 text-left mb-8">
               <li v-for="benefit in photographerBenefits" :key="benefit" class="flex items-start">
@@ -88,10 +86,12 @@
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                <span>{{ benefit }}</span>
+                <span>{{ t(benefit) }}</span>
               </li>
             </ul>
-            <button class="mt-auto btn-outline w-full max-w-xs">Become a Photo Partner</button>
+            <button class="mt-auto btn-outline w-full max-w-xs">
+              {{ t('collaboration.photographerBtn') }}
+            </button>
           </div>
 
           <!-- Model 2: Venues (Pubs, etc.) -->
@@ -99,11 +99,11 @@
             <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mb-6">
               <SparklesIcon class="w-10 h-10 text-[#C0392B]" />
             </div>
-            <h3 class="font-serif text-3xl font-semibold mb-4">For Pubs & Event Venues</h3>
+            <h3 class="font-serif text-3xl font-semibold mb-4">
+              {{ t('collaboration.venueTitle') }}
+            </h3>
             <p class="text-gray-600 mb-6">
-              Host a unique "Hanfu Night" and offer your patrons an extraordinary experience. We
-              provide a turnkey themed party package, driving new footfall and generating buzz for
-              your venue.
+              {{ t('collaboration.venueDesc') }}
             </p>
             <ul class="space-y-3 text-left mb-8">
               <li v-for="benefit in venueBenefits" :key="benefit" class="flex items-start">
@@ -118,10 +118,12 @@
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                <span>{{ benefit }}</span>
+                <span>{{ t(benefit) }}</span>
               </li>
             </ul>
-            <button class="mt-auto btn-outline w-full max-w-xs">Host a Hanfu Night</button>
+            <button class="mt-auto btn-outline w-full max-w-xs">
+              {{ t('collaboration.venueBtn') }}
+            </button>
           </div>
         </div>
       </div>
@@ -131,19 +133,20 @@
     <section class="py-20 md:py-28 px-4">
       <div class="max-w-3xl mx-auto text-center">
         <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-6">
-          Start Your Journey With Us
+          {{ t('collaboration.ctaTitle') }}
         </h2>
         <p class="text-lg text-gray-600 mb-10">
-          Ready to explore a partnership? Leave your email below, and our collaboration specialist
-          will get in touch within 24 hours.
+          {{ t('collaboration.ctaDesc') }}
         </p>
         <form class="max-w-xl mx-auto flex flex-col sm:flex-row gap-4">
           <input
             type="email"
-            placeholder="Enter your email address"
+            :placeholder="t('collaboration.ctaPlaceholder')"
             class="w-full px-5 py-4 rounded-full border-gray-300 focus:ring-[#C0392B] focus:border-[#C0392B] transition"
           />
-          <button type="submit" class="btn-primary px-8 py-4 rounded-full shrink-0">Submit</button>
+          <button type="submit" class="btn-primary px-8 py-4 rounded-full shrink-0">
+            {{ t('collaboration.ctaSubmit') }}
+          </button>
         </form>
       </div>
     </section>
@@ -152,35 +155,36 @@
 
 <script setup lang="ts">
 import { CameraIcon, SparklesIcon } from '@heroicons/vue/24/outline'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const successCases = [
   {
-    partner: 'Collaboration with "Dublin Creatives" Studio',
-    title: '"Dynasty Portraits" Photoshoot',
-    description:
-      'We provided a full range of Tang Dynasty costumes for their quarterly feature project. The series gained over 50k likes on Instagram and was featured in a local art blog.',
+    partner: 'collaboration.case1Partner',
+    title: 'collaboration.case1Title',
+    description: 'collaboration.case1Desc',
     image: '/images/collaboration/take-photo.jpeg',
   },
   {
-    partner: 'Themed Night at "The Temple Bar"',
-    title: 'Hanfu Culture Night',
-    description:
-      "We co-hosted a cultural theme night, providing costumes and interactive activities. The event was sold out and increased the venue's social media engagement by 300% that week.",
+    partner: 'collaboration.case2Partner',
+    title: 'collaboration.case2Title',
+    description: 'collaboration.case2Desc',
     image: '/images/collaboration/event-venue.jpeg',
   },
 ]
 
 const photographerBenefits = [
-  'Exclusive discounts on our entire Hanfu collection for your shoots.',
-  'First access to our newest and most elaborate outfits.',
-  'Co-promotion opportunities on our social media channels.',
-  'Priority consideration for our official commercial projects.',
+  'collaboration.photographerBenefit1',
+  'collaboration.photographerBenefit2',
+  'collaboration.photographerBenefit3',
+  'collaboration.photographerBenefit4',
 ]
 
 const venueBenefits = [
-  'A complete, all-inclusive event package: costumes, host, and activities.',
-  "Attract new customers and significantly boost your venue's profile.",
-  'Cross-promotion on our platforms to a culturally-engaged audience.',
-  'A generous revenue-sharing model.',
+  'collaboration.venueBenefit1',
+  'collaboration.venueBenefit2',
+  'collaboration.venueBenefit3',
+  'collaboration.venueBenefit4',
 ]
 </script>

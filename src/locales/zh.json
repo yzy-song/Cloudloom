@@ -4,12 +4,23 @@
   },
   "navbar": {
     "home": "首页",
-    "gallery": "汉服展示",
+    "gallery": "云裳廊",
+    "photos": "光影纪",
     "knowledge": "汉服知识",
-    "about": "关于我们",
-    "collaboration": "商业合作",
-    "bookNow": "立即预约",
-    "login": "登录"
+    "about": "关于",
+    "aboutUs": "关于云织",
+    "collaboration": "合作洽谈",
+    "login": "登录",
+    "logout": "退出登录",
+    "profile": "个人资料",
+    "orders": "我的订单",
+    "favorites": "我的收藏",
+    "menu": "菜单",
+    "searchPlaceholder": "搜索...",
+    "viewProfile": "查看个人资料",
+    "search":"搜索",
+    "cart":"购物车"
+
   },
   "footer": {
     "brandDesc": "在爱尔兰推广汉服文化。专业汉服体验、租赁与销售。",
@@ -27,69 +38,114 @@
     "bookNow": "立即预约",
     "bannerTitle": "云织汉服",
     "bannerSlogan": "在翡翠岛国，邂逅千年华裳。我们提供汉服租赁、销售及文化体验，连接传统与现代之美。",
-    "feature1Title": "正品汉服",
-    "feature1Desc": "所有服饰均为高品质正品汉服。",
-    "feature2Title": "专业摄影",
-    "feature2Desc": "每位顾客均可享受免费专业拍照。",
-    "feature3Title": "个性化服务",
-    "feature3Desc": "一对一着装与造型指导。",
-    "feature4Title": "黄金地段",
-    "feature4Desc": "位于都柏林市中心，交通便利。",
-    "step1Title": "选择汉服",
-    "step1Desc": "浏览我们的汉服系列，挑选你喜欢的款式。",
-    "step2Title": "预约体验",
-    "step2Desc": "选择合适的日期和时间，轻松预约。",
-    "step3Title": "穿着拍照",
-    "step3Desc": "换上汉服，享受美好时光，留下美丽照片。",
-    "testimonial1": "非常棒的体验！汉服很美，工作人员也很友好。",
-    "testimonial2": "仿佛穿越回古代，强烈推荐！",
-    "testimonial3": "照片很美，回忆难忘。",
-    "faq1Q": "如何预约汉服体验？",
-    "faq1A": "您可以在线预约或通过邮箱、电话联系我们。",
-    "faq2Q": "是否提供摄影服务？",
-    "faq2A": "是的，每次体验均包含免费专业拍照。",
-    "faq3Q": "可以取消或改期吗？",
-    "faq3A": "可以，请至少提前24小时联系我们。"
+    "slides": {
+      "tang": {
+        "title": "梦回大唐",
+        "description": "体验盛世风华，感受唐代服饰的雍容与开放。"
+      },
+      "accessories": {
+        "title": "玲珑配饰",
+        "description": "从发簪到香囊，细节之处尽显古典雅致。"
+      },
+      "cultural": {
+        "title": "文化雅集",
+        "description": "参与我们的主题活动，沉浸式体验传统文化之美。"
+      },
+      "kids": {
+        "title": "小小汉服",
+        "description": "为孩子们准备的可爱汉服，传承文化从小开始。"
+      }
+    },
+    "servicesTitle": "我们的服务",
+    "servicesDesc": "从汉服租赁到主题派对，我们为您打造全方位的汉服文化体验。",
+    "feature1Title": "汉服租赁 & 销售",
+    "feature1Desc": "多种风格，满足日常穿着和特殊场合需求。",
+    "feature2Title": "主题派对定制",
+    "feature2Desc": "为个人聚会和公司团建打造专属汉服主题体验。",
+    "feature3Title": "汉服周边",
+    "feature3Desc": "精致配饰与文创产品，点缀你的汉服生活。",
+    "feature4Title": "摄影服务",
+    "feature4Desc": "专业合作摄影师，为你定格美好瞬间。",
+    "galleryTitle": "风华·刹那惊鸿",
+    "galleryDesc": "每一件汉服都承载着历史的温度，每一次回眸都定格了东方的神韵。",
+    "exploreMore": "探索更多",
+    "stepsTitle": "流程·体验之旅",
+    "stepsDesc": "仅需三步，即可开启您的汉服穿越之旅，简单而纯粹。",
+    "step1Title": "在线挑选",
+    "step1Desc": "浏览我们的汉服系列，选择您心仪的款式和尺码。",
+    "step2Title": "预约时间",
+    "step2Desc": "选择方便您的到店体验或配送时间。",
+    "step3Title": "享受体验",
+    "step3Desc": "到店试穿或签收包裹，开启您的汉服之旅。",
+    "testimonialsTitle": "回响·佳人佳话",
+    "testimonialsDesc": "听听那些曾与我们一同追寻古典之美的朋友们怎么说。",
+    "testimonials": {
+      "names": {
+        "chenxi": "晨曦",
+        "ajie": "阿杰",
+        "siyue": "思月",
+        "lin": "林老师"
+      }
+    },
+    "testimonial1": "这里的汉服款式非常正，面料也很舒服。穿上后感觉自己真的穿越了，体验感满分！",
+    "testimonial1Role": "汉服爱好者",
+    "testimonial2": "公司团建活动选择了汉服主题，Cloudloom的服务非常专业，从服装到活动策划都无可挑剔。",
+    "testimonial2Role": "企业客户",
+    "testimonial3": "第一次尝试汉服摄影，效果出乎意料的好。服装很新很干净，配饰也很齐全。",
+    "testimonial3Role": "留学生",
+    "testimonial4": "作为一名历史老师，我很高兴看到有这样一个平台在推广传统文化。服装的形制考究，值得推荐。",
+    "testimonial4Role": "文化研究者",
+    "faqTitle": "解惑·常见问题",
+    "faqDesc": "为您解答关于汉服体验的常见疑惑。",
+    "faq1Q": "汉服租赁需要押金吗？",
+    "faq1A": "是的，为了保障汉服的完好，我们需要收取一定的押金。押金将在汉服完好归还后全额退还。",
+    "faq2Q": "你们提供化妆和造型服务吗？",
+    "faq2A": "我们目前提供基础的妆造建议和配饰搭配指导。对于复杂的妆造需求，我们可以为您推荐合作的专业造型师。",
+    "faq3Q": "如果汉服在租赁期间损坏了怎么办？",
+    "faq3A": "请在发现损坏后第一时间联系我们。根据损坏程度，我们可能会从押金中扣除相应的维修或赔偿费用。具体标准请参考我们的租赁协议。"
   },
   "login": {
-    "title": "登录您的账户",
-    "or": "或",
-    "registerNow": "创建新账户",
-    "loginNow": "登录现有账户",
-    "username": "用户名",
-    "usernamePlaceholder": "请输入用户名",
-    "emailOrUsername": "邮箱或用户名",
-    "emailOrUsernamePlaceholder": "请输入邮箱或用户名",
-    "email": "邮箱地址",
-    "emailPlaceholder": "请输入邮箱地址",
-    "password": "密码",
-    "passwordPlaceholder": "请输入密码",
-    "setPasswordPlaceholder": "请设置密码",
-    "confirmPassword": "确认密码",
-    "confirmPasswordPlaceholder": "请再次输入密码",
+    "title": "欢迎回来",
+    "subtitle": "登录以继续您的云裳之旅",
+    "emailLabel": "邮箱地址",
+    "passwordLabel": "密码",
     "rememberMe": "记住我",
-    "forgotPassword": "忘记密码?",
+    "forgotPassword": "忘记密码？",
+    "loginButton": "登录",
+    "noAccount": "还没有账户？",
+    "registerNow": "立即注册",
+    "username": "用户名",
+    "usernamePlaceholder": "请输入您的用户名",
+    "emailOrUsername": "邮箱或用户名",
+    "emailOrUsernamePlaceholder": "请输入您的邮箱或用户名",
+    "email": "邮箱地址",
+    "emailPlaceholder": "请输入您的邮箱地址",
+    "password": "密码",
+    "passwordPlaceholder": "请输入您的密码",
+    "setPasswordPlaceholder": "请设置您的密码",
+    "confirmPassword": "确认密码",
+    "confirmPasswordPlaceholder": "请再次输入您的密码",
     "loginBtn": "登录",
     "registerBtn": "注册",
-    "orOther": "或用其他方式登录",
-    "google": "Google",
-    "facebook": "Facebook",
+    "orOther": "或使用其他方式登录",
+    "google": "谷歌",
+    "facebook": "脸书",
     "loading": "处理中...",
     "errorRequired": "请填写所有必填项。",
     "errorPasswordMismatch": "两次输入的密码不一致。",
     "errorOAuth": "第三方登录失败，请重试。",
-    "errorUsernameLength": "至少需要3个字符。",
-    "errorPasswordLength": "密码至少需要6位。",
-    "errorEmailFormat": "邮箱格式不正确。",
-    "newToSite": "新用户？",
-    "alreadyMember": "已有账户？",
-    "loginWithGoogle": "使用 Google 登录",
-    "registerWithGoogle": "使用 Google 注册",
-    "loginWithFacebook": "使用 Facebook 登录",
-    "registerWithFacebook": "使用 Facebook 注册",
-    "loginWithEmail": "用户名/邮箱登录",
+    "errorUsernameLength": "用户名至少需要3个字符。",
+    "errorPasswordLength": "密码必须至少为6个字符。",
+    "errorEmailFormat": "邮箱格式无效。",
+    "newToSite": "初来乍到？",
+    "alreadyMember": "已经是会员？",
+    "loginWithGoogle": "使用谷歌登录",
+    "registerWithGoogle": "使用谷歌注册",
+    "loginWithFacebook": "使用脸书登录",
+    "registerWithFacebook": "使用脸书注册",
+    "loginWithEmail": "使用用户名/邮箱登录",
     "registerWithEmail": "使用邮箱注册",
-    "backToOptions": "返回其他登录方式"
+    "backToOptions": "返回其他登录选项"
   },
   "router": {
     "home": "首页",
@@ -97,6 +153,7 @@
     "productDetail": "产品详情",
     "about": "关于我们",
     "collaboration": "商业合作",
+    "photoWall": "光影纪",
     "booking": "预约体验",
     "knowledge": "汉服知识",
     "login": "登录",
@@ -143,7 +200,9 @@
       "casual_desc": "舒适款式，适合日常穿着。",
       "historical": "历史风格",
       "historical_desc": "源自古代朝代的经典设计。"
-    }
+    },
+    "prevImage": "上一张图片",
+    "nextImage": "下一张图片"
   },
   "preferences": {
     "title": "您的偏好",
@@ -208,6 +267,91 @@
     "description": "还有其他想法或建议吗？欢迎留言！",
     "placeholder": "您的建议..."
   },
+  "about": {
+    "vision": {
+      "subtitle": "我们的愿景",
+      "title": "丝缕织就的文化之桥",
+      "desc": "我们不仅是一家汉服店，更是文化的大使，致力于将中华古韵的永恒优雅带到都柏林的心脏。我们的使命是创造一个沉浸式的空间，让东西方在此交汇，让历史在此重现。",
+      "imageAlt": "静谧的茶道场景"
+    },
+    "founder": {
+      "title": "创始人寄语",
+      "imageAlt": "创始人肖像",
+      "quote": "在都柏林生活了十多年，我一直为爱尔兰文化的丰富多彩而着迷。与此同时，我内心深处也渴望分享那些编织在我血脉传承的丝绸里的故事。汉服不仅仅是服装，它是一段可触摸的历史，一首可以穿在身上的诗。我开启这段旅程，是为了创造一个欢迎都柏林本地人和游客的空间，让他们不仅能看到，更能真正体验中华文化的深邃之美。这是我向您发出的邀请——在都柏林，步入另一个世界。",
+      "signature": "- 张先生，创始人"
+    },
+    "philosophy": {
+      "title": "我们的理念",
+      "desc": "三条原则指引着我们的一切。",
+      "values": {
+        "authenticity": {
+          "title": "考究",
+          "desc": "我们尊重历史。每一件服饰都经过精心研究，确保其形制和纹样忠于其所属的朝代。"
+        },
+        "quality": {
+          "title": "品质",
+          "desc": "我们信奉可触及的美。我们只使用最上乘的丝、棉、麻，以重现旧时光的质感。"
+        },
+        "experience": {
+          "title": "体验",
+          "desc": "我们提供的不仅是服装。我们提供文化的深度沉浸，从主题派对到知识讲座。"
+        }
+      }
+    },
+    "team": {
+      "title": "策展团队",
+      "members": {
+        "zhang": {
+          "name": "张先生",
+          "role": "创始人 & 文化总监",
+          "bio": "一位内心的历史学家，在复原古代服饰方面拥有十年经验。他的专业知识确保了每一件作品都能讲述一个准确而美丽的故事。"
+        },
+        "osullivan": {
+          "name": "Aoife O’Sullivan",
+          "role": "运营 & 活动经理",
+          "bio": "一位热爱跨文化活动的都柏林本地人。Aoife 负责搭建沟通的桥梁，确保我们的体验既地道又完美地契合本地观众。"
+        }
+      }
+    },
+    "join": {
+      "title": "开启您的旅程",
+      "desc": "在社交媒体上关注我们的故事，或预约参观我们位于都柏林的展厅。我们期待您的光临。",
+      "bookBtn": "预约探店",
+      "followBtn": "关注 Instagram"
+    }
+  },
+  "collaboration": {
+    "headerTitle": "与我们合作",
+    "headerDesc": "为您的业务注入难忘的古代文化气息。我们提供独特的汉服主题体验，吸引观众并创造持久的记忆。让我们携手合作。",
+    "trackRecordTitle": "我们的成功案例",
+    "trackRecordDesc": "我们已经与众多优秀的本地伙伴共同创造了精彩的体验。",
+    "case1Partner": "与“都柏林创意”工作室合作",
+    "case1Title": "“风华绝代”系列摄影",
+    "case1Desc": "我们为他们的季度专题项目提供了一整套唐代服饰。该系列在Instagram上获得了超过5万次点赞，并被当地一家艺术博客专题报道。",
+    "case2Partner": "“圣殿酒吧”主题之夜",
+    "case2Title": "汉服文化之夜",
+    "case2Desc": "我们共同主办了一场文化主题之夜，提供服装和互动活动。活动门票售罄，并使该场所当周的社交媒体互动量增加了300%。",
+    "partnerModelsTitle": "合作模式",
+    "partnerModelsDesc": "我们提供两种核心合作方案，旨在实现共赢。",
+    "photographerTitle": "致创作者与摄影师",
+    "photographerDesc": "用汉服的永恒之美提升您的作品集。我们提供丰富的服饰选择，助您创作出众的、充满文化底蕴的视觉作品。",
+    "photographerBenefit1": "拍摄专享，全系汉服租赁折扣。",
+    "photographerBenefit2": "优先体验我们最新、最精致的服装。",
+    "photographerBenefit3": "在我们的社交媒体渠道上获得联合推广机会。",
+    "photographerBenefit4": "优先考虑参与我们的官方商业项目。",
+    "photographerBtn": "成为摄影伙伴",
+    "venueTitle": "致酒吧与活动场所",
+    "venueDesc": "举办一场独特的“汉服之夜”，为您的顾客提供非凡体验。我们提供一站式主题派对套餐，为您的场所吸引新客流、创造热点。",
+    "venueBenefit1": "全包式活动套餐：服装、主持人及活动。",
+    "venueBenefit2": "吸引新顾客，显著提升您的场所知名度。",
+    "venueBenefit3": "在我们的平台上面向文化爱好者进行交叉推广。",
+    "venueBenefit4": "慷慨的收入分成模式。",
+    "venueBtn": "举办汉服之夜",
+    "ctaTitle": "与我们开启旅程",
+    "ctaDesc": "准备好探索合作机会了吗？请留下您的邮箱，我们的合作专员将在24小时内与您联系。",
+    "ctaPlaceholder": "请输入您的邮箱地址",
+    "ctaSubmit": "提交"
+  },
   "gallery": {
     "bannerTitle": "汉服珍藏馆",
     "bannerDesc": "探索跨越千年的服饰艺术，每一件都承载着华夏文明的精髓。",
@@ -231,5 +375,129 @@
     "addToCart": "加入购物车",
     "loadMore": "加载更多",
     "price": "价格"
+  },
+  "favorites": {
+    "title": "我的收藏",
+    "emptyTitle": "暂无收藏",
+    "emptyDesc": "您还没有收藏任何汉服",
+    "browse": "去逛逛"
+  },
+  "knowledge": {
+    "header": {
+      "subtitle": "穿越时光之旅",
+      "title": "汉服的故事",
+      "desc": "探索中华传统服饰的悠久历史与优雅形制。汉服不仅是一件衣裳，更是历代传承的艺术与哲学的遗产。"
+    },
+    "timeline": {
+      "title": "演变的剪影",
+      "desc": "穿越主要朝代，见证汉服在数百年间的变迁。点击朝代以了解更多。",
+      "dynasty": "{dynasty}代",
+      "han": {
+        "name": "汉代",
+        "period": "公元前206 - 公元220",
+        "desc": "汉代确立了汉服的基础美学。服饰通常宽大飘逸，强调优雅与端庄。“深衣”是男女皆宜的标志性连体服。",
+        "feature1": "长款绕襟袍（深衣）",
+        "feature2": "宽大的袖子和优雅的轮廓。",
+        "feature3": "正式场合普遍采用多层穿搭。"
+      },
+      "tang": {
+        "name": "唐代",
+        "period": "公元618 - 907",
+        "desc": "作为文化黄金时代，唐代风格更为开放和多样。受丝绸之路影响，面料鲜艳，设计大胆。尤其是女装，变得更加轻松和富有表现力。",
+        "feature1": "高腰襦裙（齐胸襦裙）",
+        "feature2": "女装的低领口和短上衣。",
+        "feature3": "大胆的色彩和奢华的面料。"
+      },
+      "song": {
+        "name": "宋代",
+        "period": "公元960 - 1279",
+        "desc": "宋代偏爱更为内敛和精致的美学。服装变得更加修长和简约，反映了当时的新儒家哲学。直领对襟的“褙子”非常流行。",
+        "feature1": "含蓄、优雅、修长的轮廓。",
+        "feature2": "“褙子”（直领对襟大袖衫）的流行。",
+        "feature3": "使用精致和自然的颜色。"
+      },
+      "ming": {
+        "name": "明代",
+        "period": "公元1368 - 1644",
+        "desc": "明代恢复并发展了早期的风格，尤其是唐代风格。它拥有从华丽的宫廷礼服到实用的日常服装等多种服饰，以其复杂的图案和纽扣而闻名。",
+        "feature1": "马面裙和带纽扣的上袄。",
+        "feature2": "不同社会阶层的多样化风格。",
+        "feature3": "丰富的刺绣和精细的图案。"
+      }
+    },
+    "styles": {
+      "title": "汉服的经典款式",
+      "desc": "尽管汉服有数百种变化，但这里有几种构成汉服基础的经典款式。",
+      "ruqun": {
+        "name": "襦裙 (Ruqun)",
+        "desc": "由上衣（襦）和下裙（裙）组成的两件式服装。腰带的高度因朝代而异，其中唐代的高腰风格尤为著名。"
+      },
+      "shenyi": {
+        "name": "深衣 (Shenyi)",
+        "desc": "一种环绕身体的长款连体袍，象征着天人合一。它是汉代常见的正式礼服。"
+      },
+      "beizi": {
+        "name": "褙子 (Beizi)",
+        "desc": "一种直领对襟的多功能外衣，男女均可穿着。因其简约优雅，在宋明两代尤为流行。"
+      }
+    },
+    "faq": {
+      "title": "常见问题",
+      "q1": "汉服和和服有什么主要区别？",
+      "a1": "虽然它们有共同的源头，但区别很大。汉服是历史悠久的中国服饰体系，风格多样，通常以右衽交领和系带为特点。和服是日本的传统服装，其形制更为标准化，呈T字形，配有更宽的腰带（Obi）和独特的袖型。",
+      "q2": "非华裔可以穿汉服吗？",
+      "a2": "当然可以！穿着汉服是一种文化欣赏的形式。我们欢迎每个人来体验它的美丽，只要穿着时尊重其历史和文化意义即可。这是接触中华文化的绝佳方式。",
+      "q3": "“汉服”到底是什么意思？",
+      "a3": "这个词的字面意思是“汉族的服装”。它指的是在清朝之前，中国汉族长达数千年的历史服饰体系。"
+    },
+    "keyFeature": "主要特点："
+  },
+  "parties": {
+    "heroAlt": "古风派对背景",
+    "heroTitle": "定制您的汉服派对",
+    "heroDesc": "无论是生日庆典、团队建设还是朋友雅集，我们都为您打造独一无二的沉浸式文化体验。",
+    "whyTitle": "为何选择我们？",
+    "whyDesc": "我们提供的不仅是服装，更是一场穿越时空的文化盛宴。",
+    "feature1Title": "海量汉服选择",
+    "feature1Desc": "提供数百套各朝代、各风格的精美汉服，确保每位宾客都能找到心仪的款式。",
+    "feature2Title": "专业妆造团队",
+    "feature2Desc": "我们合作的妆造师将为您和您的宾客打造最贴合历史与个人气质的妆容和发型。",
+    "feature3Title": "一站式摄影跟拍",
+    "feature3Desc": "无需额外寻找摄影师，我们提供专业的古风摄影服务，为您记录下每一个精彩瞬间。",
+    "themesTitle": "精选派对主题",
+    "themesDesc": "我们精心设计了多种主题，满足您不同的社交与活动需求。",
+    "theme1Title": "曲水流觞·文人雅集",
+    "theme1Desc": "复刻古代文人的诗酒盛会。宾客们身着晋制汉服，席地而坐，体验投壶、抚琴、品茗等风雅活动。",
+    "theme1Feature1": "适合团队建设、文化沙龙",
+    "theme1Feature2": "包含茶艺、古琴表演",
+    "theme1Feature3": "提供全套仿古道具",
+    "theme2Title": "上元灯会·佳节团圆",
+    "theme2Desc": "重现元宵佳节的繁华景象。现场布置华丽灯笼，宾客可体验猜灯谜、制作花灯、品尝元宵等传统习俗。",
+    "theme2Feature1": "适合家庭聚会、生日庆典",
+    "theme2Feature2": "包含灯谜互动环节",
+    "theme2Feature3": "场地将进行灯笼主题布置",
+    "theme3Title": "大唐风华·及笄之礼",
+    "theme3Desc": "为女孩举办一场庄重而华美的成人礼。身着雍容的唐制汉服，在亲友的见证下，完成这一生中重要的仪式。",
+    "theme3Feature1": "适合成人礼、毕业纪念",
+    "theme3Feature2": "包含专业赞者（司仪）",
+    "theme3Feature3": "提供定制化仪式流程",
+    "bookingTitle": "预定流程",
+    "bookingDesc": "简单四步，轻松开启您的专属派对。",
+    "step1Title": "提交需求",
+    "step1Desc": "通过线上或电话告诉我们您的派对构想、人数和预算。",
+    "step2Title": "方案定制",
+    "step2Desc": "我们的策划师会为您量身打造一份专属派对方案。",
+    "step3Title": "确认预定",
+    "step3Desc": "确认方案细节并支付定金，我们将为您锁定档期。",
+    "step4Title": "尽享派对",
+    "step4Desc": "在约定之日，轻松前来，享受我们为您准备的一切。",
+    "ctaTitle": "准备好开始了吗？",
+    "ctaDesc": "立即联系我们的派对策划师，让我们一起将您的构想变为现实。无论是细节咨询还是初步报价，我们都乐意为您服务。",
+    "ctaBtn": "立即咨询"
+  },
+  "photowall": {
+    "title":"摄影作品集",
+    "moments":"精彩瞬间",
+    "description":"镜头下，汉服之美被永久定格。每一张照片，都是一个关于风雅与浪漫的故事。"
   }
 }

@@ -2,11 +2,6 @@
   <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
     <!-- Logo 和 标题 -->
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <div class="flex justify-center">
-        <div class="w-12 h-12 rounded-full bg-hanfu-red flex items-center justify-center">
-          <span class="text-white font-display text-xl">华</span>
-        </div>
-      </div>
       <h2 class="mt-6 text-center text-3xl font-display text-gray-900">
         {{ isLoginMode ? t('login.loginBtn') : t('login.registerBtn') }}
       </h2>
@@ -53,7 +48,6 @@
 
             <div class="my-6 flex items-center">
               <div class="flex-grow border-t border-gray-300"></div>
-              <span class="mx-4 text-gray-500 text-sm">{{ t('login.or') }}</span>
               <div class="flex-grow border-t border-gray-300"></div>
             </div>
 

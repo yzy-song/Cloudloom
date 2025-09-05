@@ -25,13 +25,13 @@
               class="font-serif text-5xl md:text-7xl lg:text-8xl font-bold tracking-wider mb-4 animate-fade-in-down"
               style="text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5)"
             >
-              {{ slide.title }}
+              {{ t(slide.title) }}
             </h1>
             <p
               class="text-lg md:text-xl max-w-2xl mx-auto mb-8 animate-fade-in-up"
               style="animation-delay: 0.3s; text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5)"
             >
-              {{ slide.description }}
+              {{ t(slide.description) }}
             </p>
           </div>
         </swiper-slide>
@@ -52,9 +52,11 @@
     <section class="py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
       <div class="max-w-screen-xl mx-auto">
         <div class="text-center mb-16" v-observe-animation>
-          <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">我们的服务</h2>
+          <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
+            {{ t('home.servicesTitle') }}
+          </h2>
           <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            从汉服租赁到主题派对，我们为您打造全方位的汉服文化体验。
+            {{ t('home.servicesDesc') }}
           </p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -69,8 +71,8 @@
             <div class="flex justify-center items-center mb-5">
               <component :is="feature.icon" class="w-12 h-12 text-[#C0392B]" />
             </div>
-            <h3 class="font-serif text-2xl font-semibold mb-3">{{ feature.title }}</h3>
-            <p class="text-gray-500">{{ feature.desc }}</p>
+            <h3 class="font-serif text-2xl font-semibold mb-3">{{ t(feature.title) }}</h3>
+            <p class="text-gray-500">{{ t(feature.desc) }}</p>
           </div>
         </div>
       </div>
@@ -81,13 +83,13 @@
       <div class="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div class="text-center lg:text-left" v-observe-animation="'animate-fade-in-right'">
           <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
-            风华·刹那惊鸿
+            {{ t('home.galleryTitle') }}
           </h2>
           <p class="text-lg text-gray-600 mb-8">
-            每一件汉服都承载着历史的温度，每一次回眸都定格了东方的神韵。
+            {{ t('home.galleryDesc') }}
           </p>
           <router-link to="/gallery" class="text-[#C0392B] font-semibold text-lg group">
-            <span>探索更多</span>
+            <span>{{ t('home.exploreMore') }}</span>
             <span class="inline-block transition-transform duration-300 group-hover:translate-x-2"
               >→</span
             >
@@ -127,10 +129,10 @@
       <div class="max-w-screen-xl mx-auto">
         <div class="text-center mb-16" v-observe-animation>
           <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
-            流程·体验之旅
+            {{ t('home.stepsTitle') }}
           </h2>
           <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            仅需三步，即可开启您的汉服穿越之旅，简单而纯粹。
+            {{ t('home.stepsDesc') }}
           </p>
         </div>
         <div class="relative">
@@ -167,10 +169,10 @@
       <div class="max-w-screen-xl mx-auto">
         <div class="text-center mb-16" v-observe-animation>
           <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
-            回响·佳人佳话
+            {{ t('home.testimonialsTitle') }}
           </h2>
           <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            听听那些曾与我们一同追寻古典之美的朋友们怎么说。
+            {{ t('home.testimonialsDesc') }}
           </p>
         </div>
 
@@ -205,11 +207,11 @@
                 <div class="flex items-center mt-auto pt-4 border-t border-gray-200">
                   <img
                     :src="item.avatar"
-                    :alt="item.name"
+                    :alt="t(item.name)"
                     class="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>
-                    <span class="font-semibold text-gray-800">{{ item.name }}</span>
+                    <span class="font-semibold text-gray-800">{{ t(item.name) }}</span>
                     <span class="text-sm text-gray-500 block">{{ t(item.role) }}</span>
                   </div>
                 </div>
@@ -242,9 +244,9 @@
       <div class="max-w-3xl mx-auto">
         <div class="text-center mb-16" v-observe-animation>
           <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wider mb-4">
-            解惑·常见问题
+            {{ t('home.faqTitle') }}
           </h2>
-          <p class="text-lg text-gray-600 max-w-3xl mx-auto">为您解答关于汉服体验的常见疑惑。</p>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">{{ t('home.faqDesc') }}</p>
         </div>
         <div class="space-y-4">
           <div
@@ -316,107 +318,77 @@ const { t } = useI18n()
 const { isMobile } = useDeviceCheck()
 const baseHomeSlides = [
   {
-    title: '盛唐风华系列',
-    description: '体验大唐盛世服饰，感受千年文化魅力',
-    buttonText: '查看详情',
+    key: 'tang',
     action: '/gallery?filter=tang',
     imageFileName: 'slide_001.jpeg',
   },
   {
-    title: '汉服配饰精选',
-    description: '团扇、发簪、荷包等传统配饰',
-    buttonText: '探索周边',
+    key: 'accessories',
     action: '/gallery?filter=accessories',
     imageFileName: 'slide_002.jpeg',
   },
   {
-    title: '文创产品上新',
-    description: '传统纹样设计的日常用品与艺术品',
-    buttonText: '浏览文创',
+    key: 'cultural',
     action: '/gallery?filter=cultural',
     imageFileName: 'slide_003.jpeg',
   },
   {
-    title: '儿童汉服特惠',
-    description: '专为儿童设计的传统服饰，传承从小开始',
-    buttonText: '查看系列',
+    key: 'kids',
     action: '/gallery?filter=kids',
     imageFileName: 'slide_004.jpeg',
   },
   {
-    title: '盛唐风华系列',
-    description: '体验大唐盛世服饰，感受千年文化魅力',
-    buttonText: '查看详情',
+    key: 'tang',
     action: '/gallery?filter=tang',
     imageFileName: 'slide_005.jpeg',
   },
   {
-    title: '汉服配饰精选',
-    description: '团扇、发簪、荷包等传统配饰',
-    buttonText: '探索周边',
+    key: 'accessories',
     action: '/gallery?filter=accessories',
     imageFileName: 'slide_006.jpeg',
   },
   {
-    title: '文创产品上新',
-    description: '传统纹样设计的日常用品与艺术品',
-    buttonText: '浏览文创',
+    key: 'cultural',
     action: '/gallery?filter=cultural',
     imageFileName: 'slide_007.jpeg',
   },
   {
-    title: '儿童汉服特惠',
-    description: '专为儿童设计的传统服饰，传承从小开始',
-    buttonText: '查看系列',
+    key: 'kids',
     action: '/gallery?filter=kids',
     imageFileName: 'slide_008.jpeg',
   },
   {
-    title: '盛唐风华系列',
-    description: '体验大唐盛世服饰，感受千年文化魅力',
-    buttonText: '查看详情',
+    key: 'tang',
     action: '/gallery?filter=tang',
     imageFileName: 'slide_009.jpeg',
   },
   {
-    title: '汉服配饰精选',
-    description: '团扇、发簪、荷包等传统配饰',
-    buttonText: '探索周边',
+    key: 'accessories',
     action: '/gallery?filter=accessories',
     imageFileName: 'slide_010.jpeg',
   },
   {
-    title: '文创产品上新',
-    description: '传统纹样设计的日常用品与艺术品',
-    buttonText: '浏览文创',
+    key: 'cultural',
     action: '/gallery?filter=cultural',
     imageFileName: 'slide_011.jpeg',
   },
   {
-    title: '儿童汉服特惠',
-    description: '专为儿童设计的传统服饰，传承从小开始',
-    buttonText: '查看系列',
+    key: 'kids',
     action: '/gallery?filter=kids',
     imageFileName: 'slide_012.jpeg',
   },
   {
-    title: '盛唐风华系列',
-    description: '体验大唐盛世服饰，感受千年文化魅力',
-    buttonText: '查看详情',
+    key: 'tang',
     action: '/gallery?filter=tang',
     imageFileName: 'slide_013.jpeg',
   },
   {
-    title: '汉服配饰精选',
-    description: '团扇、发簪、荷包等传统配饰',
-    buttonText: '探索周边',
+    key: 'accessories',
     action: '/gallery?filter=accessories',
     imageFileName: 'slide_014.jpeg',
   },
   {
-    title: '文创产品上新',
-    description: '传统纹样设计的日常用品与艺术品',
-    buttonText: '浏览文创',
+    key: 'cultural',
     action: '/gallery?filter=cultural',
     imageFileName: 'slide_015.jpeg',
   },
@@ -425,7 +397,8 @@ const shuffledBaseSlides = shuffle([...baseHomeSlides])
 const homeSlides = computed(() => {
   const imagePath = isMobile.value ? '/images/home-banner/mobile/' : '/images/home-banner/pc/'
   return shuffledBaseSlides.map((slide) => ({
-    ...slide,
+    title: `home.slides.${slide.key}.title`,
+    description: `home.slides.${slide.key}.description`,
     image: `${imagePath}${slide.imageFileName}`,
   }))
 })
@@ -434,26 +407,26 @@ const homeSlides = computed(() => {
 const features = [
   {
     icon: BuildingStorefrontIcon,
-    title: '汉服租赁 & 销售',
-    desc: '多种风格，满足日常穿着和特殊场合需求。',
+    title: 'home.feature1Title',
+    desc: 'home.feature1Desc',
     link: '/gallery',
   },
   {
     icon: UserGroupIcon,
-    title: '主题派对定制',
-    desc: '为个人聚会和公司团建打造专属汉服主题体验。',
+    title: 'home.feature2Title',
+    desc: 'home.feature2Desc',
     link: '/parties',
   },
   {
     icon: SparklesIcon,
-    title: '汉服周边',
-    desc: '精致配饰与文创产品，点缀你的汉服生活。',
+    title: 'home.feature3Title',
+    desc: 'home.feature3Desc',
     link: '/gallery',
   },
   {
     icon: CameraIcon,
-    title: '摄影服务',
-    desc: '专业合作摄影师，为你定格美好瞬间。',
+    title: 'home.feature4Title',
+    desc: 'home.feature4Desc',
     link: '/photos',
   },
 ]
@@ -468,28 +441,28 @@ const steps = [
 // 客户评价数据 (UPDATED)
 const testimonials = [
   {
-    name: '晨曦',
+    name: 'home.testimonials.names.chenxi',
     role: 'home.testimonial1Role',
     text: 'home.testimonial1',
     avatar:
       'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=464&auto=format&fit=crop',
   },
   {
-    name: '阿杰',
+    name: 'home.testimonials.names.ajie',
     role: 'home.testimonial2Role',
     text: 'home.testimonial2',
     avatar:
       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=387&auto=format&fit=crop',
   },
   {
-    name: '思月',
+    name: 'home.testimonials.names.siyue',
     role: 'home.testimonial3Role',
     text: 'home.testimonial3',
     avatar:
       'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=461&auto=format&fit=crop',
   },
   {
-    name: '林老师',
+    name: 'home.testimonials.names.lin',
     role: 'home.testimonial4Role',
     text: 'home.testimonial4',
     avatar:
