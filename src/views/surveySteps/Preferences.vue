@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   surveyData: {
@@ -10,14 +13,19 @@ const props = defineProps({
 const emit = defineEmits(['update:surveyData'])
 
 const styles = [
-  '飘逸优雅的风格（如魏晋、宋制）(Flowy and elegant styles, e.g., Wei-Jin, Song)',
-  '华丽大气的风格（如唐制）(Grand and magnificent styles, e.g., Tang)',
-  '端庄秀丽的风格（如明制）(Elegant and graceful styles, e.g., Ming)',
-  '英姿飒爽的侠客/武侠风格 (Heroic / Wuxia styles)',
-  "我不了解，希望店员推荐 (I don't know, I'd like a recommendation)",
+  t('survey.preferences.styles.flowy'),
+  t('survey.preferences.styles.grand'),
+  t('survey.preferences.styles.elegant'),
+  t('survey.preferences.styles.heroic'),
+  t('survey.preferences.styles.recommend'),
 ]
 
-const durations = ['1小时以内', '1 - 2 小时', '2 - 3 小时', '半天或更久']
+const durations = [
+  t('survey.preferences.durations.d1'),
+  t('survey.preferences.durations.d2'),
+  t('survey.preferences.durations.d3'),
+  t('survey.preferences.durations.d4'),
+]
 
 const localSurveyData = computed({
   get: () => props.surveyData,
@@ -30,9 +38,9 @@ const localSurveyData = computed({
 <template>
   <div class="p-4 md:p-6">
     <h2 class="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-      问题 3.2: 您更偏爱哪种风格的汉服？
+      {{ t('survey.preferences.q1_title') }}
     </h2>
-    <p class="text-sm text-gray-500 mb-4">如果能配图展示效果最佳</p>
+    <p class="text-sm text-gray-500 mb-4">{{ t('survey.preferences.q1_prompt') }}</p>
     <div class="space-y-3">
       <label
         v-for="style in styles"
@@ -50,7 +58,7 @@ const localSurveyData = computed({
     </div>
 
     <h2 class="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-200 mt-8 mb-4">
-      问题 3.3: 您理想中的一次完整汉服体验（从进店到结束）时长是多久？
+      {{ t('survey.preferences.q2_title') }}
     </h2>
     <div class="space-y-3">
       <label

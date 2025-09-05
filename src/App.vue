@@ -32,6 +32,7 @@
         </svg>
       </button>
     </transition>
+    <DevAccessInfo />
   </div>
 </template>
 

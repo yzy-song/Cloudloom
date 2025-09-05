@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface ClothingItem {
   id: number
@@ -19,27 +22,27 @@ const emit = defineEmits(['update:surveyData'])
 const clothingItems = ref<ClothingItem[]>([
   { id: 1, name: 'Hanfu (汉服)', src: '/images/survey/hanfu.jpeg', isHanfu: true },
   { id: 2, name: 'Qipao (旗袍)', src: '/images/survey/qipao.jpeg', isHanfu: false },
-  { id: 3, name: 'Kimono (着物)', src: '/images/survey/kimono.jpeg', isHanfu: false },
+  { id: 3, name: 'Kimono (きもの)', src: '/images/survey/kimono.jpeg', isHanfu: false },
   { id: 4, name: 'Hanbok (한복)', src: '/images/survey/hanbok.jpeg', isHanfu: false },
   { id: 5, name: 'Modern Wear', src: '/images/survey/morden.jpeg', isHanfu: false },
   { id: 6, name: 'Cosplay', src: '/images/survey/cosplay.jpeg', isHanfu: false },
 ])
 
-const residenceOptions = [
-  '都柏林 (Dublin)',
-  '爱尔兰其他城市 (Other city in Ireland)',
-  '其他国家 (I am a tourist / live in another country)',
-]
+const residenceOptions = computed(() => [
+  t('survey.recognition.residenceOptions.dublin'),
+  t('survey.recognition.residenceOptions.other_ireland'),
+  t('survey.recognition.residenceOptions.other_country'),
+])
 
-const channelOptions = [
-  '微信群 / 朋友圈 (WeChat Groups / Moments)',
-  '小红书 (RED / Xiaohongshu)',
-  'Instagram / Facebook',
-  'TikTok',
-  "朋友推荐 (Friend's Recommendation)",
-  '学校/社团通知 (University / Student Group Notice)',
-  '其他 (Other)',
-]
+const channelOptions = computed(() => [
+  t('survey.recognition.channelOptions.wechat'),
+  t('survey.recognition.channelOptions.red'),
+  t('survey.recognition.channelOptions.instagram'),
+  t('survey.recognition.channelOptions.tiktok'),
+  t('survey.recognition.channelOptions.friend'),
+  t('survey.recognition.channelOptions.university'),
+  t('survey.recognition.channelOptions.other'),
+])
 
 // 用于存储每个选项的视觉状态 (correct, incorrect)
 const selectionStatus = reactive<Record<number, 'correct' | 'incorrect'>>({})
@@ -88,9 +91,9 @@ function getBorderClass(item: ClothingItem) {
 <template>
   <div class="p-4 md:p-6">
     <h2 class="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-      问题 1.1: 您能认出以下哪些是汉服（中国汉族的传统服饰）吗？
+      {{ t('survey.recognition.q1_title') }}
     </h2>
-    <p class="text-sm text-gray-500 mb-4">请点击您认为是汉服的图片。</p>
+    <p class="text-sm text-gray-500 mb-4">{{ t('survey.recognition.q1_prompt') }}</p>
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
       <div
         v-for="item in clothingItems"
@@ -129,15 +132,16 @@ function getBorderClass(item: ClothingItem) {
     >
       <p class="text-sm text-gray-600 dark:text-gray-400">
         <span class="inline-block w-3 h-3 rounded-full bg-green-500 mr-1" />
-        <span class="font-semibold">正确!</span>
+        <span class="font-semibold">{{ t('survey.recognition.feedback_correct') }}</span>
         <span class="inline-block w-3 h-3 rounded-full bg-red-500 mr-1 ml-4" />
-        <span class="font-semibold">提示:</span> 汉服是汉民族的传统服饰，而旗袍等属于近代服饰。
+        <span class="font-semibold">{{ t('survey.recognition.feedback_incorrect_prompt') }}</span>
+        {{ t('survey.recognition.feedback_incorrect_text') }}
       </p>
     </div>
 
     <!-- 问题 1.2 -->
     <h2 class="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-200 mt-8 mb-4">
-      问题 1.2: 您目前主要居住在哪个城市？
+      {{ t('survey.recognition.q2_title') }}
     </h2>
     <div class="space-y-3">
       <label
@@ -157,7 +161,7 @@ function getBorderClass(item: ClothingItem) {
 
     <!-- 问题 1.3 -->
     <h2 class="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-200 mt-8 mb-4">
-      问题 1.3: 您是通过以下哪个渠道了解到本次问卷调查的？
+      {{ t('survey.recognition.q3_title') }}
     </h2>
     <div class="space-y-3">
       <label
