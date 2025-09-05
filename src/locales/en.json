@@ -10,6 +10,7 @@
     "about": "About",
     "aboutUs": "About Us",
     "collaboration": "Collaboration",
+    "survey": "Market Survey",
     "login": "Login",
     "logout": "Logout",
     "profile": "Profile",
@@ -174,7 +175,7 @@
     },
     "recognition": {
       "correct": "Congratulations, you're right! This is Hanfu.",
-      "incorrect": "Not quite, this is {alt}. Hanfu is the correct answer.",
+      "incorrect": "Not quite, this is {alt}. Hanfu is the correct answer. ",
       "thisIs": "This is"
     },
     "submitted": "Thank you for your participation!",

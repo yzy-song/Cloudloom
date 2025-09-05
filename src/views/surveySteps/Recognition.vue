@@ -71,12 +71,17 @@ const emit = defineEmits(['update:modelValue', 'recognition'])
 const temporaryFeedback = ref<{ id: number; isCorrect: boolean } | null>(null)
 
 const recognitionImages = [
-  { id: 1, src: '/images/survey/qipao.jpeg', alt: '旗袍', isCorrect: false },
-  { id: 2, src: '/images/survey/hanfu.jpeg', alt: '汉服', isCorrect: true },
-  { id: 3, src: '/images/survey/kimono.jpeg', alt: '日式和服', isCorrect: false },
-  { id: 4, src: '/images/survey/hanbok.jpeg', alt: '韩服', isCorrect: false },
-  { id: 5, src: '/images/survey/morden.jpeg', alt: '现代服饰', isCorrect: false },
-  { id: 6, src: '/images/survey/cosplay.jpeg', alt: 'Cosplay', isCorrect: false },
+  { id: 1, src: '/images/survey/qipao.jpeg', alt: t('recognition.alts.qipao'), isCorrect: false },
+  { id: 2, src: '/images/survey/hanfu.jpeg', alt: t('recognition.alts.hanfu'), isCorrect: true },
+  { id: 3, src: '/images/survey/kimono.jpeg', alt: t('recognition.alts.kimono'), isCorrect: false },
+  { id: 4, src: '/images/survey/hanbok.jpeg', alt: t('recognition.alts.hanbok'), isCorrect: false },
+  { id: 5, src: '/images/survey/morden.jpeg', alt: t('recognition.alts.morden'), isCorrect: false },
+  {
+    id: 6,
+    src: '/images/survey/cosplay.jpeg',
+    alt: t('recognition.alts.cosplay'),
+    isCorrect: false,
+  },
 ]
 
 function select(image: any) {
