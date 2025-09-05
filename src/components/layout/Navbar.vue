@@ -414,6 +414,7 @@ const navItems = [
     children: [
       { label: 'navbar.aboutUs', path: '/about' },
       { label: 'navbar.collaboration', path: '/collaboration' },
+      { label: 'navbar.survey', path: '/survey-page' },
     ],
   },
 ]
