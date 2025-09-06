@@ -136,3 +136,15 @@ export interface PaginationState {
   total: number
   totalPages: number
 }
+
+// =================================================================
+// 图片 (Photo)
+// =================================================================
+
+export interface Photo {
+  id: number
+  url: string // 图片文件名
+  alt?: string // 可选，图片描述
+  userId?: number // 可选，上传者
+  createdAt?: string
+}
