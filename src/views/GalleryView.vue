@@ -162,5 +162,6 @@ onMounted(async () => {
   if (authStore.isAuthenticated && favoriteStore.favorites.length === 0) {
     await favoriteStore.fetchFavorites()
   }
+  await productStore.fetchAllProducts()
 })
 </script>

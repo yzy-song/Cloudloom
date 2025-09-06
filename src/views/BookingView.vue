@@ -15,7 +15,7 @@
               class="bg-gray-200 border-2 border-dashed rounded-xl aspect-[3/4] w-full mb-4"
             ></div>
             <template v-if="booking.bookingType === 'standard'">
-              <h3 class="text-lg font-medium">{{ product?.name }}</h3>
+              <h3 class="text-lg font-medium">{{ product?.title }}</h3>
               <p class="text-gray-600 mt-1">尺寸: {{ booking.size }}</p>
               <p class="text-hanfu-red text-xl font-medium mt-2">
                 €{{ product?.price ? product.price.toFixed(2) : '--' }}
@@ -211,7 +211,7 @@ const timeSlots = [
 // 获取产品详情
 onMounted(async () => {
   if (productId.value) {
-    await productStore.fetchProductById(productId.value)
+    await productStore.fetchProductById(Number(productId.value))
   }
   if (sizeFromQuery.value) {
     booking.value.size = sizeFromQuery.value
@@ -276,8 +276,8 @@ async function submitBooking() {
       totalAmount: 30,
     })
     // 展示 Stripe 支付
-    logger.info('预约创建成功，准备支付', res.data)
-    clientSecret.value = (res.data as any).client_secret ?? ''
+    logger.info('预约创建成功，准备支付', res)
+    clientSecret.value = (res as any).client_secret ?? ''
     logger.info('客户端密钥', clientSecret.value)
     showStripe.value = true
   } catch (e: any) {

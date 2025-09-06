@@ -47,10 +47,9 @@ apiClient.interceptors.request.use(
 // 响应拦截器
 apiClient.interceptors.response.use(
   (response) => {
-    // 处理response格式
-    if (response.data && typeof response.data === 'object' && 'data' in response.data) {
-      return response.data
-    }
+    // [关键修正] 移除这里的解包逻辑。
+    // 让拦截器只返回原始的 Axios 响应。
+    // 让 api.get 或 api.post 的调用者自己决定如何处理数据。
     return response
   },
   (error) => {
@@ -69,8 +68,9 @@ export const setAuthToken = (token: string | null) => {
   }
 }
 
-// 类型化的API调用方法 - 更新返回类型
+// 类型化的API调用方法
 export const api = {
+  // [关键修正] 现在 .then(res => res.data) 会正确地返回后端发送的完整对象
   get: <T>(url: string, params?: any): Promise<T> =>
     apiClient.get<T>(url, { params }).then((res) => res.data),
 

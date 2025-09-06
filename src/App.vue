@@ -56,7 +56,6 @@ const productStore = useProductStore()
 
 const fetchPublicData = () => {
   categoriesStore.fetchAllCategories()
-  productStore.fetchAllProducts()
 }
 fetchPublicData()
 
