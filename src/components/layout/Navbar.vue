@@ -333,7 +333,7 @@
               />
               <div>
                 <span class="font-bold text-lg text-gray-800">{{
-                  authStore.user?.nickName || t('navbar.usernamePlaceholder')
+                  authStore.user?.username || t('navbar.usernamePlaceholder')
                 }}</span>
                 <router-link
                   to="/profile"
@@ -468,7 +468,6 @@ const dropdownLinkClass = computed(() =>
 const logout = () => {
   isUserMenuOpen.value = false
   authStore.logout()
-  router.push('/')
 }
 
 const switchLanguage = (langCode: string) => {

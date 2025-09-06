@@ -35,7 +35,7 @@ apiClient.interceptors.request.use(
     }
     logger.info('[API Request]', config.method?.toUpperCase(), fullUrl)
 
-    const token = localStorage.getItem('auth_token')
+    const token = localStorage.getItem('token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
@@ -54,11 +54,6 @@ apiClient.interceptors.response.use(
     return response
   },
   (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('auth_token')
-      window.location.href = '/login'
-    }
-
     const errorMessage =
       error.response?.data?.error || error.response?.data?.message || 'Network error'
 
@@ -76,13 +71,17 @@ export const setAuthToken = (token: string | null) => {
 
 // 类型化的API调用方法 - 更新返回类型
 export const api = {
-  get: <T>(url: string, params?: any) => apiClient.get<T>(url, { params }), // 直接返回 T，不是 ApiResponse<T>
+  get: <T>(url: string, params?: any): Promise<T> =>
+    apiClient.get<T>(url, { params }).then((res) => res.data),
 
-  post: <T>(url: string, data?: any) => apiClient.post<T>(url, data),
+  post: <T>(url: string, data?: any): Promise<T> =>
+    apiClient.post<T>(url, data).then((res) => res.data),
 
-  put: <T>(url: string, data?: any) => apiClient.put<T>(url, data),
+  put: <T>(url: string, data?: any): Promise<T> =>
+    apiClient.put<T>(url, data).then((res) => res.data),
 
-  delete: <T>(url: string) => apiClient.delete<T>(url),
+  delete: <T>(url: string): Promise<T> => apiClient.delete<T>(url).then((res) => res.data),
 
-  patch: <T>(url: string, data?: any) => apiClient.patch<T>(url, data),
+  patch: <T>(url: string, data?: any): Promise<T> =>
+    apiClient.patch<T>(url, data).then((res) => res.data),
 }

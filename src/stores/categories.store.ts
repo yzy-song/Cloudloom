@@ -1,35 +1,43 @@
-import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { useApi } from '@/composables/useApi'
+import type { Category } from '@/types'
+import { apiClient } from '@/api/client'
 
-// 1. 定义 Category 接口
-export interface Category {
-  id: number
-  name: string
-  description?: string
-}
+export const useCategoriesStore = defineStore('categories', {
+  state: () => ({
+    categories: [] as Category[],
+    isLoading: false,
+    error: null as string | null,
+  }),
+  getters: {
+    /**
+     * [保留] Getter for all categories.
+     */
+    getCategories(state): Category[] {
+      return state.categories
+    },
+  },
+  actions: {
+    /**
+     * [更名并优化] 从服务器获取所有分类（包含子分类）。
+     * 同样加入了缓存机制。
+     */
+    async fetchAllCategories() {
+      // 如果分类已经加载过，就不再重复获取
+      if (this.categories.length > 0) {
+        return
+      }
 
-export const useCategoryStore = defineStore('categories', () => {
-  const api = useApi()
-
-  // 2. 添加类型定义和 isLoading 状态
-  const categories = ref<Category[]>([])
-  const isLoading = ref(false)
-
-  async function fetchCategories() {
-    isLoading.value = true
-    try {
-      // 3. 修正 API 响应处理
-      const responseData = await api.get<Category[]>('/categories')
-      if (responseData) categories.value = responseData
-      else categories.value = []
-    } catch (error) {
-      console.error('Failed to fetch categories:', error)
-      categories.value = []
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  return { categories, isLoading, fetchCategories }
+      this.isLoading = true
+      this.error = null
+      try {
+        const response = await apiClient.get<Category[]>('/categories')
+        this.categories = response.data
+      } catch (err: any) {
+        this.error = err.response?.data?.message || '获取分类列表失败。'
+        console.error(this.error)
+      } finally {
+        this.isLoading = false
+      }
+    },
+  },
 })
