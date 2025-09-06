@@ -28,7 +28,11 @@
 
     <router-link :to="`/product/${product.id}`">
       <figure>
-        <img :src="product.images[0]" :alt="product.title" class="h-64 w-full object-cover" />
+        <img
+          :src="getBackendAssetURL(product.images[0])"
+          :alt="product.title"
+          class="h-64 w-full object-cover"
+        />
       </figure>
       <div class="card-body">
         <h2 class="card-title truncate text-base">{{ product.title }}</h2>
@@ -44,7 +48,7 @@ import { useRouter } from 'vue-router'
 import type { Product } from '@/types'
 import { useAuthStore } from '@/stores/auth.store'
 import { useFavoriteStore } from '@/stores/favorite.store'
-
+import { getBackendAssetURL } from '@/utils/url'
 const props = defineProps<{
   product: Product
 }>()
