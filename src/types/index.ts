@@ -1,151 +1,129 @@
-/*
- * @Author: yzy
- * @Date: 2025-08-16 11:09:37
- * @LastEditors: yzy
- * @LastEditTime: 2025-08-26 00:08:38
+/**
+ * src/types/index.ts
+ * * 这是项目的前端类型定义文件。
+ * 它应该与后端 /src/core/entities 中的实体定义保持同步。
  */
 
-// FIX: Correctly define the structure for product details
-export interface ProductDetailItem {
-  key: string
-  value: string
+// =================================================================
+// 权限与角色 (Permissions & Roles)
+// =================================================================
+
+export interface Permission {
+  id: number
+  name: string
+  description: string
 }
 
-// 产品类型
-export interface Product {
+export interface Role {
   id: number
-  title: string
+  name: string
   description: string
-  price: number
-  category: string
-  colors?: ProductColor[]
-  dynasty: string
-  dynastyLabel: string
-  tags: string[]
-  images: string[]
-  material: string
-  sizeOptions: string[]
-  careInstructions: string
+  permissions: Permission[]
+}
+
+// =================================================================
+// 用户 (User)
+// =================================================================
+
+export interface User {
+  id: number
+  username: string
+  nickName: string
+  email: string
+  avatarUrl?: string
+  provider: 'local' | 'google' | 'facebook'
+  providerId?: string
+  roles: Role[]
   createdAt: string
   updatedAt: string
-  rentalPrice: number
-  rentalPeriods: RentalPeriod[]
-  details: ProductDetailItem[] | string[] // Allow both structures for flexibility
-  reviews: number
-  subcategoryId: string
-  subcategory?: Subcategory // 详情页可选返回
 }
 
-export interface Subcategory {
-  id: string
-  name: string
-  categoryId: string
-  category?: Category // 可选，详情页展示用
-}
+// =================================================================
+// 产品与分类 (Products & Categories)
+// =================================================================
 
-// 分类类型
 export interface Category {
   id: number
   name: string
   description: string
-  productCount: number
-  image: string
-  filterKey: string
-
-  subcategories: Subcategory[]
+  subcategories: Subcategory[] // 一个主分类下有多个子分类
+  createdAt: string
+  updatedAt: string
 }
 
-export interface HeroSlide {
-  title: string
-  description: string
-  buttonText?: string
-  action?: string
-  image: string
-}
-
-// 合作类型
-export interface CollaborationOption {
+export interface Subcategory {
   id: number
   name: string
   description: string
-  benefits: string[]
+  category: Category // 子分类属于一个主分类
+  products: Product[] // 一个子分类下有多个产品
+  createdAt: string
+  updatedAt: string
 }
 
-export interface ProductColor {
-  id: string
+export interface Product {
+  id: number
   name: string
-  value: string
-  inStock: boolean
-}
-
-export interface RentalPeriod {
-  id: string
-  name: string
-  duration: number
-  unit: 'hour' | 'day'
-  price: number
-}
-
-export type ProductCategory =
-  | 'tang'
-  | 'song'
-  | 'ming'
-  | 'male'
-  | 'female'
-  | 'kids'
-  | 'wedding'
-  | 'accessories'
-  | 'cultural'
-
-export interface EraInfo {
-  id: string
-  name: string
-  period: string
   description: string
-  characteristics: string[]
-  typicalOutfits: string[]
-  historicalBackground: string
+  mainImage: string
   images: string[]
-  timeline: TimelineEvent[]
+  price: number
+  stock: number
+  status: 'available' | 'unavailable'
+  subcategory: Subcategory // 产品属于一个子分类
+  createdAt: string
+  updatedAt: string
 }
 
-export interface TimelineEvent {
-  year: string
-  event: string
-  description: string
-}
+// =================================================================
+// 用户收藏 (User Favorites)
+// =================================================================
 
-export interface Booking {
-  id: string
-  packageId: string
-  customer: CustomerInfo
-  date: string
-  time: string
-  participants: number
-  status: BookingStatus
-  totalAmount: number
+export interface UserFavorite {
+  id: number
+  user: User
+  product: Product
   createdAt: string
 }
 
-export type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed'
+// =================================================================
+// 预定 (Booking)
+// =================================================================
 
-export interface CustomerInfo {
-  id?: string
-  username: string
-  email: string
-  phone: string
+export interface Booking {
+  id: number
+  user: User
+  product: Product
+  bookingDate: string
+  bookingTime: string
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed'
   notes?: string
+  createdAt: string
+  updatedAt: string
 }
 
-export interface ApiResponse<T> {
-  data: T
-  message?: string
-  pagination?: PaginationMeta
+// =================================================================
+// 合作申请 (Collaboration Application)
+// =================================================================
+
+export interface CollaborationApplication {
+  id: number
+  name: string
+  email: string
+  phone?: string
+  socialMediaLink?: string
+  collaborationType: string
+  message: string
+  status: 'pending' | 'approved' | 'rejected'
+  submittedAt: Date
 }
 
-export interface PaginationMeta {
-  total: number
+/**
+ * Interface for pagination state.
+ */
+export interface PaginationState {
   page: number
   limit: number
+  total: number
   totalPages: number
 }

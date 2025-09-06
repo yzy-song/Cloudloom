@@ -306,12 +306,9 @@ import {
 import { Autoplay, Pagination, Navigation } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-
-import type { HeroSlide } from '@/types'
 import { useDeviceCheck } from '@/composables/useDeviceCheck'
+import router from '@/router'
 
-const router = useRouter()
 const { t } = useI18n()
 
 // --- 修正后的轮播图数据和逻辑 ---

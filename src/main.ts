@@ -2,73 +2,63 @@
  * @Author: yzy
  * @Date: 2025-08-20 16:35:27
  * @LastEditors: yzy
- * @LastEditTime: 2025-08-29 11:36:51
+ * @LastEditTime: 2025-09-06 01:43:00
  */
-import { createApp, watchEffect } from 'vue'
+import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import { createI18nInstance } from './i18n'
-import { createRouterInstance } from './router' // 从 router/index.ts 导入创建函数
-import { useAuthStore } from './stores/auth.store'
-import { installLogger, logger } from '@/utils/logger' // 确保同时导入 logger
 import './assets/styles/main.css'
+import router from './router'
+import { useAuthStore } from './stores/auth.store'
+import { installLogger } from '@/utils/logger'
 
-async function startApp() {
+async function initializeApp() {
   const app = createApp(App)
 
-  // 安装 Logger
+  // 1. 安装 Logger 和 Pinia
   installLogger(app)
-
   const pinia = createPinia()
   app.use(pinia)
 
-  // 使用导入的函数创建 router 实例
-  const router = createRouterInstance()
-  // 不再需要 await
+  // 2. 安装 i18n
   const i18n = createI18nInstance()
+  app.use(i18n)
 
-  // 1. 导航守卫逻辑 (保持不变)
+  // 3. 安装路由插件（此时不注册守卫）
+  app.use(router)
+
+  // 4. [关键步骤] 等待初始认证状态检查完成
+  // 必须在路由守卫注册前完成，以确保 isAuthenticated 状态是可靠的
+  const authStore = useAuthStore()
+  await authStore.checkAuthState()
+
+  // 5. [关键步骤] 在认证状态就绪后，动态注册全局导航守卫
   router.beforeEach((to, from, next) => {
-    const enableAuth = import.meta.env.VITE_ENABLE_AUTH === 'true'
-    if (enableAuth) {
-      const authStore = useAuthStore()
-      // Pinia store 在这里可以安全使用，因为 app.use(pinia) 已经执行
+    // 从环境变量决定是否启用认证逻辑
+    const authEnabled = import.meta.env.VITE_ENABLE_AUTH === 'true'
+    if (!authEnabled) {
+      return next()
+    }
 
-      if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-        logger.warn('Route requires auth, but user is not authenticated. Redirecting to login.')
-        next({ name: 'Login', query: { redirect: to.fullPath } })
-      } else if (to.meta.requiresGuest && authStore.isAuthenticated) {
-        logger.debug('Route requires guest, but user is authenticated. Redirecting to home.')
-        next('/')
-      } else {
-        next()
-      }
+    // 此刻，authStore.isAuthenticated 的值是初始化后最准确的状态
+    const isAuthenticated = authStore.isAuthenticated
+
+    if (to.meta.requiresAuth && !isAuthenticated) {
+      // 如果目标路由需要认证但用户未登录，则重定向到登录页
+      next({ name: 'Login', query: { redirect: to.fullPath } })
+    } else if (to.meta.requiresGuest && isAuthenticated) {
+      // 如果目标路由只允许访客访问但用户已登录，则重定向到首页
+      next({ name: 'Home' })
     } else {
+      // 其他情况，正常放行
       next()
     }
   })
 
-  // 2. 使用 watchEffect 响应式地更新标题 (保持不变)
-  watchEffect(() => {
-    const route = router.currentRoute.value
-    const titleKey = route.meta.titleKey as string
-
-    const brandName = i18n.global.t('brand.name')
-    const pageTitle = titleKey ? i18n.global.t(titleKey) : ''
-
-    if (pageTitle && pageTitle !== titleKey) {
-      document.title = `${pageTitle} - ${brandName}`
-    } else {
-      document.title = brandName
-    }
-  })
-
-  // 依次注册插件
-  app.use(i18n)
-  app.use(router)
-
-  // 挂载应用
+  // 6. 等待路由完全就绪后，再挂载应用
+  await router.isReady()
   app.mount('#app')
 }
 
-startApp()
+initializeApp()

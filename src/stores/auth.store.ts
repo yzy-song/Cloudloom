@@ -1,299 +1,193 @@
-import { ref } from 'vue'
+import { signInWithPopup, signOut, onAuthStateChanged, type AuthProvider } from 'firebase/auth'
 import { defineStore } from 'pinia'
-import type { ApiResponse } from '@/types'
-import { api, setAuthToken } from '@/api/client'
+import type { User } from '@/types'
+import type { LoginUserDto, RegisterUserDto, OAuthLoginDto } from '@/types/dto'
+import { apiClient } from '@/api/client'
+import { auth } from '@/firebase'
 
-export interface User {
-  id: string
-  username: string
-  nickName?: string
-  email: string
-  avatarUrl?: string
-  phone?: string
-  role: 'admin' | 'customer'
-  description?: string
-}
+export const useAuthStore = defineStore('auth', {
+  state: () => ({
+    user: null as User | null,
+    token: localStorage.getItem('token') || null,
+    error: null as string | null,
+    loading: false,
+    isAuthReady: false,
+  }),
 
-export interface LoginCredentials {
-  identifier: string
-  password: string
-  remember?: boolean
-}
+  getters: {
+    isAuthenticated(state): boolean {
+      // [修正] 认证状态应该只依赖于 token 的存在。
+      return !!state.token
+    },
+    getUser(state): User | null {
+      return state.user
+    },
+  },
 
-export interface RegisterData {
-  username: string
-  email: string
-  password: string
-  confirmPassword: string
-}
+  actions: {
+    /**
+     * 从后端获取用户 profile 信息
+     */
+    async fetchUserProfile() {
+      if (!this.token) return
 
-export interface ProfileData {
-  username?: string
-  nickName?: string
-  email?: string
-  phone?: string
-  avatarUrl?: string
-  description?: string
-}
-
-export const useAuthStore = defineStore('auth', () => {
-  const user = ref<User | null>(null)
-  const token = ref<string | null>(localStorage.getItem('auth_token'))
-  const loading = ref(false)
-  const error = ref<string | null>(null)
-  const isAuthenticated = ref(!!token.value)
-
-  // 初始化认证状态
-  const initAuth = () => {
-    // 首先检查 localStorage (记住我功能)
-    const savedUser = localStorage.getItem('cloudloom_user')
-    const savedToken = localStorage.getItem('auth_token')
-    const rememberMe = localStorage.getItem('remember_me') === 'true'
-
-    // 检查 localStorage 中的数据是否有效
-    if (savedUser && savedToken && rememberMe && savedUser !== 'undefined') {
+      this.loading = true
       try {
-        const parsedUser = JSON.parse(savedUser)
-        if (parsedUser && parsedUser.id) {
-          // 简单验证用户对象
-          user.value = parsedUser
-          token.value = savedToken
-          isAuthenticated.value = true
-          // 设置token到API客户端
-          setAuthToken(savedToken)
-          return // 如果localStorage有效，直接返回
+        const response = await apiClient.get<User>('/auth/profile')
+        this.user = response.data
+      } catch (err: any) {
+        // [修正] 只有在认证失败 (401) 时才清除 token，避免其他错误导致意外登出
+        if (err.response?.status === 401) {
+          this.user = null
+          this.token = null
+          localStorage.removeItem('token')
+          delete apiClient.defaults.headers.common['Authorization']
+          this.handleAuthError(err, '会话已过期或无效，请重新登录。')
+        } else {
+          // 对于其他错误（如网络问题），只记录错误，不清除登录状态
+          this.handleAuthError(err, '获取用户信息失败。')
         }
-      } catch (e) {
-        // 解析失败时清除无效数据
-        localStorage.removeItem('cloudloom_user')
-        localStorage.removeItem('auth_token')
-        localStorage.removeItem('remember_me')
+      } finally {
+        this.loading = false
       }
-    }
+    },
 
-    // 如果没有记住我或localStorage无效，检查sessionStorage
-    const sessionUser = sessionStorage.getItem('cloudloom_user')
-    const sessionToken = sessionStorage.getItem('auth_token')
-    if (sessionUser && sessionToken && sessionUser !== 'undefined') {
+    /**
+     * 用户名密码登录
+     */
+    async login(loginDto: LoginUserDto) {
+      this.loading = true
+      this.error = null
       try {
-        const parsedUser = JSON.parse(sessionUser)
-        if (parsedUser && parsedUser.id) {
-          // 简单验证用户对象
-          user.value = parsedUser
-          token.value = sessionToken
-          isAuthenticated.value = true
-          setAuthToken(sessionToken)
-          return
+        // [修正] 动态导入 router
+        const router = (await import('@/router')).default
+        // [修正] 后端登录接口返回了 accessToken 和 user，直接使用它们
+        const response = await apiClient.post<{ accessToken: string; user: User }>(
+          '/auth/login',
+          loginDto,
+        )
+        const { accessToken, user } = response.data
+
+        // 直接设置 token 和 user
+        this.token = accessToken
+        this.user = user
+        localStorage.setItem('token', accessToken)
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
+
+        // 登录成功后跳转
+        router.push('/')
+      } catch (err: any) {
+        this.handleAuthError(err, '登录失败，请检查您的邮箱和密码。')
+      } finally {
+        this.loading = false
+      }
+    },
+
+    /**
+     * 用户注册
+     */
+    async register(registerDto: RegisterUserDto) {
+      this.loading = true
+      this.error = null
+      try {
+        // [修正] 动态导入 router
+        const router = (await import('@/router')).default
+        await apiClient.post('/auth/register', registerDto)
+        alert('注册成功，请登录！')
+        router.push('/login')
+      } catch (err: any) {
+        this.handleAuthError(err, '注册失败，该邮箱可能已被使用。')
+      } finally {
+        this.loading = false
+      }
+    },
+
+    /**
+     * [最终正确版本] 通用的 OAuth 登录方法，匹配你最新的后端API
+     * @param provider - Firebase Auth Provider (e.g., GoogleAuthProvider)
+     */
+    async loginWithOAuth(provider: AuthProvider) {
+      this.loading = true
+      this.error = null
+      try {
+        // [修正] 动态导入 router
+        const router = (await import('@/router')).default
+        // 步骤 1: 通过 Firebase 进行第三方认证
+        const result = await signInWithPopup(auth, provider)
+        const firebaseToken = await result.user.getIdToken()
+
+        // 步骤 2: 将 Firebase token 发送到你后端真实的 /auth/oauth-login 接口
+        const oauthLoginDto: OAuthLoginDto = { idToken: firebaseToken }
+        const response = await apiClient.post<{ accessToken: string; user: User }>(
+          '/auth/oauth-login',
+          oauthLoginDto,
+        )
+
+        // 步骤 3: 从后端一次性获取 token 和 user 对象并保存
+        const { accessToken, user } = response.data
+        this.token = accessToken
+        this.user = user
+        localStorage.setItem('token', accessToken)
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
+
+        router.push('/')
+      } catch (err: any) {
+        logger.error('OAuth login error:', err)
+        this.handleAuthError(err, '第三方登录失败。')
+      } finally {
+        this.loading = false
+      }
+    },
+
+    /**
+     * 用户登出
+     */
+    async logout() {
+      this.loading = true
+      const router = (await import('@/router')).default
+      try {
+        // [修正] 动态导入 router
+        // 仍然需要登出 Firebase 的会话
+        if (auth.currentUser) {
+          await signOut(auth)
         }
-      } catch (e) {
-        // 解析失败时清除无效数据
-        sessionStorage.removeItem('cloudloom_user')
-        sessionStorage.removeItem('auth_token')
+      } catch (error) {
+        console.error('Firebase signOut error:', error)
+      } finally {
+        this.user = null
+        this.token = null
+        localStorage.removeItem('token')
+        logger.info('User logged out, redirecting to home.')
+        delete apiClient.defaults.headers.common['Authorization']
+        this.loading = false
+        if (router.currentRoute.value.path !== '/') {
+          router.push('/')
+        }
       }
-    }
+    },
 
-    // 如果都没有有效数据，确保状态是干净的
-    if (!user.value) {
-      user.value = null
-      token.value = null
-      isAuthenticated.value = false
-      // 清除所有存储
-      localStorage.removeItem('cloudloom_user')
-      localStorage.removeItem('auth_token')
-      localStorage.removeItem('remember_me')
-      sessionStorage.removeItem('cloudloom_user')
-      sessionStorage.removeItem('auth_token')
-    }
-  }
-
-  const login = async (credentials: LoginCredentials) => {
-    loading.value = true
-    error.value = null
-    try {
-      const response = await api.post<{ user: User; accessToken: string }>('/auth/login', {
-        identifier: credentials.identifier,
-        password: credentials.password,
-      })
-
-      user.value = response.data.user
-      token.value = response.data.accessToken
-      isAuthenticated.value = true
-
-      // 设置token到API客户端
-      setAuthToken(response.data.accessToken)
-      // 根据remember选项决定存储方式
-      if (credentials.remember) {
-        // 长期存储到localStorage
-        localStorage.setItem('cloudloom_user', JSON.stringify(response.data.user))
-        localStorage.setItem('auth_token', response.data.accessToken)
-        localStorage.setItem('remember_me', 'true')
-      } else {
-        // 只存储到sessionStorage（浏览器关闭后清除）
-        sessionStorage.setItem('cloudloom_user', JSON.stringify(response.data.user))
-        sessionStorage.setItem('auth_token', response.data.accessToken)
-        // 清除localStorage中的相关数据
-        localStorage.removeItem('cloudloom_user')
-        localStorage.removeItem('auth_token')
-        localStorage.removeItem('remember_me')
+    /**
+     * 检查认证状态持久化
+     */
+    async checkAuthState() {
+      const token = localStorage.getItem('token')
+      if (token) {
+        this.token = token
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`
+        // 如果有 token，尝试获取用户信息
+        await this.fetchUserProfile()
       }
+      // 无论如何，最后都将 isAuthReady 设为 true
+      this.isAuthReady = true
+    },
 
-      return { success: true }
-    } catch (e: any) {
-      error.value = e.message || '登录失败，请检查用户名和密码'
-      return { success: false, error: error.value }
-    } finally {
-      loading.value = false
-    }
-  }
-
-  const register = async (userData: RegisterData) => {
-    loading.value = true
-    error.value = null
-
-    try {
-      // 检查密码是否匹配
-      if (userData.password !== userData.confirmPassword) {
-        throw new Error('密码不匹配')
-      }
-
-      const response = await api.post<{ user: User; token: string }>('/auth/register', {
-        username: userData.username,
-        email: userData.email,
-        password: userData.password,
-      })
-
-      user.value = response.data.user
-      token.value = response.data.token
-      isAuthenticated.value = true
-
-      // 存储到本地
-      localStorage.setItem('cloudloom_user', JSON.stringify(response.data.user))
-      localStorage.setItem('auth_token', response.data.token)
-
-      return { success: true }
-    } catch (e: any) {
-      error.value = e.message || '注册失败，请稍后重试'
-      return { success: false, error: error.value }
-    } finally {
-      loading.value = false
-    }
-  }
-
-  const logout = async () => {
-    try {
-      await api.post('/auth/logout')
-    } catch (e) {
-      logger.error('Logout error:', e)
-    } finally {
-      user.value = null
-      token.value = null
-      isAuthenticated.value = false
-      localStorage.removeItem('cloudloom_user')
-      localStorage.removeItem('auth_token')
-      localStorage.removeItem('remember_me')
-
-      // 同样清除 sessionStorage
-      sessionStorage.removeItem('cloudloom_user')
-      sessionStorage.removeItem('auth_token')
-
-      // 移除API认证头
-      setAuthToken(null)
-    }
-  }
-
-  const validateToken = async () => {
-    if (!token.value) return false
-
-    try {
-      const response = await api.get<{ user: User }>('/auth/me')
-      user.value = response.data.user
-      isAuthenticated.value = true
-
-      // 更新本地存储
-      localStorage.setItem('cloudloom_user', JSON.stringify(response.data.user))
-
-      return true
-    } catch (e) {
-      // Token无效，清除存储
-      await logout()
-      return false
-    }
-  }
-
-  const resetPassword = async (email: string) => {
-    loading.value = true
-    error.value = null
-
-    try {
-      const response = await api.post('/auth/reset-password', { email })
-      return { success: true }
-    } catch (e: any) {
-      error.value = e.message || '密码重置失败'
-      return { success: false, error: error.value }
-    } finally {
-      loading.value = false
-    }
-  }
-
-  const updateProfile = async (profileData: ProfileData) => {
-    loading.value = true
-    error.value = null
-
-    try {
-      const response = await api.patch<{ user: User }>('/auth/profile', profileData)
-      user.value = response.data.user
-
-      // 更新本地存储
-      localStorage.setItem('cloudloom_user', JSON.stringify(response.data.user))
-
-      return { success: true }
-    } catch (e: any) {
-      error.value = e.message || '更新个人资料失败'
-      return { success: false, error: error.value }
-    } finally {
-      loading.value = false
-    }
-  }
-
-  const loginWithOAuth = async (payload: any) => {
-    loading.value = true
-    error.value = null
-    logger.debug('OAuth Login Payload:', payload)
-    try {
-      const response = await api.post<{ user: User; token: string }>('/auth/oauth-login', payload)
-      user.value = response.data.user
-      token.value = response.data.token
-      isAuthenticated.value = true
-      localStorage.setItem('cloudloom_user', JSON.stringify(response.data.user))
-      localStorage.setItem('auth_token', response.data.token)
-      logger.log('OAuth Login Response:', response.data)
-      logger.log('OAuth Login avatarUrl:', user.value.avatarUrl)
-      logger.log('OAuth Login email:', user.value.email)
-      return { success: true }
-    } catch (e: any) {
-      error.value = e.message || '第三方登录失败'
-      return { success: false, error: error.value }
-    } finally {
-      loading.value = false
-    }
-  }
-
-  // 初始化
-  initAuth()
-
-  return {
-    user,
-    token,
-    loading,
-    error,
-    isAuthenticated,
-    initAuth,
-    login,
-    register,
-    logout,
-    validateToken,
-    resetPassword,
-    updateProfile,
-    loginWithOAuth,
-  }
+    /**
+     * 统一的错误处理器
+     */
+    handleAuthError(error: any, defaultMessage: string) {
+      const errorMessage = error.response?.data?.message || error.message || defaultMessage
+      this.error = Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage
+      console.error('Auth Error:', this.error)
+    },
+  },
 })

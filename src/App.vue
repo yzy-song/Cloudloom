@@ -38,14 +38,47 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { watch } from 'vue'
+import { RouterView } from 'vue-router'
 import DevAccessInfo from '@/components/DevAccessInfo.vue'
 import Footer from '@/components/layout/Footer.vue'
 import Navbar from '@/components/layout/Navbar.vue'
 
-// import { useTheme } from '@/composables/useTheme' // Removed
+import { useAuthStore } from '@/stores/auth.store'
+import { useCategoriesStore } from '@/stores/categories.store'
+import { useFavoriteStore } from '@/stores/favorite.store'
+import { useProductStore } from '@/stores/product.store'
 
-// The useTheme() call has been removed.
-// useTheme()
+const authStore = useAuthStore()
+const favoriteStore = useFavoriteStore()
+const categoriesStore = useCategoriesStore()
+const productStore = useProductStore()
+
+const fetchPublicData = () => {
+  categoriesStore.fetchAllCategories()
+  productStore.fetchAllProducts()
+}
+fetchPublicData()
+
+watch(
+  // 同时侦听 isAuthReady 和 isAuthenticated
+  () => [authStore.isAuthReady, authStore.isAuthenticated],
+  async ([isReady, isAuth]) => {
+    // 只有在认证状态就绪后才执行逻辑
+    if (!isReady) {
+      return
+    }
+
+    if (isAuth) {
+      // 用户已登录且状态就绪
+      await Promise.all([favoriteStore.fetchFavorites()])
+    } else {
+      // 用户未登录且状态就绪
+      favoriteStore.favorites = []
+    }
+  },
+  { immediate: true, deep: true }, // deep 确保数组变化被侦测
+)
 
 const showBackToTopButton = ref(false)
 

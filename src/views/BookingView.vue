@@ -15,7 +15,7 @@
               class="bg-gray-200 border-2 border-dashed rounded-xl aspect-[3/4] w-full mb-4"
             ></div>
             <template v-if="booking.bookingType === 'standard'">
-              <h3 class="text-lg font-medium">{{ product?.title }}</h3>
+              <h3 class="text-lg font-medium">{{ product?.name }}</h3>
               <p class="text-gray-600 mt-1">尺寸: {{ booking.size }}</p>
               <p class="text-hanfu-red text-xl font-medium mt-2">
                 €{{ product?.price ? product.price.toFixed(2) : '--' }}
@@ -161,12 +161,11 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import StripeCheckout from '@/components/StripeCheckout.vue' // 新增
+import router from '@/router'
 import { useBookingStore } from '@/stores/booking.store'
 import { useProductStore } from '@/stores/product.store'
 import { validateEmail, validatePhone, validateRequired } from '@/utils/validation'
-
 const route = useRoute()
-const router = useRouter()
 const isLoading = ref(false)
 const message = ref('')
 
