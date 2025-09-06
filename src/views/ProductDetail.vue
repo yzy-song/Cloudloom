@@ -29,7 +29,7 @@
         <div class="flex flex-col gap-4">
           <figure class="border rounded-lg overflow-hidden aspect-square">
             <img
-              :src="product.images[selectedImageIndex]"
+              :src="getBackendAssetURL(product.images[selectedImageIndex])"
               :alt="product.title"
               class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
             />
@@ -46,7 +46,7 @@
               }"
             >
               <img
-                :src="image"
+                :src="getBackendAssetURL(image)"
                 :alt="`${product.title} thumbnail ${index + 1}`"
                 class="w-full h-full object-cover"
               />
@@ -183,6 +183,7 @@ import { useAuthStore } from '@/stores/auth.store'
 import { useCategoriesStore } from '@/stores/categories.store'
 import { useFavoriteStore } from '@/stores/favorite.store'
 import { useProductStore } from '@/stores/product.store'
+import { getBackendAssetURL } from '@/utils/url'
 
 const { t } = useI18n()
 const route = useRoute()

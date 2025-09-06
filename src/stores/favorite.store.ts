@@ -35,7 +35,6 @@ export const useFavoriteStore = defineStore('favorite', {
       this.error = null
       try {
         const response = await apiClient.get<UserFavorite[]>('/user-favorites')
-        logger.info('Fetched favorites:', response)
         this.favorites = response.data.map((fav) => fav.product)
       } catch (err: any) {
         this.error = err.response?.data?.message || '获取收藏列表失败。'

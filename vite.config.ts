@@ -74,6 +74,11 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
+        // **【新增】** 图片上传目录的代理
+        '/uploads': {
+          target: 'http://localhost:3000', // 同样指向后端服务
+          changeOrigin: true,
+        },
       },
     },
     resolve: {
