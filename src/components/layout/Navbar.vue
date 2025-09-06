@@ -393,7 +393,6 @@ import { useAuthStore } from '@/stores/auth.store'
 
 const { t, locale } = useI18n()
 const route = useRoute()
-const router = useRouter()
 const authStore = useAuthStore()
 
 const { isScrolled } = useScroll(50)

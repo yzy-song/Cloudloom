@@ -63,16 +63,25 @@ export interface Subcategory {
 
 export interface Product {
   id: number
-  name: string
+  title: string // 修正: name -> title
   description: string
-  mainImage: string
-  images: string[]
+  dynasty: string // 新增
+  dynastyLabel: string // 新增
   price: number
-  stock: number
-  status: 'available' | 'unavailable'
-  subcategory: Subcategory // 产品属于一个子分类
+  stockQuantity: number // 修正: stock -> stockQuantity
+  material: string // 新增
+  images: string[]
+  tags: string[] // 新增
+  sizeOptions: string[] // 新增 (具体类型根据后端确定)
+  details: { key: string; value: string }[] // 新增
+  careInstructions: string // 新增
+  gender: 'male' | 'female' | 'unisex' // 新增
+  reviews: number // 新增
+  isActive: boolean // 新增
   createdAt: string
   updatedAt: string
+  subcategory: Subcategory // 这个保持不变，假设后端返回的 subcategory 结构与您的定义一致
+  subcategoryId: number // 新增
 }
 
 // =================================================================

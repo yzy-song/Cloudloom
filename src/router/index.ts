@@ -86,13 +86,13 @@ const router = createRouter({
       path: '/photos',
       name: 'PhotoWall',
       component: () => import('../views/PhotoWallView.vue'),
-      meta: { titleKey: 'router.photoWall', requiresAuth: true },
+      meta: { titleKey: 'router.photoWall' },
     },
     {
       path: '/parties',
-      name: 'Patries',
+      name: 'Parties',
       component: () => import('../views/PartiesView.vue'),
-      meta: { titleKey: 'router.parties', requiresAuth: true },
+      meta: { titleKey: 'router.parties' },
     },
     {
       path: '/test',

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { Product, PaginationState } from '@/types'
-import { api } from '@/api/client' // [修改] 导入 api 而不是 apiClient
+import { api } from '@/api/client'
+import { logger } from '@/utils/logger'
 
 /**
  * Interface for product fetching filters.
@@ -54,41 +55,21 @@ export const useProductStore = defineStore('product', {
       this.loading = true
       this.error = null
       try {
-        const params = new URLSearchParams()
-        if (filters.subcategoryId) {
-          if (Array.isArray(filters.subcategoryId)) {
-            filters.subcategoryId.forEach((id) => params.append('subcategoryId', id))
-          } else {
-            params.append('subcategoryId', filters.subcategoryId)
-          }
-        }
-        if (filters.page) {
-          params.append('page', filters.page.toString())
-        }
-        if (filters.limit) {
-          params.append('limit', filters.limit.toString())
-        }
-
-        // [修改] 使用 api.get
-        const response = await api.get<{
-          data: Product[]
-          total: number
-        }>('/products', { params })
-
-        // 现在这行代码不会报错了，因为 api.get 的返回类型就是 T
-        const { data, total } = response
-        this.products = data // 将获取到的商品列表赋值给 state
+        const response = await api.get<{ data: Product[]; total: number }>('/products', filters)
+        this.products = response.data
 
         const page = filters.page || 1
         const limit = filters.limit || 12
         this.pagination = {
           page,
           limit,
-          total,
-          totalPages: Math.ceil(total / limit),
+          total: response.total,
+          totalPages: Math.ceil(response.total / limit),
         }
 
-        logger.info(`Fetched ${data.length} products (Page ${page}/${this.pagination.totalPages})`)
+        logger.info(
+          `Fetched ${this.products.length} products (Page ${page}/${this.pagination.totalPages})`,
+        )
       } catch (err: any) {
         this.error = '获取商品列表失败'
         logger.error('Failed to fetch products:', err)
@@ -115,8 +96,8 @@ export const useProductStore = defineStore('product', {
       this.loading = true
       this.error = null
       try {
-        const response = await api.get<Product>(`/products/${id}`)
-        this.currentProduct = response
+        const product = await api.get<Product>(`/products/${id}`)
+        this.currentProduct = product
         return this.currentProduct
       } catch (err: any) {
         const errorMessage = `获取产品 #${id} 失败: ${err.response?.data?.message || err.message}`

@@ -28,10 +28,10 @@
 
     <router-link :to="`/product/${product.id}`">
       <figure>
-        <img :src="product.mainImage" :alt="product.name" class="h-64 w-full object-cover" />
+        <img :src="product.images[0]" :alt="product.title" class="h-64 w-full object-cover" />
       </figure>
       <div class="card-body">
-        <h2 class="card-title truncate text-base">{{ product.name }}</h2>
+        <h2 class="card-title truncate text-base">{{ product.title }}</h2>
         <p class="line-clamp-2 text-sm text-gray-500">{{ product.description }}</p>
       </div>
     </router-link>
@@ -72,6 +72,7 @@ async function handleFavoriteClick() {
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
