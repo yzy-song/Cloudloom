@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import type { ApiResponse, Booking, BookingStatus, CustomerInfo } from '@/types'
+import type { Booking, BookingStatus } from '@/types'
 import { api } from '@/api/client'
 
 export interface BookingData {
@@ -62,7 +62,7 @@ export const useBookingStore = defineStore('booking', () => {
 
     try {
       const response = await api.get<Booking[]>('/bookings')
-      bookings.value = response.data
+      bookings.value = response
     } catch (e: any) {
       error.value = e.message || 'Failed to fetch bookings'
       throw e
@@ -77,8 +77,8 @@ export const useBookingStore = defineStore('booking', () => {
 
     try {
       const response = await api.post<Booking>('/bookings', bookingData)
-      currentBooking.value = response.data
-      bookings.value.push(response.data)
+      currentBooking.value = response
+      bookings.value.push(response)
       return response
     } catch (e: any) {
       error.value = e.message || 'Failed to create booking'
@@ -96,14 +96,17 @@ export const useBookingStore = defineStore('booking', () => {
       const response = await api.patch<Booking>(`/bookings/${id}`, { status })
 
       // Update local state
-      const index = bookings.value.findIndex((b) => b.id === id)
+      const index = bookings.value.findIndex((b) => String(b.id) === String(id))
 
       if (index !== -1) {
         bookings.value[index] = { ...bookings.value[index], status: status as BookingStatus }
       }
 
-      if (currentBooking.value?.id === id) {
-        currentBooking.value = { ...currentBooking.value, status: status as BookingStatus } // 避免直接修改响应式对象属性
+      if (String(currentBooking.value?.id) === String(id) && currentBooking.value) {
+        currentBooking.value = {
+          ...currentBooking.value,
+          status: status as BookingStatus,
+        } as Booking
       }
 
       return response

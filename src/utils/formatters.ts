@@ -23,13 +23,6 @@ export const formatDate = (date: string | Date, locale = 'en-IE'): string => {
   }).format(new Date(date))
 }
 
-export const getProductPriceRange = (product: Product): string => {
-  if (product.rentalPrice) {
-    return `${formatCurrency(product.rentalPrice)} - ${formatCurrency(product.price)}`
-  }
-  return formatCurrency(product.price)
-}
-
 export const capitalizeFirst = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }

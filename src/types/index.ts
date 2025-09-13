@@ -30,6 +30,8 @@ export interface User {
   username: string
   nickName: string
   email: string
+  phone: string
+  description: string
   avatarUrl?: string
   provider: 'local' | 'google' | 'facebook'
   providerId?: string
@@ -105,7 +107,7 @@ export interface Booking {
   product: Product
   bookingDate: string
   bookingTime: string
-  status: 'pending' | 'confirmed' | 'cancelled' | 'completed'
+  status: BookingStatus
   notes?: string
   createdAt: string
   updatedAt: string
@@ -148,3 +150,11 @@ export interface Photo {
   userId?: number // 可选，上传者
   createdAt?: string
 }
+
+export type BookingStatus =
+  | 'pending'
+  | 'confirmed'
+  | 'completed'
+  | 'cancelled'
+  | 'deleted'
+  | 'no_show'
