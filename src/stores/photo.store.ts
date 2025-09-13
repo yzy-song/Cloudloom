@@ -12,7 +12,7 @@ export const usePhotoStore = defineStore('photo', () => {
     isLoading.value = true
     error.value = null
     try {
-      photos.value = await api.get<Photo[]>('/photos')
+      photos.value = (await api.get<{ data: Photo[] }>('/photos')).data
     } catch (e: any) {
       error.value = e?.message || '加载照片失败'
     } finally {

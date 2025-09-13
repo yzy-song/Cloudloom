@@ -163,7 +163,6 @@
               </div>
             </transition>
           </div>
-
           <!-- User Menu Dropdown -->
           <div v-if="authStore.isAuthenticated" class="relative" ref="userMenuContainer">
             <button
@@ -174,7 +173,7 @@
               <img
                 class="h-9 w-9 rounded-full object-cover border-2 transition-colors duration-300"
                 :class="isScrolled || !isHomePage ? 'border-gray-300' : 'border-white/50'"
-                :src="authStore.user?.avatarUrl || 'https://source.unsplash.com/100x100/?portrait'"
+                :src="userAvatar"
                 :alt="t('navbar.userAvatar')"
               />
             </button>
@@ -422,6 +421,15 @@ const userMenuItems = [
   { name: 'navbar.profile', path: '/profile', icon: UserCircleIcon },
   { name: 'navbar.orders', path: '/orders', icon: ArchiveBoxIcon },
 ]
+
+// Default avatar image URL
+const defaultAvatar = '/images/avatar/dafault.jpeg'
+
+const userAvatar = computed(() =>
+  authStore.user?.avatarUrl && authStore.user.avatarUrl.trim() !== ''
+    ? authStore.user.avatarUrl
+    : defaultAvatar,
+)
 
 const availableLanguages = [
   { code: 'en', name: 'English' },

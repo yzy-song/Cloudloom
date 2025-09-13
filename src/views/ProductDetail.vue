@@ -177,14 +177,12 @@
 import { ref, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
-import type { Product } from '@/types'
 import router from '@/router'
 import { useAuthStore } from '@/stores/auth.store'
 import { useCategoriesStore } from '@/stores/categories.store'
 import { useFavoriteStore } from '@/stores/favorite.store'
 import { useProductStore } from '@/stores/product.store'
 import { getBackendAssetURL } from '@/utils/url'
-
 const { t } = useI18n()
 const route = useRoute()
 const productStore = useProductStore()
@@ -192,7 +190,8 @@ const favoriteStore = useFavoriteStore()
 const authStore = useAuthStore()
 const categoriesStore = useCategoriesStore()
 
-const product = ref<Product | null>(null)
+const product = computed(() => productStore.currentProduct) // 直接用 store 的 state
+
 const isLoading = ref(false)
 const error = ref<string | null>(null)
 
@@ -223,7 +222,7 @@ const breadcrumbs = computed(() => {
     { name: categoryName.value, link: `/gallery?category=${categoryName.value}` },
     {
       name: product.value.subcategory.name,
-      link: `/gallery?subcategory=${product.value.subcategory.name}`,
+      link: `/gallery?subcategory=${product.value.subcategoryId}`,
     },
     { name: product.value.title },
   ]
@@ -256,7 +255,7 @@ onMounted(async () => {
     if (authStore.isAuthenticated && favoriteStore.favorites.length === 0) {
       await favoriteStore.fetchFavorites()
     }
-    product.value = await productStore.fetchProductById(productId.value)
+    await productStore.fetchProductById(productId.value)
   } catch (err: any) {
     error.value = err.message || t('productDetail.fetchError')
     console.error(err)

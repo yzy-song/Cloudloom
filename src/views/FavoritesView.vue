@@ -17,13 +17,13 @@ onMounted(() => {
     <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200">我的收藏</h1>
 
     <!-- 加载状态 -->
-    <div v-if="favoriteStore.isLoading" class="flex justify-center items-center h-64">
+    <div v-if="favoriteStore.loading" class="flex justify-center items-center h-64">
       <BaseLoading class="w-12 h-12" />
     </div>
 
     <!-- 收藏列表为空 -->
     <div
-      v-else-if="!favoriteStore.isLoading && favoriteStore.favorites.length === 0"
+      v-else-if="!favoriteStore.loading && favoriteStore.favorites.length === 0"
       class="text-center py-16 px-6 bg-white dark:bg-gray-800 rounded-lg shadow"
     >
       <p class="text-xl text-gray-500 dark:text-gray-400">您的收藏夹是空的。</p>
@@ -35,7 +35,7 @@ onMounted(() => {
       <ProductCard
         v-for="favorite in favoriteStore.favorites"
         :key="favorite.id"
-        :product="favorite.product"
+        :product="favorite"
       />
     </div>
   </div>

@@ -38,7 +38,7 @@
           <button
             :disabled="!hasPrevPage"
             @click="$emit('prev')"
-            class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span class="sr-only">上一页</span>
             <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -56,11 +56,12 @@
             :key="page"
             @click="$emit('page-change', page)"
             :class="[
-              'relative inline-flex items-center px-4 py-2 text-sm font-semibold',
+              'relative inline-flex items-center px-4 py-2 text-sm font-semibold focus:z-20',
               currentPage === page
-                ? 'z-10 bg-hanfu-red text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hanfu-red'
-                : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0',
+                ? 'z-10 bg-red-500 text-white focus:outline-none'
+                : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-none',
             ]"
+            :style="currentPage === page ? 'background-color:#ef4444;border-color:#ef4444;' : ''"
           >
             {{ page }}
           </button>
@@ -69,7 +70,7 @@
           <button
             :disabled="!hasNextPage"
             @click="$emit('next')"
-            class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span class="sr-only">下一页</span>
             <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -87,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 interface Props {
   currentPage: number
   totalItems: number
@@ -140,8 +141,5 @@ const visiblePages = computed(() => {
 </script>
 
 <style scoped>
-button:focus {
-  outline: 2px solid theme('colors.hanfu.red');
-  outline-offset: 2px;
-}
+/* 只用 Tailwind 类，不用 theme()，避免报错 */
 </style>
