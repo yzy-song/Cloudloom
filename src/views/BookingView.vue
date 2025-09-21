@@ -138,6 +138,18 @@
     <div v-if="showStripe" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <StripeCheckout
         :clientSecret="clientSecret"
+        :bookingDetails="{
+          productId: booking.bookingType === 'standard' ? product?.id : undefined,
+          customerFullname: booking.name,
+          customerEmail: booking.email,
+          customerPhone: booking.phone,
+          bookingDate: booking.bookingDate,
+          bookingTime: booking.time,
+          participants: 1,
+          notes: booking.notes,
+          bookingType: booking.bookingType,
+          totalAmount: 30,
+        }"
         @success="onStripeSuccess"
         @fail="onStripeFail"
         @cancel="showStripe = false"
@@ -275,10 +287,7 @@ async function submitBooking() {
       bookingType: booking.value.bookingType,
       totalAmount: 30,
     })
-    // 展示 Stripe 支付
-    logger.info('预约创建成功，准备支付', res)
-    clientSecret.value = (res as any).client_secret ?? ''
-    logger.info('客户端密钥', clientSecret.value)
+    clientSecret.value = res.client_secret ?? ''
     showStripe.value = true
   } catch (e: any) {
     message.value =

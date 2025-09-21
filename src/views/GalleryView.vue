@@ -91,9 +91,9 @@
 
       <!-- Pagination -->
       <base-pagination
-        v-if="!isLoading && productStore.pagination.totalPages > 1"
+        v-if="!isLoading && productStore.pagination.total > 1"
         :current-page="productStore.pagination.page"
-        :total-pages="productStore.pagination.totalPages"
+        :total-pages="productStore.pagination.lastPage"
         :total-items="productStore.pagination.total"
         :items-per-page="productStore.pagination.limit"
         @page-change="handlePageChange"
@@ -144,17 +144,17 @@ const fetchProducts = async () => {
   isLoading.value = true
   isError.value = false
   try {
-    const data = await productStore.fetchAllProducts({
+    const { data: productList, meta } = await productStore.fetchAllProducts({
       category: currentCategory.value === 'all' ? undefined : currentCategory.value,
       subcategory:
         currentSubcategory.value === 'all' || currentSubcategory.value == null
           ? undefined
           : currentSubcategory.value,
       page: currentPage.value,
-      limit: 12, // Assuming 12 items per page as per your original logic
+      limit: 12,
     })
-    products.value = data.data
-    totalPages.value = data.totalPages
+    products.value = productList
+    totalPages.value = meta.lastPage
   } catch (error) {
     console.error('Failed to fetch products:', error)
     isError.value = true

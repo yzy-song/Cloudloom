@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth.store'
-import type { Product, UserFavorite } from '@/types'
-import { apiClient } from '@/api/client'
+import type { Product } from '@/types'
+import api from '@/api/api'
 
 export const useFavoriteStore = defineStore('favorite', {
   state: () => ({
@@ -16,7 +16,7 @@ export const useFavoriteStore = defineStore('favorite', {
      * @returns {Set<number>}
      */
     favoriteProductIds(state): Set<number> {
-      return new Set(state.favorites.map((p) => p.id))
+      return new Set(state.favorites.filter((p) => p && typeof p.id === 'number').map((p) => p.id))
     },
   },
 
@@ -34,8 +34,8 @@ export const useFavoriteStore = defineStore('favorite', {
       this.loading = true
       this.error = null
       try {
-        const response = await apiClient.get<UserFavorite[]>('/user-favorites')
-        this.favorites = response.data.map((fav) => fav.product)
+        const response = await api.get<{ data: Product[]; total: number }>('/user-favorites')
+        this.favorites = response.data.data
       } catch (err: any) {
         this.error = err.response?.data?.message || '获取收藏列表失败。'
         console.error(this.error)
@@ -62,7 +62,7 @@ export const useFavoriteStore = defineStore('favorite', {
       if (isCurrentlyFavorited) {
         // --- 取消收藏 ---
         try {
-          await apiClient.delete(`/user-favorites/${product.id}`)
+          await api.delete(`/user-favorites/${product.id}`)
           this.favorites = this.favorites.filter((p) => p.id !== product.id)
         } catch (err: any) {
           this.error = err.response?.data?.message || '取消收藏失败。'
@@ -71,7 +71,7 @@ export const useFavoriteStore = defineStore('favorite', {
       } else {
         // --- 添加收藏 ---
         try {
-          await apiClient.post('/user-favorites', { productId: product.id })
+          await api.post('/user-favorites', { productId: product.id })
           this.favorites.push(product)
         } catch (err: any) {
           this.error = err.response?.data?.message || '添加收藏失败。'

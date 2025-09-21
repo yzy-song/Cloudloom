@@ -5,8 +5,8 @@
  * @LastEditTime: 2025-09-06 11:00:00
  */
 import { ref } from 'vue'
-import { api } from '@/api/client'
-import { logger } from '@/utils/logger' // 确保 logger 被导入
+import api from '@/api/api'
+import { logger } from '@/utils/logger'
 
 export function useApi() {
   const loading = ref(false)
@@ -22,11 +22,10 @@ export function useApi() {
     error.value = null
 
     try {
-      let response: T // 将 response 的类型直接声明为 T
+      let response // 类型推断即可
 
       switch (method) {
         case 'get':
-          // api.get 返回 Promise<T>，所以 await 之后的结果就是 T
           response = await api.get<T>(url, config?.params)
           break
         case 'delete':
@@ -45,8 +44,8 @@ export function useApi() {
           throw new Error(`Unsupported method: ${method}`)
       }
 
-      // [关键修正] 直接返回 response，因为它已经是我们想要的最终数据了
-      return response
+      // 只返回 response.data
+      return response.data
     } catch (err: any) {
       error.value = err.message || '请求失败'
       logger.error('API Error:', err)

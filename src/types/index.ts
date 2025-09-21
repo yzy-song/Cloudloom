@@ -87,17 +87,6 @@ export interface Product {
 }
 
 // =================================================================
-// 用户收藏 (User Favorites)
-// =================================================================
-
-export interface UserFavorite {
-  id: number
-  user: User
-  product: Product
-  createdAt: string
-}
-
-// =================================================================
 // 预定 (Booking)
 // =================================================================
 
@@ -111,6 +100,7 @@ export interface Booking {
   notes?: string
   createdAt: string
   updatedAt: string
+  client_secret?: string
 }
 
 // =================================================================
