@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { Photo } from '@/types'
-import { api } from '@/api/client'
+import api from '@/api/api'
 
 export const usePhotoStore = defineStore('photo', () => {
   const photos = ref<Photo[]>([])
@@ -12,7 +12,7 @@ export const usePhotoStore = defineStore('photo', () => {
     isLoading.value = true
     error.value = null
     try {
-      photos.value = (await api.get<{ data: Photo[] }>('/photos')).data
+      photos.value = (await api.get<{ data: Photo[] }>('/photos')).data.data
     } catch (e: any) {
       error.value = e?.message || '加载照片失败'
     } finally {

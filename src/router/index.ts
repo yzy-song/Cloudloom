@@ -95,10 +95,16 @@ const router = createRouter({
       meta: { titleKey: 'router.parties' },
     },
     {
-      path: '/test',
-      name: 'TestPage',
-      component: () => import('../views/TestView.vue'),
-      meta: { titleKey: 'router.test', requiresAuth: true },
+      path: '/payment-success',
+      name: 'payment-success',
+      component: () => import('../views/PaymentSuccessView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/payment-cancelled',
+      name: 'payment-cancelled',
+      component: () => import('../views/PaymentCancelledView.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/404',

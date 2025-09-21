@@ -1,150 +1,124 @@
-<!--
- * @Author: yzy
- * @Date: 2025-08-25 15:44:11
- * @LastEditors: yzy
- * @LastEditTime: 2025-08-25 15:45:57
--->
 <template>
-  <div class="stripe-modal">
-    <div class="stripe-title">支付押金</div>
-    <div ref="cardElement" class="stripe-card"></div>
-    <button :disabled="loading" @click="pay" class="stripe-btn">
-      {{ loading ? '支付中...' : '确认支付' }}
+  <div class="stripe-checkout-container">
+    <h2 class="text-xl font-semibold mb-4">完成您的支付</h2>
+    <p class="mb-4">您将被重定向到我们的安全支付合作伙伴 Stripe 以完成您的购买。</p>
+
+    <div v-if="loading" class="loading-spinner">
+      <p>正在重定向到支付页面...</p>
+    </div>
+
+    <!-- 改进的错误显示 -->
+    <div v-if="error" class="my-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+      <h3 class="font-bold">出现错误！</h3>
+      <p>{{ error }}</p>
+      <p class="mt-2 text-sm">
+        请检查您的后端服务日志以获取详细信息。一个常见的原因是服务器上缺少 `STRIPE_SECRET_KEY`
+        环境变量。
+      </p>
+    </div>
+
+    <button
+      @click="redirectToCheckout"
+      :disabled="loading"
+      class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-md hover:bg-indigo-700 disabled:bg-gray-400 transition-colors"
+    >
+      前往支付
     </button>
-    <button class="stripe-cancel" @click="$emit('cancel')">取消支付</button>
-    <div v-if="error" class="stripe-error">{{ error }}</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { loadStripe } from '@stripe/stripe-js'
+import { useApi } from '@/composables/useApi'
 
-const props = defineProps<{ clientSecret: string }>()
-const emit = defineEmits(['success', 'fail', 'cancel'])
-
-const stripePromise = loadStripe(
-  'pk_test_51RzaFyGyhldLFyVCumvuQSYuWY76QLOXSzZCLYtyxgRqXW3C3eaMeMmlHTiv3HrMc2Gy4XzMFrD8TbTTsQBhbAet00y3lxnhb0',
-)
-const cardElement = ref<HTMLDivElement | null>(null)
-let stripe: any = null
-let elements: any = null
-let card: any = null
-
-const loading = ref(false)
-const error = ref('')
-
-onMounted(async () => {
-  stripe = await stripePromise
-  elements = stripe.elements()
-  card = elements.create('card', {
-    style: {
-      base: {
-        color: '#222',
-        fontFamily: 'inherit',
-        fontSize: '16px',
-        backgroundColor: '#f8fafc',
-        borderRadius: '8px',
-        '::placeholder': { color: '#bbb' },
-        iconColor: '#c53030',
-        padding: '12px 16px',
-      },
-      invalid: {
-        color: '#e53e3e',
-        iconColor: '#e53e3e',
-      },
-    },
-  })
-  card.mount(cardElement.value)
+const props = defineProps({
+  bookingDetails: {
+    type: Object,
+    required: true,
+  },
 })
 
-async function pay() {
+const api = useApi()
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)
+const loading = ref(false)
+const error = ref<string | null>(null)
+
+const redirectToCheckout = async () => {
   loading.value = true
-  error.value = ''
-  const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(
-    props.clientSecret,
-    { payment_method: { card } },
-  )
-  loading.value = false
-  if (stripeError) {
-    error.value = stripeError.message
-    emit('fail', stripeError)
-  } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-    emit('success', paymentIntent)
+  error.value = null
+
+  try {
+    // 1. Get Stripe instance
+    const stripe = await stripePromise
+
+    // 2. Prepare payload for the backend
+    const payload = {
+      bookingId: props.bookingDetails.id,
+      items: [
+        {
+          name: `Booking for ${props.bookingDetails.serviceName}`,
+          amount: props.bookingDetails.totalAmount,
+          quantity: 1,
+        },
+      ],
+    }
+
+    // 3. Call your backend to create a checkout session.
+    // The screenshot shows this request is failing with a 500 error.
+    // This is a server-side issue. Please check your backend logs.
+    // A common cause is a missing STRIPE_SECRET_KEY in the .env file on the server.
+    interface CheckoutSessionResponse {
+      data: {
+        sessionId: string
+      }
+    }
+    const response = await api.post<CheckoutSessionResponse>(
+      '/payments/create-checkout-session',
+      payload,
+    )
+
+    const sessionId = response?.data?.sessionId
+    console.log('Received session ID from backend:', response)
+    if (!sessionId) {
+      throw new Error('未能从服务器获取有效的支付会话。请检查后端服务。')
+    }
+
+    // 4. Redirect to Stripe Checkout page using the session ID
+    if (!stripe) {
+      throw new Error('Stripe 加载失败，请检查您的 Stripe 公钥配置。')
+    }
+    const { error: stripeError } = await stripe.redirectToCheckout({
+      sessionId,
+    })
+
+    if (stripeError) {
+      console.error('Stripe redirection error:', stripeError)
+      error.value = stripeError.message ?? '发生未知错误'
+    }
+  } catch (err) {
+    console.error('创建支付会话失败:', err)
+    // Display the specific error from the backend if available
+    error.value = (err as any).response?.data?.message || '无法连接到支付服务，请稍后再试。'
+  } finally {
+    loading.value = false
   }
 }
 </script>
 
 <style scoped>
-.stripe-modal {
-  background: #fff;
-  border-radius: 1.25rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  padding: 2.5rem 2rem 2rem 2rem;
-  width: 100%;
-  max-width: 380px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  position: relative;
+.stripe-checkout-container {
+  max-width: 400px;
+  margin: auto;
+  padding: 2rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
-.stripe-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #c53030;
+.loading-spinner {
   text-align: center;
-  margin-bottom: 1.5rem;
-  letter-spacing: 1px;
-}
-.stripe-card {
-  background: #f8fafc;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 0.75rem;
-  padding: 14px 16px 8px 16px;
-  margin-bottom: 1.5rem;
-  min-height: 48px;
-}
-.stripe-btn {
-  background: #c53030;
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  padding: 0.9rem 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  transition:
-    transform 0.15s,
-    box-shadow 0.15s;
-  box-shadow: 0 2px 8px rgba(197, 48, 48, 0.08);
-  cursor: pointer;
-}
-.stripe-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-.stripe-btn:not(:disabled):hover {
-  transform: scale(1.03);
-  box-shadow: 0 4px 16px rgba(197, 48, 48, 0.13);
-}
-.stripe-cancel {
-  background: none;
-  border: none;
-  color: #888;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  cursor: pointer;
-  transition: color 0.15s;
-}
-.stripe-cancel:hover {
-  color: #c53030;
-  text-decoration: underline;
-}
-.stripe-error {
-  color: #e53e3e;
-  font-size: 0.95rem;
-  text-align: center;
-  margin-top: 0.5rem;
+  padding: 1rem;
 }
 </style>

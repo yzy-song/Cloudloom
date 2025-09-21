@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import type { Booking, BookingStatus } from '@/types'
-import { api } from '@/api/client'
+import api from '@/api/api'
 
 export interface BookingData {
   // 商品相关（可选）
@@ -62,7 +62,7 @@ export const useBookingStore = defineStore('booking', () => {
 
     try {
       const response = await api.get<Booking[]>('/bookings')
-      bookings.value = response
+      bookings.value = response.data
     } catch (e: any) {
       error.value = e.message || 'Failed to fetch bookings'
       throw e
@@ -76,12 +76,16 @@ export const useBookingStore = defineStore('booking', () => {
     error.value = null
 
     try {
-      const response = await api.post<Booking>('/bookings', bookingData)
-      currentBooking.value = response
-      bookings.value.push(response)
-      return response
+      const response = await api.post<{ code: number; message: string; data: Booking }>(
+        '/bookings',
+        bookingData,
+      )
+      const booking = response.data.data
+      currentBooking.value = booking
+      bookings.value.push(booking)
+      return booking // 只返回业务数据
     } catch (e: any) {
-      error.value = e.message || 'Failed to create booking'
+      error.value = e.message || '预约失败'
       throw e
     } finally {
       loading.value = false

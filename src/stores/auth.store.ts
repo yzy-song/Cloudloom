@@ -2,7 +2,7 @@ import { signInWithPopup, signOut, onAuthStateChanged, type AuthProvider } from 
 import { defineStore } from 'pinia'
 import type { User } from '@/types'
 import type { LoginUserDto, RegisterUserDto, OAuthLoginDto } from '@/types/dto'
-import { api, apiClient } from '@/api/client'
+import api from '@/api/api'
 import { auth } from '@/firebase'
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -31,13 +31,13 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       try {
         const response = await api.get<{ data: User }>('/auth/profile')
-        this.user = response.data
+        this.user = response.data.data
       } catch (err: any) {
         if (err.response?.status === 401) {
           this.token = null
           this.user = null
           localStorage.removeItem('token')
-          delete apiClient.defaults.headers.common['Authorization']
+          delete api.defaults.headers.common['Authorization']
         } else {
           this.error = err.message || '获取用户信息失败'
         }
@@ -58,7 +58,7 @@ export const useAuthStore = defineStore('auth', {
           '/auth/login',
           loginDto,
         )
-        const { accessToken, user } = response.data
+        const { accessToken, user } = response.data.data
         this.token = accessToken
         this.user = user
         localStorage.setItem('token', accessToken)
@@ -104,7 +104,7 @@ export const useAuthStore = defineStore('auth', {
           '/auth/oauth-login',
           oauthLoginDto,
         )
-        const { accessToken, user } = response.data
+        const { accessToken, user } = response.data.data
         this.token = accessToken
         this.user = user
         localStorage.setItem('token', accessToken)
@@ -134,7 +134,7 @@ export const useAuthStore = defineStore('auth', {
         this.token = null
         localStorage.removeItem('token')
         logger.info('User logged out, redirecting to home.')
-        delete apiClient.defaults.headers.common['Authorization']
+        delete api.defaults.headers.common['Authorization']
         this.loading = false
         router.push('/')
       }
@@ -149,7 +149,7 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       this.error = null
       try {
-        const response = await apiClient.patch('/users/me', profileData)
+        const response = await api.patch('/users/me', profileData)
         // 假设返回的是更新后的用户对象
         this.user = { ...this.user, ...response.data }
         return { success: true }

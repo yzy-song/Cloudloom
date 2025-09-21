@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { Category } from '@/types'
-import { apiClient } from '@/api/client'
+import api from '@/api/api'
 
 export const useCategoriesStore = defineStore('categories', {
   state: () => ({
@@ -30,7 +30,7 @@ export const useCategoriesStore = defineStore('categories', {
       this.isLoading = true
       this.error = null
       try {
-        const response = await apiClient.get<Category[]>('/categories')
+        const response = await api.get<Category[]>('/categories')
         this.categories = response.data
       } catch (err: any) {
         this.error = err.response?.data?.message || '获取分类列表失败。'

@@ -1,23 +1,23 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { Product } from '@/types'
-import { api } from '@/api/client'
+import type { PaginatedResult } from '@/utils/pagination'
+import api from '@/api/api'
 
 export const useProductStore = defineStore('product', () => {
   const products = ref<Product[]>([])
-  const currentProduct = ref<Product | null>(null) // 新增
-  const pagination = ref({
+  const currentProduct = ref<Product | null>(null)
+  const pagination = ref<PaginatedResult<Product>['meta']>({
+    total: 0,
     page: 1,
     limit: 12,
-    total: 0,
-    totalPages: 1,
+    lastPage: 1,
   })
   const loading = ref(false)
   const error = ref<string | null>(null)
 
   /**
-   * Fetches a paginated and filterable list of products from the API.
-   * @param filters - Optional filters for subcategory, page, and limit.
+   * 获取商品列表（带分页和筛选）
    */
   async function fetchAllProducts(
     filters: {
@@ -26,25 +26,21 @@ export const useProductStore = defineStore('product', () => {
       page?: number
       limit?: number
     } = {},
-  ) {
+  ): Promise<PaginatedResult<Product>> {
     loading.value = true
     error.value = null
     try {
-      const res = await api.get<{
-        data: Product[]
-        total: number
-        page: number
-        limit: number
-        totalPages: number
-      }>('/products', filters)
-      products.value = res.data
-      pagination.value = {
-        page: res.page,
-        limit: res.limit,
-        total: res.total,
-        totalPages: res.totalPages,
-      }
-      return res
+      const res = await api.get<{ data: Product[]; total: number; message: string }>('/products', {
+        params: filters,
+      })
+      const { data, total } = res.data
+      const page = filters.page ?? 1
+      const limit = filters.limit ?? 12
+      const lastPage = Math.ceil(total / limit)
+      const meta = { total, page, limit, lastPage }
+      products.value = data
+      pagination.value = meta
+      return { data, meta }
     } catch (e: any) {
       error.value = e.message || '加载商品失败'
       throw e
@@ -54,15 +50,14 @@ export const useProductStore = defineStore('product', () => {
   }
 
   /**
-   * 根据 ID 获取单个产品的详细信息。
-   * @param id - The ID of the product to fetch.
+   * 根据ID获取单个商品详情
    */
-  async function fetchProductById(id: number) {
+  async function fetchProductById(id: number): Promise<Product | null> {
     loading.value = true
     error.value = null
     try {
       const res = await api.get<{ data: Product }>(`/products/${id}`)
-      currentProduct.value = res.data
+      currentProduct.value = res.data.data
       return currentProduct.value
     } catch (e: any) {
       error.value = e.message || '加载商品详情失败'
