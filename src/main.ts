@@ -6,6 +6,7 @@
  */
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { Toaster } from 'vue-sonner'
 import App from './App.vue'
 import { createI18nInstance } from './i18n'
 import './assets/styles/main.css'
@@ -27,6 +28,8 @@ async function initializeApp() {
 
   // 3. 安装路由插件（此时不注册守卫）
   app.use(router)
+
+  app.component('Toaster', Toaster)
 
   // 4. [关键步骤] 等待初始认证状态检查完成
   // 必须在路由守卫注册前完成，以确保 isAuthenticated 状态是可靠的

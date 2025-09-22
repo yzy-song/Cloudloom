@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { toast } from 'vue-sonner'
 import { useAuthStore } from './auth.store'
 import type { Product } from '@/types'
 import api from '@/api/api'
@@ -7,7 +8,7 @@ export const useFavoriteStore = defineStore('favorite', {
   state: () => ({
     favorites: [] as Product[],
     loading: false,
-    error: null as string | null,
+    error: '' as string,
   }),
 
   getters: {
@@ -32,7 +33,7 @@ export const useFavoriteStore = defineStore('favorite', {
       }
 
       this.loading = true
-      this.error = null
+      this.error = ''
       try {
         const response = await api.get<{ data: Product[]; total: number }>('/user-favorites')
         this.favorites = response.data.data
@@ -56,26 +57,29 @@ export const useFavoriteStore = defineStore('favorite', {
         return
       }
 
-      this.error = null
+      this.error = ''
       const isCurrentlyFavorited = this.favoriteProductIds.has(product.id)
 
       if (isCurrentlyFavorited) {
-        // --- 取消收藏 ---
         try {
           await api.delete(`/user-favorites/${product.id}`)
           this.favorites = this.favorites.filter((p) => p.id !== product.id)
+          toast.info('已取消收藏')
+          console.log('Removed from favorites:', product.id)
         } catch (err: any) {
           this.error = err.response?.data?.message || '取消收藏失败。'
-          console.error(this.error)
+          toast.error(this.error)
         }
       } else {
         // --- 添加收藏 ---
         try {
           await api.post('/user-favorites', { productId: product.id })
           this.favorites.push(product)
+          toast.info('已添加收藏')
+          console.log('Added to favorites:', product.id)
         } catch (err: any) {
           this.error = err.response?.data?.message || '添加收藏失败。'
-          console.error(this.error)
+          toast.error(this.error)
         }
       }
     },

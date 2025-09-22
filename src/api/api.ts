@@ -5,6 +5,7 @@
  * @LastEditTime: 2025-08-28 17:30:39
  */
 import axios from 'axios'
+import { toast } from 'vue-sonner'
 import { useAuthStore } from '@/stores/auth.store'
 
 const isMockEnabled = import.meta.env.VITE_ENABLE_MOCK === 'true'
@@ -33,11 +34,17 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      useAuthStore().logout()
-      return Promise.reject(new Error('登录已过期，请重新登录'))
-    }
+    const status = error.response?.status
     const errorMessage = error.response?.data?.message || error.message || '网络错误'
+
+    if (status === 401) {
+      toast.error(errorMessage)
+      return Promise.reject(new Error(errorMessage))
+    }
+    if (status === 403 || status === 404 || status === 500) {
+      toast.error(errorMessage)
+      return Promise.reject(new Error(errorMessage))
+    }
     return Promise.reject(new Error(errorMessage))
   },
 )

@@ -9,7 +9,6 @@
       </router-view>
     </main>
     <Footer />
-
     <transition name="fade-in-up">
       <button
         v-if="showBackToTopButton"
@@ -32,6 +31,7 @@
         </svg>
       </button>
     </transition>
+    <Toaster position="bottom-right" rich-colors />
   </div>
 </template>
 
@@ -39,19 +39,17 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { watch } from 'vue'
 import { RouterView } from 'vue-router'
-import DevAccessInfo from '@/components/DevAccessInfo.vue'
+import { Toaster, toast } from 'vue-sonner'
+import 'vue-sonner/style.css'
 import Footer from '@/components/layout/Footer.vue'
 import Navbar from '@/components/layout/Navbar.vue'
-
 import { useAuthStore } from '@/stores/auth.store'
 import { useCategoriesStore } from '@/stores/categories.store'
 import { useFavoriteStore } from '@/stores/favorite.store'
-import { useProductStore } from '@/stores/product.store'
 
 const authStore = useAuthStore()
 const favoriteStore = useFavoriteStore()
 const categoriesStore = useCategoriesStore()
-const productStore = useProductStore()
 
 const fetchPublicData = () => {
   categoriesStore.fetchAllCategories()

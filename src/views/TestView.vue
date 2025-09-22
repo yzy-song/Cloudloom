@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 
+import { Toaster, toast } from 'vue-sonner'
 // 假设的商品数据，实际项目中可以从后端 API 获取
 const products = ref([
   {
@@ -32,10 +33,12 @@ const products = ref([
 const loading = ref(true)
 
 onMounted(() => {
+  console.log('TestView mounted')
   // 模拟数据加载
   setTimeout(() => {
     loading.value = false
   }, 1000)
+  toast.success('Toast 初始化测试', { duration: 3000 })
 })
 
 // 使用 Vue Composition API 和 Tailwind CSS 构建组件
@@ -110,65 +113,6 @@ const ProductCard = {
 
 <template>
   <LoadingSpinner :loading="loading" />
-
-  <div v-if="!loading" class="min-h-screen font-sans antialiased text-gray-800">
-    <Navbar />
-
-    <!-- 首页英雄区 -->
-    <section class="relative w-full h-screen flex items-center justify-center overflow-hidden">
-      <!-- 英雄区背景图 -->
-      <div
-        class="absolute inset-0 bg-cover bg-center bg-[url('https://placehold.co/1920x1080/F2F5F7/99AABB?text=Hero+Image')]"
-      ></div>
-      <div class="absolute inset-0 bg-black opacity-30"></div>
-
-      <div class="relative z-10 text-center text-white px-4">
-        <h1 class="text-4xl md:text-6xl font-serif font-bold tracking-wider">云织 · 汉服</h1>
-        <p class="mt-4 text-lg md:text-2xl font-light opacity-90">传承千年，织就你的古典之美</p>
-        <button
-          class="mt-8 px-8 py-3 bg-white text-gray-800 rounded-full text-lg font-medium shadow-xl hover:bg-gray-200 transition-colors duration-300"
-        >
-          立即预约体验
-        </button>
-      </div>
-    </section>
-
-    <main class="container mx-auto px-4 md:px-8">
-      <!-- 产品展示区 -->
-      <section class="py-20">
-        <h2 class="text-3xl md:text-4xl font-serif text-center mb-12">我们的系列</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <ProductCard v-for="product in products" :key="product.id" :product="product" />
-        </div>
-      </section>
-
-      <!-- 关于我们区 -->
-      <section
-        class="py-20 flex flex-col lg:flex-row items-center space-y-8 lg:space-y-0 lg:space-x-12"
-      >
-        <div class="lg:w-1/2 rounded-xl overflow-hidden shadow-xl">
-          <img
-            src="https://placehold.co/800x600/D9D9D9/555?text=About+Us+Image"
-            alt="关于我们"
-            class="w-full h-full object-cover rounded-xl"
-          />
-        </div>
-        <div class="lg:w-1/2 text-center lg:text-left">
-          <h2 class="text-3xl md:text-4xl font-serif mb-6">关于云织</h2>
-          <p class="text-lg text-gray-600 leading-relaxed">
-            云织，致力于复兴与传承中华传统服饰文化。我们相信，每一件汉服都承载着历史的记忆和美学的沉淀。我们精心挑选面料，手工制作每一处细节，只为让你体验最纯粹的东方之美。
-          </p>
-          <button
-            class="mt-8 px-8 py-3 rounded-full bg-gray-900 text-white font-medium hover:bg-gray-700 transition-colors duration-300"
-          >
-            了解更多
-          </button>
-        </div>
-      </section>
-    </main>
-
-    <Footer />
-  </div>
 </template>
 
 <style scoped>

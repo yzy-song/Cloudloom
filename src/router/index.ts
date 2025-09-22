@@ -124,6 +124,17 @@ const router = createRouter({
       component: () => import('@/components/ImageProcessor.vue'),
     },
     {
+      path: '/privacy',
+      name: 'Privacy',
+      component: () => import('../views/PrivacyPolicyView.vue'),
+      meta: { titleKey: 'router.privacyPolicy' },
+    },
+    {
+      path: '/terms',
+      name: 'Terms',
+      component: () => import('../views/TermsView.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/404',
     },

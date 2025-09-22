@@ -1,5 +1,6 @@
 import { signInWithPopup, signOut, onAuthStateChanged, type AuthProvider } from 'firebase/auth'
 import { defineStore } from 'pinia'
+import { toast } from 'vue-sonner'
 import type { User } from '@/types'
 import type { LoginUserDto, RegisterUserDto, OAuthLoginDto } from '@/types/dto'
 import api from '@/api/api'
@@ -62,9 +63,10 @@ export const useAuthStore = defineStore('auth', {
         this.token = accessToken
         this.user = user
         localStorage.setItem('token', accessToken)
+        toast.success('登录成功')
         router.push('/')
       } catch (err: any) {
-        this.handleAuthError(err, '登录失败，请检查您的邮箱和密码。')
+        console.error('Login error:', err)
       } finally {
         this.loading = false
       }
@@ -79,10 +81,10 @@ export const useAuthStore = defineStore('auth', {
       try {
         const router = (await import('@/router')).default
         await api.post('/auth/register', registerDto)
-        alert('注册成功，请登录！')
+        toast.success('Registration successful, please sign in.')
         router.push('/login')
       } catch (err: any) {
-        this.handleAuthError(err, '注册失败，该邮箱可能已被使用。')
+        console.error('Registration error:', err)
       } finally {
         this.loading = false
       }
@@ -108,10 +110,10 @@ export const useAuthStore = defineStore('auth', {
         this.token = accessToken
         this.user = user
         localStorage.setItem('token', accessToken)
+        toast.success('登录成功')
         router.push('/')
       } catch (err: any) {
         logger.error('OAuth login error:', err)
-        this.handleAuthError(err, '第三方登录失败。')
       } finally {
         this.loading = false
       }
@@ -126,6 +128,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         if (auth.currentUser) {
           await signOut(auth)
+          toast.success('已登出')
         }
       } catch (error) {
         console.error('Firebase signOut error:', error)
@@ -175,15 +178,6 @@ export const useAuthStore = defineStore('auth', {
         }
       }
       this.isAuthReady = true
-    },
-
-    /**
-     * 统一的错误处理器
-     */
-    handleAuthError(error: any, defaultMessage: string) {
-      const errorMessage = error.response?.data?.message || error.message || defaultMessage
-      this.error = Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage
-      console.error('Auth Error:', this.error)
     },
   },
 })
