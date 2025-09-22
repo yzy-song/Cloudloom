@@ -24,25 +24,6 @@ export interface BookingData {
 }
 
 export const useBookingStore = defineStore('booking', () => {
-  interface BookingData {
-    // 商品相关（可选）
-    productId?: string
-    productTitle?: string
-
-    // 用户信息（必需）
-    name: string
-    contact: string // 电话
-    email: string
-
-    // 预约信息
-    date: string
-    time: string
-    participants: number
-    notes?: string
-
-    // 预约类型
-    type: 'product' | 'general' // 区分是商品预约还是通用预约
-  }
   // State
   const bookings = ref<Booking[]>([])
   const currentBooking = ref<Booking | null>(null)
@@ -83,6 +64,7 @@ export const useBookingStore = defineStore('booking', () => {
       const booking = response.data.data
       currentBooking.value = booking
       bookings.value.push(booking)
+      console.log('Created booking:', booking)
       return booking // 只返回业务数据
     } catch (e: any) {
       error.value = e.message || '预约失败'

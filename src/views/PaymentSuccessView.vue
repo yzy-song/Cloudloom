@@ -17,10 +17,10 @@
       </svg>
       <h1 class="text-3xl font-bold text-gray-800 mb-2">支付成功！</h1>
       <p class="text-gray-600 mb-6">感谢您的预订。我们已经收到了您的付款。</p>
-      <div v-if="bookingId" class="mb-6">
+      <div v-if="bookingNumber" class="mb-6">
         <p class="text-gray-700">
           您的预订号是:
-          <span class="font-semibold text-indigo-600">{{ bookingId }}</span>
+          <span class="font-semibold text-indigo-600">{{ bookingNumber }}</span>
         </p>
       </div>
       <div>
@@ -46,20 +46,21 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const bookingId = ref<string | null>(null)
+const bookingNumber = route.query.bookingNumber
+// const bookingId = ref<string | null>(null)
 
-onMounted(() => {
-  // 从 URL 查询参数中获取 bookingId
-  const queryValue = route.query.bookingId
-  if (typeof queryValue === 'string') {
-    bookingId.value = queryValue
-  } else if (Array.isArray(queryValue) && queryValue.length > 0) {
-    bookingId.value = queryValue[0]
-  } else {
-    bookingId.value = null
-  }
-  // 在这里你也可以调用一个 API 来验证订单状态
-})
+// onMounted(() => {
+//   // 从 URL 查询参数中获取 bookingId
+//   const queryValue = route.query.bookingId
+//   if (typeof queryValue === 'string') {
+//     bookingId.value = queryValue
+//   } else if (Array.isArray(queryValue) && queryValue.length > 0) {
+//     bookingId.value = queryValue[0]
+//   } else {
+//     bookingId.value = null
+//   }
+//   // 在这里你也可以调用一个 API 来验证订单状态
+// })
 </script>
 
 <style scoped>
