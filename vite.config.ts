@@ -12,7 +12,6 @@ import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import { defineConfig } from 'vite'
-import svgLoader from 'vite-plugin-svg-loader'
 import vueDevTools from 'vite-plugin-vue-devtools'
 // 获取本地IP地址 - 使用os模块替代address模块
 const getLocalIp = () => {
@@ -61,7 +60,6 @@ export default defineConfig(({ mode }) => {
           /* ... */
         ],
       }),
-      svgLoader(),
     ],
     server: {
       host: '0.0.0.0', // 允许所有网络接口访问
