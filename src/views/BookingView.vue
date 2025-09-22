@@ -135,7 +135,7 @@
     </div>
 
     <!-- Stripe 支付弹窗 -->
-    <div v-if="showStripe" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div v-if="showStripe" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
       <StripeCheckout
         :clientSecret="clientSecret"
         :bookingDetails="{
@@ -148,7 +148,8 @@
           participants: 1,
           notes: booking.notes,
           bookingType: booking.bookingType,
-          totalAmount: 30,
+          totalAmount: product?.price ? product.price : 30,
+          bookingNumber: booking.bookingNumber,
         }"
         @success="onStripeSuccess"
         @fail="onStripeFail"
@@ -200,6 +201,7 @@ const booking = ref({
   size: sizeFromQuery.value || 'M',
   notes: '',
   bookingType: 'standard', // 默认预约类型
+  bookingNumber: '', // 预约号
 })
 
 // 表单错误信息
@@ -270,11 +272,10 @@ const paymentSuccess = ref(false)
 
 async function submitBooking() {
   message.value = ''
-  if (!validateBooking()) return
+  // if (!validateBooking()) return
 
   isLoading.value = true
   try {
-    // 假设后端返回 { clientSecret: '...' }
     const res = await bookingStore.createBooking({
       productId: booking.value.bookingType === 'standard' ? product.value?.id : undefined,
       customerFullname: booking.value.name,
@@ -287,6 +288,7 @@ async function submitBooking() {
       bookingType: booking.value.bookingType,
       totalAmount: 30,
     })
+    booking.value.bookingNumber = res.bookingNumber
     clientSecret.value = res.client_secret ?? ''
     showStripe.value = true
   } catch (e: any) {

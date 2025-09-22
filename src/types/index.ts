@@ -101,6 +101,7 @@ export interface Booking {
   createdAt: string
   updatedAt: string
   client_secret?: string
+  bookingNumber: string
 }
 
 // =================================================================

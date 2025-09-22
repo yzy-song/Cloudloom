@@ -54,7 +54,7 @@ const redirectToCheckout = async () => {
 
     // 2. Prepare payload for the backend
     const payload = {
-      bookingId: props.bookingDetails.id,
+      bookingNumber: props.bookingDetails.bookingNumber,
       items: [
         {
           name: `Booking for ${props.bookingDetails.serviceName}`,
@@ -79,7 +79,6 @@ const redirectToCheckout = async () => {
     )
 
     const sessionId = response?.data?.sessionId
-    console.log('Received session ID from backend:', response)
     if (!sessionId) {
       throw new Error('未能从服务器获取有效的支付会话。请检查后端服务。')
     }
@@ -108,6 +107,7 @@ const redirectToCheckout = async () => {
 
 <style scoped>
 .stripe-checkout-container {
+  background: #ffffff;
   max-width: 400px;
   margin: auto;
   padding: 2rem;
