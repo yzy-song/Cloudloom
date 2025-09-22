@@ -248,38 +248,63 @@
       v-show="mobileMenuOpen"
       class="fixed inset-0 z-[60] bg-white/95 backdrop-blur-lg flex flex-col p-6 md:hidden"
     >
-      <!-- 1. Redesigned Menu Header -->
-      <div class="flex items-center justify-between pb-4 border-b border-gray-200 mb-6">
-        <h2 class="font-serif text-2xl font-bold text-gray-800">{{ t('navbar.menu') }}</h2>
-        <button @click="mobileMenuOpen = false" class="text-gray-700 z-50 p-2 -mr-2">
+      <!-- 顶部：用户信息+购物车+登录/登出 + 关闭按钮 -->
+      <div class="flex items-center justify-between pb-4 border-b border-gray-200 mb-4">
+        <!-- 用户信息和操作区 -->
+        <div class="flex items-center">
+          <img
+            v-if="authStore.isAuthenticated"
+            class="h-12 w-12 rounded-full object-cover mr-3 border-2 border-gray-300"
+            :src="authStore.user?.avatarUrl || 'https://source.unsplash.com/100x100/?portrait'"
+            :alt="t('navbar.userAvatar')"
+          />
+          <div>
+            <span v-if="authStore.isAuthenticated" class="font-bold text-lg text-gray-800">{{
+              authStore.user?.nickName || t('navbar.usernamePlaceholder')
+            }}</span>
+            <router-link
+              v-if="authStore.isAuthenticated"
+              to="/profile"
+              @click="mobileMenuOpen = false"
+              class="text-sm text-gray-500 hover:underline block"
+              >{{ t('navbar.viewProfile') }}</router-link
+            >
+            <router-link
+              v-else
+              to="/login"
+              @click="mobileMenuOpen = false"
+              class="flex items-center text-gray-800 font-semibold text-lg"
+            >
+              <UserCircleIcon class="h-10 w-10 mr-2" />{{ t('navbar.login') }}
+            </router-link>
+          </div>
+          <!-- 购物车图标 -->
+          <router-link
+            to="/cart"
+            @click="mobileMenuOpen = false"
+            class="p-2 ml-4"
+            :aria-label="t('navbar.cart')"
+          >
+            <ShoppingCartIcon class="h-8 w-8 text-gray-700" />
+          </router-link>
+        </div>
+        <!-- 关闭按钮始终在右侧 -->
+        <button @click="mobileMenuOpen = false" class="text-gray-700 z-50 p-2 -mr-2 ml-4">
           <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
 
-      <!-- 2. Main content area -->
+      <!-- 主菜单内容 -->
       <div class="w-full max-w-sm mx-auto flex flex-col h-full">
-        <!-- Search Bar -->
-        <div class="relative w-full mb-6">
-          <input
-            type="text"
-            :placeholder="t('navbar.searchPlaceholder')"
-            class="w-full pl-12 pr-6 py-4 rounded-full border border-gray-300 bg-white focus:outline-none focus:border-[#C0392B] text-lg placeholder-gray-400 text-gray-800"
-          />
-          <MagnifyingGlassIcon
-            class="absolute left-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400"
-          />
-        </div>
-
         <!-- Navigation Links -->
         <nav class="flex-grow">
           <template v-for="item in navItems" :key="item.label">
-            <!-- Item with children -->
             <div v-if="item.children">
-              <p class="font-bold text-xl text-gray-500 py-3 w-full text-center block rounded-lg">
+              <!-- <p class="font-bold text-xl text-gray-500 py-3 w-full text-center block rounded-lg">
                 {{ t(item.label) }}
-              </p>
+              </p> -->
               <router-link
                 v-for="child in item.children"
                 :key="child.path"
@@ -290,7 +315,6 @@
                 {{ t(child.label) }}
               </router-link>
             </div>
-            <!-- Item without children -->
             <router-link
               v-else
               :to="item.path"
@@ -301,6 +325,15 @@
             </router-link>
           </template>
         </nav>
+
+        <!-- 登出按钮（仅登录时显示） -->
+        <button
+          v-if="authStore.isAuthenticated"
+          @click="logout"
+          class="ml-4 px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded hover:bg-gray-200"
+        >
+          {{ t('navbar.logout') }}
+        </button>
 
         <!-- Language Switcher (Mobile) -->
         <div class="w-full pt-6 mb-6">
@@ -318,55 +351,6 @@
             >
               {{ lang.name }}
             </button>
-          </div>
-        </div>
-
-        <!-- User Actions & Footer -->
-        <div class="w-full border-t border-gray-200 pt-6">
-          <div v-if="authStore.isAuthenticated" class="flex items-center justify-between">
-            <div class="flex items-center">
-              <img
-                class="h-12 w-12 rounded-full object-cover mr-3 border-2 border-gray-300"
-                :src="authStore.user?.avatarUrl || 'https://source.unsplash.com/100x100/?portrait'"
-                :alt="t('navbar.userAvatar')"
-              />
-              <div>
-                <span class="font-bold text-lg text-gray-800">{{
-                  authStore.user?.username || t('navbar.usernamePlaceholder')
-                }}</span>
-                <router-link
-                  to="/profile"
-                  @click="mobileMenuOpen = false"
-                  class="text-sm text-gray-500 hover:underline block"
-                  >{{ t('navbar.viewProfile') }}</router-link
-                >
-              </div>
-            </div>
-            <router-link
-              to="/cart"
-              @click="mobileMenuOpen = false"
-              class="p-2"
-              :aria-label="t('navbar.cart')"
-            >
-              <ShoppingCartIcon class="h-8 w-8 text-gray-700" />
-            </router-link>
-          </div>
-          <div v-else class="flex items-center justify-between">
-            <router-link
-              to="/login"
-              class="flex items-center text-gray-800 font-semibold text-lg"
-              @click="mobileMenuOpen = false"
-            >
-              <UserCircleIcon class="h-10 w-10 mr-2" />{{ t('navbar.login') }}
-            </router-link>
-            <router-link
-              to="/cart"
-              @click="mobileMenuOpen = false"
-              class="p-2"
-              :aria-label="t('navbar.cart')"
-            >
-              <ShoppingCartIcon class="h-8 w-8 text-gray-700" />
-            </router-link>
           </div>
         </div>
       </div>

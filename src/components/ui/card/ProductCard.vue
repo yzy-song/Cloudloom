@@ -45,6 +45,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { toast } from 'vue-sonner'
 import type { Product } from '@/types'
 import { useAuthStore } from '@/stores/auth.store'
 import { useFavoriteStore } from '@/stores/favorite.store'
@@ -63,8 +64,8 @@ const isFavorited = computed(() => favoriteStore.favoriteProductIds.has(props.pr
 // 处理点击收藏按钮的事件
 async function handleFavoriteClick() {
   if (!authStore.isAuthenticated) {
-    alert('请先登录才能收藏哦！')
-    router.push('/login')
+    toast.error('请先登录才能收藏哦！')
+    // router.push('/login')
     return
   }
   await favoriteStore.toggleFavorite(props.product)

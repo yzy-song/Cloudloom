@@ -172,9 +172,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import StripeCheckout from '@/components/StripeCheckout.vue' // 新增
-import router from '@/router'
 import { useBookingStore } from '@/stores/booking.store'
 import { useProductStore } from '@/stores/product.store'
 import { validateEmail, validatePhone, validateRequired } from '@/utils/validation'
@@ -189,10 +188,9 @@ const productId = computed(() => route.query.productId as string)
 const sizeFromQuery = computed(() => route.query.size as string | undefined)
 
 const product = computed(() => productStore.currentProduct)
-const loadingProduct = computed(() => productStore.loading)
 
 // 预约信息
-const booking = ref({
+const booking = reactive({
   name: '',
   email: '',
   phone: '',
@@ -228,7 +226,7 @@ onMounted(async () => {
     await productStore.fetchProductById(Number(productId.value))
   }
   if (sizeFromQuery.value) {
-    booking.value.size = sizeFromQuery.value
+    booking.size = sizeFromQuery.value
   }
 })
 
@@ -236,32 +234,61 @@ function validateBooking() {
   let valid = true
   errors.value = { name: '', email: '', phone: '', bookingDate: '', time: '' }
 
-  if (!validateRequired(booking.value.name)) {
-    errors.value.name = '请输入姓名'
-    valid = false
+  const rules = [
+    {
+      key: 'name',
+      value: booking.name,
+      message: '请输入姓名',
+      validate: validateRequired,
+    },
+    {
+      key: 'email',
+      value: booking.email,
+      message: '请输入邮箱',
+      validate: validateRequired,
+    },
+    {
+      key: 'email',
+      value: booking.email,
+      message: '请输入有效的邮箱地址',
+      validate: validateEmail,
+      skipIfEmpty: true,
+    },
+    {
+      key: 'phone',
+      value: booking.phone,
+      message: '请输入电话',
+      validate: validateRequired,
+    },
+    {
+      key: 'phone',
+      value: booking.phone,
+      message: '请输入有效的电话号码',
+      validate: validatePhone,
+      skipIfEmpty: true,
+    },
+    {
+      key: 'bookingDate',
+      value: booking.bookingDate,
+      message: '请选择预约日期',
+      validate: validateRequired,
+    },
+    {
+      key: 'time',
+      value: booking.time,
+      message: '请选择预约时间',
+      validate: validateRequired,
+    },
+  ]
+
+  for (const rule of rules) {
+    if (rule.skipIfEmpty && !rule.value) continue
+    if (!rule.validate(rule.value)) {
+      errors.value[rule.key as keyof typeof errors.value] = rule.message
+      valid = false
+    }
   }
-  if (!validateRequired(booking.value.email)) {
-    errors.value.email = '请输入邮箱'
-    valid = false
-  } else if (!validateEmail(booking.value.email)) {
-    errors.value.email = '请输入有效的邮箱地址'
-    valid = false
-  }
-  if (!validateRequired(booking.value.phone)) {
-    errors.value.phone = '请输入电话'
-    valid = false
-  } else if (!validatePhone(booking.value.phone)) {
-    errors.value.phone = '请输入有效的电话号码'
-    valid = false
-  }
-  if (!validateRequired(booking.value.bookingDate)) {
-    errors.value.bookingDate = '请选择预约日期'
-    valid = false
-  }
-  if (!validateRequired(booking.value.time)) {
-    errors.value.time = '请选择预约时间'
-    valid = false
-  }
+
   return valid
 }
 
@@ -272,23 +299,23 @@ const paymentSuccess = ref(false)
 
 async function submitBooking() {
   message.value = ''
-  // if (!validateBooking()) return
+  if (!validateBooking()) return
 
   isLoading.value = true
   try {
     const res = await bookingStore.createBooking({
-      productId: booking.value.bookingType === 'standard' ? product.value?.id : undefined,
-      customerFullname: booking.value.name,
-      customerEmail: booking.value.email,
-      customerPhone: booking.value.phone,
-      bookingDate: booking.value.bookingDate,
-      bookingTime: booking.value.time,
+      productId: booking.bookingType === 'standard' ? product.value?.id : undefined,
+      customerFullname: booking.name,
+      customerEmail: booking.email,
+      customerPhone: booking.phone,
+      bookingDate: booking.bookingDate,
+      bookingTime: booking.time,
       participants: 1,
-      notes: booking.value.notes,
-      bookingType: booking.value.bookingType,
+      notes: booking.notes,
+      bookingType: booking.bookingType,
       totalAmount: 30,
     })
-    booking.value.bookingNumber = res.bookingNumber
+    booking.bookingNumber = res.bookingNumber
     clientSecret.value = res.client_secret ?? ''
     showStripe.value = true
   } catch (e: any) {
