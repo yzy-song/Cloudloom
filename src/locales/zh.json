@@ -260,9 +260,8 @@
   },
   "favorites": {
     "title": "我的收藏",
-    "emptyTitle": "暂无收藏",
-    "emptyDesc": "您还没有收藏任何汉服",
-    "browse": "去逛逛"
+    "empty": "您的收藏夹是空的。",
+    "goBrowse": "快去逛逛，把喜欢的汉服都加进来吧！"
   },
   "knowledge": {
     "header": {
@@ -385,6 +384,7 @@
   "profile": {
     "tabs": {
       "profile": "个人资料",
+      "favorites": "我的收藏",
       "orders": "我的订单",
       "settings": "账户设置"
     },

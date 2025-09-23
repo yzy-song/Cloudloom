@@ -55,14 +55,15 @@ export const useAuthStore = defineStore('auth', {
       this.error = null;
       try {
         const router = (await import('@/router')).default;
-        const response = await api.post<{ data: { accessToken: string; user: User } }>('/auth/login', loginDto);
+        const response = await api.post<{ data: { accessToken: string; user: User }; message: string }>('/auth/login', loginDto);
         const { accessToken, user } = response.data.data;
         this.token = accessToken;
         this.user = user;
         localStorage.setItem('token', accessToken);
-        toast.success('登录成功');
+        toast.success(response.data.message || 'Login successful');
         router.push('/');
       } catch (err: any) {
+        toast.error(err.message || 'Login failed');
         console.error('Login error:', err);
       } finally {
         this.loading = false;
