@@ -1,97 +1,139 @@
 <template>
   <div class="gallery-view">
-    <!-- Gallery Banner Section -->
-    <div class="banner-wrapper relative">
+    <!-- Banner Section -->
+    <div class="banner-wrapper">
       <div class="banner">
         <img
           v-for="(image, index) in bannerImages"
           :key="index"
           :src="image"
           alt="Gallery Banner"
-          :class="{
-            'fade-in': currentBannerIndex === index,
-            'fade-out': currentBannerIndex !== index,
-          }"
+          :class="currentBannerIndex === index ? 'fade-in' : 'fade-out'"
         />
       </div>
-      <div class="banner-overlay absolute inset-0 flex items-center justify-center text-white">
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold font-serif shadow-lg">
-          {{ $t('gallery.title') }}
+      <div class="banner-overlay">
+        <h1 class="text-3xl md:text-5xl font-display text-white font-bold shadow-lg">
+          {{ t('gallery.title') }}
         </h1>
       </div>
     </div>
-
-    <!-- Gallery Content Section -->
-    <div class="gallery-content container mx-auto px-4 py-8">
-      <!-- Category Navigation -->
-      <div class="category-nav mb-8 flex flex-wrap justify-center gap-4">
+    <!-- 顶部筛选区 -->
+    <div class="gallery-toolbar flex items-center justify-between gap-4 py-4 px-2 bg-white sticky top-0 z-10">
+      <button class="btn-outline flex items-center gap-2" @click="drawerOpen = true">
+        <svg width="22" height="22" fill="none">
+          <path d="M3 6h16M6 12h12M10 18h8" stroke="#222" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <span>{{ t('gallery.filter') || 'Filter' }}</span>
+      </button>
+      <div class="flex gap-2">
         <button
-          v-for="(category, index) in categories"
-          :key="category.id"
-          @click="selectCategory(category.name)"
-          :class="[
-            'px-4 py-2 rounded-full transition-colors duration-300',
-            currentCategory === category.name
-              ? 'bg-red-900 text-white shadow-md'
-              : 'bg-white text-gray-800 border border-gray-300 hover:bg-gray-100',
-          ]"
+          class="btn-outline px-3 py-2 rounded-lg"
+          :class="{ 'bg-hanfu-blue text-white': layout === 'grid' }"
+          @click="layout = 'grid'"
+          aria-label="Grid"
         >
-          {{ $t(`categories.${category.name}`) }}
-        </button>
-      </div>
-
-      <!-- Subcategory Navigation -->
-      <div
-        v-if="subcategories.length > 0"
-        class="subcategory-nav mb-8 flex flex-wrap justify-center gap-4"
-      >
-        <button
-          @click="selectSubcategory(null)"
-          :class="[
-            'px-4 py-2 rounded-full transition-colors duration-300',
-            currentSubcategory === null
-              ? 'bg-blue-900 text-white shadow-md'
-              : 'bg-white text-gray-800 border border-gray-300 hover:bg-gray-100',
-          ]"
-        >
-          {{ $t('subcategories.all') }}
+          <svg width="22" height="22" fill="none">
+            <circle cx="6" cy="6" r="2.5" fill="currentColor" />
+            <circle cx="16" cy="6" r="2.5" fill="currentColor" />
+            <circle cx="6" cy="16" r="2.5" fill="currentColor" />
+            <circle cx="16" cy="16" r="2.5" fill="currentColor" />
+          </svg>
         </button>
         <button
-          v-for="(subcategory, index) in subcategories"
-          :key="subcategory.id"
-          @click="selectSubcategory(subcategory.name)"
-          :class="[
-            'px-4 py-2 rounded-full transition-colors duration-300',
-            currentSubcategory === subcategory.name
-              ? 'bg-blue-900 text-white shadow-md'
-              : 'bg-white text-gray-800 border border-gray-300 hover:bg-gray-100',
-          ]"
+          class="btn-outline px-3 py-2 rounded-lg"
+          :class="{ 'bg-hanfu-blue text-white': layout === 'list' }"
+          @click="layout = 'list'"
+          aria-label="List"
         >
-          {{ $t(`subcategories.${subcategory.name}`) }}
+          <svg width="22" height="22" fill="none">
+            <rect x="4" y="5" width="14" height="3" rx="1.5" fill="currentColor" />
+            <rect x="4" y="14" width="14" height="3" rx="1.5" fill="currentColor" />
+          </svg>
         </button>
       </div>
-
-      <!-- Product Grid -->
-      <div v-if="isLoading" class="flex justify-center items-center py-12">
-        <base-loading />
+      <div class="min-w-[120px]">
+        <select v-model="sort" class="rounded-lg border border-hanfu-red px-4 py-2 text-base bg-white text-hanfu-dark">
+          <option value="az">A-Z</option>
+          <option value="za">Z-A</option>
+          <option value="new">Newest</option>
+          <option value="priceUp">Price ↑</option>
+          <option value="priceDown">Price ↓</option>
+        </select>
       </div>
-
-      <div v-else-if="isError" class="text-center text-red-500 py-12">
-        <p>{{ $t('errors.loadFailed') }}</p>
+    </div>
+    <!-- 筛选抽屉 -->
+    <div v-if="drawerOpen" class="filter-drawer" @click.self="drawerOpen = false">
+      <div class="drawer-panel">
+        <div class="flex items-center justify-between font-semibold mb-2">
+          <span>{{ t('gallery.filter') || 'Filter' }}</span>
+          <button class="text-2xl text-gray-500" @click="drawerOpen = false">&times;</button>
+        </div>
+        <div>
+          <h3 class="font-bold mb-2">{{ t('gallery.category') || 'Category' }}</h3>
+          <div class="flex flex-wrap gap-2">
+            <button
+              v-for="category in categories"
+              :key="category.id"
+              @click="handleCategorySelect(category.id)"
+              class="btn-outline px-4 py-2 rounded-full"
+              :class="{ 'bg-hanfu-blue text-white': currentCategoryId === category.id }"
+            >
+              {{ category.name }}
+            </button>
+          </div>
+        </div>
+        <div v-if="subcategories.length > 0">
+          <h3 class="font-bold mb-2">{{ t('gallery.subcategory') || 'Subcategory' }}</h3>
+          <div class="flex flex-wrap gap-2">
+            <button
+              @click="handleSubcategorySelect(null)"
+              class="btn-outline px-4 py-2 rounded-full"
+              :class="{ 'bg-hanfu-blue text-white': currentSubcategoryId === null }"
+            >
+              {{ t('subcategories.all') || 'All' }}
+            </button>
+            <button
+              v-for="subcategory in subcategories"
+              :key="subcategory.id"
+              @click="handleSubcategorySelect(subcategory.id)"
+              class="btn-outline px-4 py-2 rounded-full"
+              :class="{ 'bg-hanfu-blue text-white': currentSubcategoryId === subcategory.id }"
+            >
+              {{ subcategory.name }}
+            </button>
+          </div>
+        </div>
       </div>
-
-      <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <product-card
-          v-for="product in products"
-          :key="product.id"
-          :product="product"
-          @favorite-toggled="handleFavoriteToggled"
-        />
+    </div>
+    <!-- 产品区 -->
+    <div class="container mx-auto px-4 py-8">
+      <div v-if="productStore.loading" class="flex justify-center items-center py-12">
+        <BaseLoading />
       </div>
-
-      <!-- Pagination -->
-      <base-pagination
-        v-if="!isLoading && productStore.pagination.total > 1"
+      <div v-else-if="productStore.error" class="text-center text-red-500 py-12">
+        <p>{{ t('errors.loadFailed') }}</p>
+      </div>
+      <div v-else>
+        <div v-if="layout === 'grid'" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <ProductCard
+            v-for="product in productStore.products"
+            :key="product.id"
+            :product="product"
+            @favorite-toggled="handleFavoriteToggled"
+          />
+        </div>
+        <div v-else class="flex flex-col gap-6">
+          <ProductCard
+            v-for="product in productStore.products"
+            :key="product.id"
+            :product="product"
+            layout="list"
+            @favorite-toggled="handleFavoriteToggled"
+          />
+        </div>
+      </div>
+      <BasePagination
+        v-if="productStore.pagination.total > 1"
         :current-page="productStore.pagination.page"
         :total-pages="productStore.pagination.lastPage"
         :total-items="productStore.pagination.total"
@@ -104,192 +146,110 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watchEffect } from 'vue'
-import { useI18n } from 'vue-i18n'
-import type { Product } from '@/types/index'
-import type { Category, Subcategory } from '@/types/index'
-import BaseLoading from '@/components/ui/BaseLoading.vue'
-import BasePagination from '@/components/ui/BasePagination.vue'
-import ProductCard from '@/components/ui/card/ProductCard.vue'
-import { useCategoriesStore } from '@/stores/categories.store'
-import { useProductStore } from '@/stores/product.store'
+import { ref, onMounted, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import type { Category, Subcategory } from '@/types';
+import BaseLoading from '@/components/ui/BaseLoading.vue';
+import BasePagination from '@/components/ui/BasePagination.vue';
+import ProductCard from '@/components/ui/card/ProductCard.vue';
+import { useCategoriesStore } from '@/stores/categories.store';
+import { useProductStore } from '@/stores/product.store';
 
-const { t } = useI18n()
-const productStore = useProductStore()
-const categoryStore = useCategoriesStore()
+const { t } = useI18n();
+const productStore = useProductStore();
+const categoryStore = useCategoriesStore();
 
-// Reactive state for the component
-const isLoading = ref<boolean>(false)
-const isError = ref<boolean>(false)
-const products = ref<Product[]>([])
-const categories = ref<Category[]>([])
-const subcategories = ref<Subcategory[]>([])
-const currentCategory = ref<string>('all')
-const currentSubcategory = ref<string | null>(null)
-const currentPage = ref<number>(1)
-const totalPages = ref<number>(1)
-
-// Banner state
+const categories = ref<Category[]>([]);
+const subcategories = ref<Subcategory[]>([]);
+const currentCategoryId = ref<number | null>(null);
+const currentSubcategoryId = ref<number | null>(null);
+const currentPage = ref(1);
+// Banner
 const bannerImages = ref([
   '/images/gallery-banner/slide1.png',
   '/images/gallery-banner/slide2.png',
   '/images/gallery-banner/slide3.png',
   '/images/gallery-banner/slide4.png',
-])
-const currentBannerIndex = ref(0)
-const bannerInterval = ref()
+]);
+const currentBannerIndex = ref(0);
+const bannerInterval = ref();
+const drawerOpen = ref(false);
+const layout = ref<'grid' | 'list'>('grid');
+const sort = ref('az');
 
-// Fetches products based on current filters and pagination
-const fetchProducts = async () => {
-  isLoading.value = true
-  isError.value = false
-  try {
-    const { data: productList, meta } = await productStore.fetchAllProducts({
-      category: currentCategory.value === 'all' ? undefined : currentCategory.value,
-      subcategory:
-        currentSubcategory.value === 'all' || currentSubcategory.value == null
-          ? undefined
-          : currentSubcategory.value,
-      page: currentPage.value,
-      limit: 12,
-    })
-    products.value = productList
-    totalPages.value = meta.lastPage
-  } catch (error) {
-    console.error('Failed to fetch products:', error)
-    isError.value = true
-  } finally {
-    isLoading.value = false
-  }
-}
-
-// Fetches all categories and populates subcategories for the selected category
+// 获取分类并初始化
 const fetchCategories = async () => {
   try {
-    await categoryStore.fetchAllCategories()
-    categories.value = categoryStore.categories
-    updateSubcategories()
-  } catch (error) {
-    console.error('Failed to fetch categories:', error)
-    isError.value = true
-  }
-}
+    await categoryStore.fetchAllCategories();
+    categories.value = categoryStore.categories;
+    currentCategoryId.value = categories.value[0]?.id ?? null;
+    updateSubcategories();
+  } catch (error) {}
+};
 
-// Updates subcategories based on the selected category
+// 根据当前分类更新子分类
 const updateSubcategories = () => {
-  const selectedCategory = categories.value.find((cat) => cat.name === currentCategory.value)
-  if (selectedCategory) {
-    subcategories.value = selectedCategory.subcategories
-  } else {
-    subcategories.value = []
-  }
-  // Reset subcategory selection when a new main category is chosen
-  currentSubcategory.value = null
-}
+  const selectedCategory = categories.value.find(cat => cat.id === currentCategoryId.value);
+  subcategories.value = selectedCategory?.subcategories ?? [];
+  currentSubcategoryId.value = null;
+};
 
-// Watch for changes in the active category or subcategory and refetch products
-watchEffect(() => {
-  // We don't need to manually call fetchProducts here anymore,
-  // watchEffect will handle it automatically on initial load and whenever
-  // currentCategory, currentSubcategory, or currentPage changes.
-  // This consolidates the logic from onMounted and the two watchers.
-  if (currentCategory.value || currentSubcategory.value || currentPage.value) {
-    fetchProducts()
-  }
-})
+// 获取产品
+const fetchProducts = async () => {
+  await productStore.fetchAllProducts({
+    categoryId: currentCategoryId.value ?? undefined,
+    subcategoryId: currentSubcategoryId.value ?? undefined,
+    page: currentPage.value,
+    limit: productStore.pagination.limit,
+    sort: sort.value,
+  });
+};
 
-// Category and subcategory selection handlers
-const selectCategory = (category: string) => {
-  currentCategory.value = category
-  currentPage.value = 1 // Reset page on category change
-  updateSubcategories()
-}
+// 分类选择
+const selectCategory = (categoryId: number | null) => {
+  currentCategoryId.value = categoryId;
+  currentPage.value = 1;
+  updateSubcategories();
+};
 
-const selectSubcategory = (subcategory: string | null) => {
-  currentSubcategory.value = subcategory
-  currentPage.value = 1 // Reset page on subcategory change
-}
+// 子分类选择
+const selectSubcategory = (subcategoryId: number | null) => {
+  currentSubcategoryId.value = subcategoryId;
+  currentPage.value = 1;
+};
 
-// Pagination handler
+// 分页
 const handlePageChange = (page: number) => {
-  currentPage.value = page
-}
+  currentPage.value = page;
+};
 
-// Favorite toggle handler
-const handleFavoriteToggled = () => {
-  // Re-fetch data to reflect the favorite status change if needed,
-  // or handle local state update if product store is reactive.
-  // Assuming the store is reactive, this might not be needed.
-  // For now, let's keep it simple.
-  console.log('Favorite toggled, re-fetching products might be needed.')
-}
+// 收藏操作
+const handleFavoriteToggled = () => {};
 
-// Lifecycle hooks
-onMounted(() => {
-  fetchCategories()
-  startBannerRotation()
-})
+const handleCategorySelect = (id: number | null) => {
+  selectCategory(id);
+  // drawerOpen.value = false;
+};
 
-// Banner rotation logic
+// 轮播
 const startBannerRotation = () => {
-  if (bannerInterval.value) {
-    clearInterval(bannerInterval.value)
-  }
+  if (bannerInterval.value) clearInterval(bannerInterval.value);
   bannerInterval.value = setInterval(() => {
-    currentBannerIndex.value = (currentBannerIndex.value + 1) % bannerImages.value.length
-  }, 5000) // Change image every 5 seconds
-}
+    currentBannerIndex.value = (currentBannerIndex.value + 1) % bannerImages.value.length;
+  }, 5000);
+};
+
+const handleSubcategorySelect = (id: number | null) => {
+  selectSubcategory(id);
+  // drawerOpen.value = false;
+};
+
+// 自动刷新产品
+watch([currentCategoryId, currentSubcategoryId, currentPage, sort], () => {
+  fetchProducts();
+});
+onMounted(() => {
+  fetchCategories();
+  startBannerRotation();
+});
 </script>
-
-<style scoped>
-.banner-wrapper {
-  height: 300px; /* Adjust height for a better mobile view */
-}
-
-.banner img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
-  transition: opacity 1s ease-in-out;
-}
-
-.fade-in {
-  opacity: 1;
-}
-
-.fade-out {
-  opacity: 0;
-}
-
-.banner-overlay {
-  background: rgba(0, 0, 0, 0.4);
-}
-
-.category-nav,
-.subcategory-nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.gallery-content {
-  max-width: 1200px;
-}
-
-@media (max-width: 640px) {
-  .gallery-content {
-    padding: 0 1rem;
-  }
-
-  .category-nav,
-  .subcategory-nav {
-    justify-content: flex-start;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-}
-</style>
