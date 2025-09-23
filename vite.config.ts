@@ -4,33 +4,33 @@
  * @LastEditors: yzy
  * @LastEditTime: 2025-08-29 08:10:22
  */
-import { fileURLToPath, URL } from 'node:url'
-import os from 'os'
-import { resolve } from 'path'
-
-import tailwindcss from '@tailwindcss/vite'
-import vue from '@vitejs/plugin-vue'
-import AutoImport from 'unplugin-auto-import/vite'
-import { defineConfig } from 'vite'
-import vueDevTools from 'vite-plugin-vue-devtools'
+import { fileURLToPath, URL } from 'node:url';
+import os from 'os';
+import { resolve } from 'path';
+import path from 'path';
+import tailwindcss from '@tailwindcss/vite';
+import vue from '@vitejs/plugin-vue';
+import AutoImport from 'unplugin-auto-import/vite';
+import { defineConfig } from 'vite';
+import vueDevTools from 'vite-plugin-vue-devtools';
 // 获取本地IP地址 - 使用os模块替代address模块
 const getLocalIp = () => {
-  const interfaces = os.networkInterfaces()
+  const interfaces = os.networkInterfaces();
   for (const name of Object.keys(interfaces)) {
     for (const iface of interfaces[name] || []) {
       if (iface.family === 'IPv4' && !iface.internal && iface.address) {
-        return iface.address
+        return iface.address;
       }
     }
   }
-  return 'localhost'
-}
+  return 'localhost';
+};
 
 // 导出 defineConfig 函数，并传入环境参数
 export default defineConfig(({ mode }) => {
-  const isProd = mode === 'production'
-  const devIp = isProd ? 'cloudloom.yzysong.com' : getLocalIp()
-  const devPort = isProd ? '80' : 5173
+  const isProd = mode === 'production';
+  const devIp = isProd ? 'cloudloom.yzysong.com' : getLocalIp();
+  const devPort = isProd ? '80' : 5173;
 
   return {
     plugins: [
@@ -72,7 +72,7 @@ export default defineConfig(({ mode }) => {
         '/api': {
           target: 'http://localhost:3000', // 开发环境后端地址
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ''),
+          rewrite: path => path.replace(/^\/api/, ''),
         },
         // **【新增】** 图片上传目录的代理
         '/uploads': {
@@ -84,6 +84,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
+        '@api': path.resolve(__dirname, 'src/api'),
       },
     },
     define: {
@@ -99,5 +100,5 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-  }
-})
+  };
+});
