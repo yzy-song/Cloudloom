@@ -192,18 +192,19 @@ const fetchCategories = async () => {
   try {
     await categoryStore.fetchAllCategories();
     categories.value = categoryStore.categories;
-    currentCategoryId.value = categories.value[0]?.id ?? null;
+    currentCategoryId.value = null; // 不选中任何分类
     updateSubcategories();
   } catch (error) {}
 };
 
 // 根据当前分类更新子分类
 const updateSubcategories = () => {
-  const selectedCategory = categories.value.find(cat => cat.id === currentCategoryId.value);
-  subcategories.value = selectedCategory?.subcategories ?? [];
-  if (subcategories.value.length > 0) {
-    currentSubcategoryId.value = subcategories.value[0].id;
+  if (currentCategoryId.value === null) {
+    subcategories.value = [];
+    currentSubcategoryId.value = null;
   } else {
+    const selectedCategory = categories.value.find(cat => cat.id === currentCategoryId.value);
+    subcategories.value = selectedCategory?.subcategories ?? [];
     currentSubcategoryId.value = null;
   }
 };
@@ -215,7 +216,7 @@ const fetchProducts = async () => {
     subcategoryId: currentSubcategoryId.value ?? undefined,
     page: currentPage.value,
     limit: productStore.pagination.limit,
-    // sort: sort.value,
+    sort: sort.value,
   });
 };
 
@@ -262,8 +263,9 @@ const handleSubcategorySelect = (id: number | null) => {
 watch([currentCategoryId, currentSubcategoryId, currentPage, sort], () => {
   fetchProducts();
 });
-onMounted(() => {
-  fetchCategories();
+onMounted(async () => {
+  await fetchCategories();
+  await fetchProducts(); // 主动请求一次所有商品
   startBannerRotation();
 });
 </script>
