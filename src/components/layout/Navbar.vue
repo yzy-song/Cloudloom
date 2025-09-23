@@ -248,14 +248,15 @@
         <nav class="flex-grow">
           <template v-for="item in navItems" :key="item.label">
             <div v-if="item.children">
-              <!-- <p class="font-bold text-xl text-gray-500 py-3 w-full text-center block rounded-lg">
+              <!-- gallery主菜单标题 -->
+              <p class="font-bold text-lg text-gray-600 py-2 w-full text-left pl-4 mb-1">
                 {{ t(item.label) }}
-              </p> -->
+              </p>
               <router-link
                 v-for="child in item.children"
                 :key="child.path"
                 :to="child.path"
-                class="font-bold text-2xl text-gray-800 py-4 w-full text-center block hover:bg-gray-100 transition-colors duration-200 rounded-lg"
+                class="font-medium text-base text-gray-800 py-2 w-full text-left pl-8 block hover:bg-gray-100 transition-colors duration-200 rounded-lg"
                 @click="mobileMenuOpen = false"
               >
                 {{ t(child.label) }}
@@ -264,7 +265,7 @@
             <router-link
               v-else
               :to="item.path"
-              class="font-bold text-2xl text-gray-800 py-4 w-full text-center block hover:bg-gray-100 transition-colors duration-200 rounded-lg"
+              class="font-bold text-lg text-gray-800 py-3 w-full text-left pl-4 block hover:bg-gray-100 transition-colors duration-200 rounded-lg"
               @click="mobileMenuOpen = false"
             >
               {{ t(item.label) }}

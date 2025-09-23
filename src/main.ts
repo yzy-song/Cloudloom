@@ -1,9 +1,3 @@
-/*
- * @Author: yzy
- * @Date: 2025-08-20 16:35:27
- * @LastEditors: yzy
- * @LastEditTime: 2025-09-06 01:43:00
- */
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import { Toaster } from 'vue-sonner';
