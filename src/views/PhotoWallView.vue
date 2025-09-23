@@ -164,6 +164,14 @@
         </div>
       </div>
     </transition>
+
+    <!-- 上传弹窗或页面顶部 -->
+    <div v-if="uploading" class="fixed top-0 left-0 w-full z-50 px-4 py-2 bg-white shadow">
+      <div class="w-full bg-gray-200 rounded h-4 overflow-hidden">
+        <div class="bg-[#C0392B] h-4 rounded transition-all duration-200" :style="{ width: uploadProgress + '%' }"></div>
+      </div>
+      <div class="text-center text-sm text-gray-700 mt-1">{{ uploadProgress }}%</div>
+    </div>
   </div>
 </template>
 
@@ -188,6 +196,7 @@ const uploadFiles = ref<File[]>([]);
 const uploadAlts = ref<string[]>([]);
 const uploading = ref(false);
 const uploadError = ref('');
+const uploadProgress = ref(0);
 
 const openModal = (photo: any, index: number) => {
   selectedPhoto.value = photo;
@@ -220,18 +229,21 @@ const handlePhotoUpload = async () => {
     return;
   }
   uploading.value = true;
+  uploadProgress.value = 0;
   uploadError.value = '';
   try {
-    // 调用你封装好的批量上传方法
-    await uploadFilesApi(uploadFiles.value, 'photowall');
+    await uploadFilesApi(uploadFiles.value, 'photowall', percent => {
+      uploadProgress.value = percent;
+    });
     showUploadModal.value = false;
     uploadFiles.value = [];
     uploadAlts.value = [];
-    photoStore.fetchPhotos(); // 上传成功后刷新照片墙
+    photoStore.fetchPhotos();
   } catch (err) {
     uploadError.value = '上传失败，请重试';
   } finally {
     uploading.value = false;
+    uploadProgress.value = 0;
   }
 };
 
