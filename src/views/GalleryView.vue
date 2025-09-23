@@ -18,47 +18,49 @@
       </div>
     </div>
     <!-- 顶部筛选区 -->
-    <div class="gallery-toolbar flex items-center justify-between gap-4 py-4 px-2 bg-white sticky top-0 z-10">
-      <button class="btn-outline flex items-center gap-2" @click="drawerOpen = true">
-        <svg width="22" height="22" fill="none">
-          <path d="M3 6h16M6 12h12M10 18h8" stroke="#222" stroke-width="2" stroke-linecap="round" />
-        </svg>
-        <span>{{ t('gallery.filter') || 'Filter' }}</span>
-      </button>
-      <div class="flex gap-2">
-        <button
-          class="btn-outline px-3 py-2 rounded-lg"
-          :class="{ 'bg-hanfu-blue text-white': layout === 'grid' }"
-          @click="layout = 'grid'"
-          aria-label="Grid"
-        >
+    <div class="w-full md:max-w-screen-xl md:mx-auto md:px-6 lg:px-8 px-2">
+      <div class="gallery-toolbar flex items-center justify-between gap-4 py-4 bg-white sticky top-0 z-10">
+        <button class="btn-outline flex items-center gap-2" @click="drawerOpen = true">
           <svg width="22" height="22" fill="none">
-            <circle cx="6" cy="6" r="2.5" fill="currentColor" />
-            <circle cx="16" cy="6" r="2.5" fill="currentColor" />
-            <circle cx="6" cy="16" r="2.5" fill="currentColor" />
-            <circle cx="16" cy="16" r="2.5" fill="currentColor" />
+            <path d="M3 6h16M6 12h12M10 18h8" stroke="#222" stroke-width="2" stroke-linecap="round" />
           </svg>
+          <span>{{ t('gallery.filter') || 'Filter' }}</span>
         </button>
-        <button
-          class="btn-outline px-3 py-2 rounded-lg"
-          :class="{ 'bg-hanfu-blue text-white': layout === 'list' }"
-          @click="layout = 'list'"
-          aria-label="List"
-        >
-          <svg width="22" height="22" fill="none">
-            <rect x="4" y="5" width="14" height="3" rx="1.5" fill="currentColor" />
-            <rect x="4" y="14" width="14" height="3" rx="1.5" fill="currentColor" />
-          </svg>
-        </button>
-      </div>
-      <div class="min-w-[120px]">
-        <select v-model="sort" class="rounded-lg border border-hanfu-red px-4 py-2 text-base bg-white text-hanfu-dark">
-          <option value="az">A-Z</option>
-          <option value="za">Z-A</option>
-          <option value="new">Newest</option>
-          <option value="priceUp">Price ↑</option>
-          <option value="priceDown">Price ↓</option>
-        </select>
+        <div class="flex gap-2">
+          <button
+            class="btn-outline px-3 py-2 rounded-lg"
+            :class="{ 'bg-hanfu-blue text-white': layout === 'grid' }"
+            @click="layout = 'grid'"
+            aria-label="Grid"
+          >
+            <svg width="22" height="22" fill="none">
+              <circle cx="6" cy="6" r="2.5" fill="currentColor" />
+              <circle cx="16" cy="6" r="2.5" fill="currentColor" />
+              <circle cx="6" cy="16" r="2.5" fill="currentColor" />
+              <circle cx="16" cy="16" r="2.5" fill="currentColor" />
+            </svg>
+          </button>
+          <button
+            class="btn-outline px-3 py-2 rounded-lg"
+            :class="{ 'bg-hanfu-blue text-white': layout === 'list' }"
+            @click="layout = 'list'"
+            aria-label="List"
+          >
+            <svg width="22" height="22" fill="none">
+              <rect x="4" y="5" width="14" height="3" rx="1.5" fill="currentColor" />
+              <rect x="4" y="14" width="14" height="3" rx="1.5" fill="currentColor" />
+            </svg>
+          </button>
+        </div>
+        <div class="min-w-[120px]">
+          <select v-model="sort" class="rounded-lg border border-hanfu-red px-4 py-2 text-base bg-white text-hanfu-dark">
+            <option value="az">A-Z</option>
+            <option value="za">Z-A</option>
+            <option value="new">Newest</option>
+            <option value="priceUp">Price ↑</option>
+            <option value="priceDown">Price ↓</option>
+          </select>
+        </div>
       </div>
     </div>
     <!-- 筛选抽屉 -->
@@ -70,7 +72,15 @@
         </div>
         <div>
           <h3 class="font-bold mb-2">{{ t('gallery.category') || 'Category' }}</h3>
+
           <div class="flex flex-wrap gap-2">
+            <button
+              @click="handleCategorySelect(null)"
+              class="btn-outline px-4 py-2 rounded-full"
+              :class="{ 'bg-hanfu-blue text-white': currentCategoryId === null }"
+            >
+              All
+            </button>
             <button
               v-for="category in categories"
               :key="category.id"
@@ -90,7 +100,7 @@
               class="btn-outline px-4 py-2 rounded-full"
               :class="{ 'bg-hanfu-blue text-white': currentSubcategoryId === null }"
             >
-              {{ t('subcategories.all') || 'All' }}
+              All
             </button>
             <button
               v-for="subcategory in subcategories"
@@ -191,7 +201,11 @@ const fetchCategories = async () => {
 const updateSubcategories = () => {
   const selectedCategory = categories.value.find(cat => cat.id === currentCategoryId.value);
   subcategories.value = selectedCategory?.subcategories ?? [];
-  currentSubcategoryId.value = null;
+  if (subcategories.value.length > 0) {
+    currentSubcategoryId.value = subcategories.value[0].id;
+  } else {
+    currentSubcategoryId.value = null;
+  }
 };
 
 // 获取产品
@@ -201,7 +215,7 @@ const fetchProducts = async () => {
     subcategoryId: currentSubcategoryId.value ?? undefined,
     page: currentPage.value,
     limit: productStore.pagination.limit,
-    sort: sort.value,
+    // sort: sort.value,
   });
 };
 

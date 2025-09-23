@@ -14,7 +14,7 @@
       { '-translate-y-full': isScrollingDown && isScrolled && !mobileMenuOpen },
     ]"
   >
-    <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+    <div class="w-full px-4 h-full md:max-w-screen-xl md:mx-auto md:px-6 lg:px-8">
       <div class="flex items-center justify-between h-full">
         <!-- Logo -->
         <router-link to="/" class="flex items-center group">
