@@ -34,6 +34,14 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Service"
   },
+  "category": {
+    "top": "Hanfu Tops",
+    "bottom": "Hanfu Bottoms",
+    "suit": "Hanfu Suits",
+    "accessory": "Accessories",
+    "shoes": "Shoes",
+    "event": "Events"
+  },
   "home": {
     "bookNow": "Book Now",
     "bannerTitle": "Cloudloom Hanfu",

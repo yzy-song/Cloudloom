@@ -33,7 +33,20 @@
           <template v-for="item in navItems" :key="item.label">
             <!-- Item with children (Dropdown) -->
             <div v-if="item.children" class="relative group">
+              <!-- 主菜单有 path 时用 router-link，否则用 button -->
+              <router-link
+                v-if="item.path"
+                :to="item.path"
+                :class="[
+                  'font-semibold text-sm tracking-wider relative group transition-colors duration-300 flex items-center',
+                  linkTextColorClass,
+                ]"
+              >
+                <span>{{ t(item.label) }}</span>
+                <ChevronDownIcon class="w-4 h-4 ml-1" />
+              </router-link>
               <button
+                v-else
                 :class="[
                   'font-semibold text-sm tracking-wider relative group transition-colors duration-300 flex items-center',
                   linkTextColorClass,
@@ -320,7 +333,18 @@ const langMenuContainer = ref<HTMLElement | null>(null);
 
 const navItems = [
   { label: 'navbar.home', path: '/' },
-  { label: 'navbar.gallery', path: '/gallery' },
+  {
+    label: 'navbar.gallery',
+    path: '/gallery',
+    children: [
+      { label: 'category.top', path: '/gallery?categoryId=1' }, // 汉服上衣
+      { label: 'category.bottom', path: '/gallery?categoryId=2' }, // 汉服下装
+      { label: 'category.suit', path: '/gallery?categoryId=3' }, // 汉服套装
+      { label: 'category.accessory', path: '/gallery?categoryId=4' }, // 配饰
+      { label: 'category.shoes', path: '/gallery?categoryId=5' }, // 鞋履
+      { label: 'category.event', path: '/gallery?categoryId=6' }, // 主题活动
+    ],
+  },
   { label: 'navbar.photos', path: '/photos' },
   { label: 'navbar.knowledge', path: '/knowledge' },
   {

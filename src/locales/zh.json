@@ -35,6 +35,14 @@
     "privacy": "隐私政策",
     "terms": "服务条款"
   },
+  "category": {
+    "top": "汉服上衣",
+    "bottom": "汉服下装",
+    "suit": "汉服套装",
+    "accessory": "配饰",
+    "shoes": "鞋履",
+    "event": "主题活动"
+  },
   "home": {
     "bookNow": "立即预约",
     "bannerTitle": "云织汉服",

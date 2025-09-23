@@ -187,15 +187,17 @@ const drawerOpen = ref(false);
 const layout = ref<'grid' | 'list'>('grid');
 const sort = ref('az');
 
+const route = useRoute();
+
 // 获取分类并初始化
-const fetchCategories = async () => {
-  try {
-    await categoryStore.fetchAllCategories();
-    categories.value = categoryStore.categories;
-    currentCategoryId.value = null; // 不选中任何分类
-    updateSubcategories();
-  } catch (error) {}
-};
+// const fetchCategories = async () => {
+//   try {
+//     await categoryStore.fetchAllCategories();
+//     categories.value = categoryStore.categories;
+//     currentCategoryId.value = null; // 不选中任何分类
+//     updateSubcategories();
+//   } catch (error) {}
+// };
 
 // 根据当前分类更新子分类
 const updateSubcategories = () => {
@@ -260,11 +262,15 @@ const handleSubcategorySelect = (id: number | null) => {
 };
 
 // 自动刷新产品
-watch([currentCategoryId, currentSubcategoryId, currentPage, sort], () => {
+watch([() => route.query.categoryId, currentCategoryId, currentSubcategoryId, currentPage, sort], ([categoryId]) => {
+  // 路由参数变化时，切换分类
+  if (categoryId !== undefined) {
+    selectCategory(categoryId ? Number(categoryId) : null);
+  }
   fetchProducts();
 });
 onMounted(async () => {
-  await fetchCategories();
+  // await fetchCategories();
   await fetchProducts(); // 主动请求一次所有商品
   startBannerRotation();
 });
