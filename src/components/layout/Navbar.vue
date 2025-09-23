@@ -18,38 +18,12 @@
       <div class="flex items-center justify-between h-full">
         <!-- Logo -->
         <router-link to="/" class="flex items-center group">
-          <svg
-            class="w-10 h-10 mr-2"
-            :class="logoColorClass"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 2L2 7L12 12L22 7L12 2Z"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M2 17L12 22L22 17"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M2 12L12 17L22 12"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linejoin="round"
-            />
+          <svg class="w-10 h-10 mr-2" :class="logoColorClass" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
           </svg>
-          <span
-            :class="[
-              'font-serif font-bold tracking-widest transition-colors duration-300',
-              logoTextColorClass,
-            ]"
-          >
+          <span :class="['font-serif font-bold tracking-widest transition-colors duration-300', logoTextColorClass]">
             {{ t('brand.name') }}
           </span>
         </router-link>
@@ -79,10 +53,7 @@
                   v-for="child in item.children"
                   :key="child.path"
                   :to="child.path"
-                  :class="[
-                    'block px-4 py-2 text-sm transition-colors duration-200',
-                    dropdownLinkClass,
-                  ]"
+                  :class="['block px-4 py-2 text-sm transition-colors duration-200', dropdownLinkClass]"
                 >
                   {{ t(child.label) }}
                 </router-link>
@@ -93,10 +64,7 @@
             <router-link
               v-else
               :to="item.path"
-              :class="[
-                'font-semibold text-sm tracking-wider relative group transition-colors duration-300',
-                linkTextColorClass,
-              ]"
+              :class="['font-semibold text-sm tracking-wider relative group transition-colors duration-300', linkTextColorClass]"
             >
               <span>{{ t(item.label) }}</span>
               <span
@@ -107,10 +75,7 @@
               ></span>
               <span
                 v-if="activePath === item.path"
-                :class="[
-                  'absolute -bottom-2 left-1/2 -translate-x-1/2 h-0.5 w-full rounded-full',
-                  underlineColorClass,
-                ]"
+                :class="['absolute -bottom-2 left-1/2 -translate-x-1/2 h-0.5 w-full rounded-full', underlineColorClass]"
               ></span>
             </router-link>
           </template>
@@ -121,17 +86,11 @@
           <button :class="iconColorClass" :aria-label="t('navbar.search')">
             <MagnifyingGlassIcon class="h-6 w-6" />
           </button>
-          <router-link to="/cart" :class="iconColorClass" :aria-label="t('navbar.cart')"
-            ><ShoppingCartIcon class="h-6 w-6"
-          /></router-link>
+          <router-link to="/cart" :class="iconColorClass" :aria-label="t('navbar.cart')"><ShoppingCartIcon class="h-6 w-6" /></router-link>
 
           <!-- Language Switcher -->
           <div class="relative" ref="langMenuContainer">
-            <button
-              @click="isLangMenuOpen = !isLangMenuOpen"
-              :class="iconColorClass"
-              class="flex items-center"
-            >
+            <button @click="isLangMenuOpen = !isLangMenuOpen" :class="iconColorClass" class="flex items-center">
               <GlobeAltIcon class="h-6 w-6" />
               <span class="ml-2 font-semibold text-sm">{{ locale === 'zh' ? '中' : 'EN' }}</span>
             </button>
@@ -153,9 +112,7 @@
                   @click="switchLanguage(lang.code)"
                   :class="[
                     'w-full text-left px-4 py-2 text-sm',
-                    locale === lang.code
-                      ? 'bg-gray-100 text-gray-900'
-                      : 'text-gray-700 hover:bg-gray-100',
+                    locale === lang.code ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100',
                   ]"
                 >
                   {{ lang.name }}
@@ -164,12 +121,8 @@
             </transition>
           </div>
           <!-- User Menu Dropdown -->
-          <div v-if="authStore.isAuthenticated" class="relative" ref="userMenuContainer">
-            <button
-              @click="isUserMenuOpen = !isUserMenuOpen"
-              id="user-menu-button"
-              :aria-label="t('navbar.userMenu')"
-            >
+          <div v-if="authStore.isAuthenticated && authStore.user" class="relative" ref="userMenuContainer">
+            <button @click="isUserMenuOpen = !isUserMenuOpen" id="user-menu-button" :aria-label="t('navbar.userMenu')">
               <img
                 class="h-9 w-9 rounded-full object-cover border-2 transition-colors duration-300"
                 :class="isScrolled || !isHomePage ? 'border-gray-300' : 'border-white/50'"
@@ -210,10 +163,7 @@
                   </router-link>
                 </div>
                 <div class="py-1 border-t border-gray-200">
-                  <button
-                    @click="logout"
-                    class="w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
+                  <button @click="logout" class="w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                     <ArrowLeftOnRectangleIcon class="w-5 h-5 mr-3 text-gray-500" />
                     {{ t('navbar.logout') }}
                   </button>
@@ -222,19 +172,13 @@
             </transition>
           </div>
           <router-link v-else to="/login" :class="loginLinkClass"
-            ><UserCircleIcon class="h-6 w-6 mr-1" /><span>{{
-              t('navbar.login')
-            }}</span></router-link
+            ><UserCircleIcon class="h-6 w-6 mr-1" /><span>{{ t('navbar.login') }}</span></router-link
           >
         </div>
 
         <!-- Mobile Menu Button -->
         <div class="md:hidden flex items-center">
-          <button
-            @click="mobileMenuOpen = !mobileMenuOpen"
-            class="mobile-menu-toggle"
-            :class="[{ open: mobileMenuOpen }, iconColorClass]"
-          >
+          <button @click="mobileMenuOpen = !mobileMenuOpen" class="mobile-menu-toggle" :class="[{ open: mobileMenuOpen }, iconColorClass]">
             <span class="bar"></span><span class="bar"></span><span class="bar"></span>
           </button>
         </div>
@@ -244,47 +188,36 @@
 
   <!-- Mobile menu panel -->
   <transition name="mobile-menu-fade">
-    <div
-      v-show="mobileMenuOpen"
-      class="fixed inset-0 z-[60] bg-white/95 backdrop-blur-lg flex flex-col p-6 md:hidden"
-    >
+    <div v-show="mobileMenuOpen" class="fixed inset-0 z-[60] bg-white/95 backdrop-blur-lg flex flex-col p-6 md:hidden">
       <!-- 顶部：用户信息+购物车+登录/登出 + 关闭按钮 -->
       <div class="flex items-center justify-between pb-4 border-b border-gray-200 mb-4">
         <!-- 用户信息和操作区 -->
         <div class="flex items-center">
+          <!-- 移动端用户信息区 -->
           <img
-            v-if="authStore.isAuthenticated"
+            v-if="authStore.isAuthenticated && authStore.user"
             class="h-12 w-12 rounded-full object-cover mr-3 border-2 border-gray-300"
-            :src="authStore.user?.avatarUrl || 'https://source.unsplash.com/100x100/?portrait'"
+            :src="authStore.user.avatarUrl || 'https://source.unsplash.com/100x100/?portrait'"
             :alt="t('navbar.userAvatar')"
           />
           <div>
-            <span v-if="authStore.isAuthenticated" class="font-bold text-lg text-gray-800">{{
-              authStore.user?.nickName || t('navbar.usernamePlaceholder')
-            }}</span>
+            <span v-if="authStore.isAuthenticated && authStore.user" class="font-bold text-lg text-gray-800">
+              {{ authStore.user.nickName }}
+            </span>
             <router-link
-              v-if="authStore.isAuthenticated"
+              v-if="authStore.isAuthenticated && authStore.user"
               to="/profile"
               @click="mobileMenuOpen = false"
               class="text-sm text-gray-500 hover:underline block"
-              >{{ t('navbar.viewProfile') }}</router-link
             >
-            <router-link
-              v-else
-              to="/login"
-              @click="mobileMenuOpen = false"
-              class="flex items-center text-gray-800 font-semibold text-lg"
-            >
+              {{ t('navbar.viewProfile') }}
+            </router-link>
+            <router-link v-else to="/login" @click="mobileMenuOpen = false" class="flex items-center text-gray-800 font-semibold text-lg">
               <UserCircleIcon class="h-10 w-10 mr-2" />{{ t('navbar.login') }}
             </router-link>
           </div>
           <!-- 购物车图标 -->
-          <router-link
-            to="/cart"
-            @click="mobileMenuOpen = false"
-            class="p-2 ml-4"
-            :aria-label="t('navbar.cart')"
-          >
+          <router-link to="/cart" @click="mobileMenuOpen = false" class="p-2 ml-4" :aria-label="t('navbar.cart')">
             <ShoppingCartIcon class="h-8 w-8 text-gray-700" />
           </router-link>
         </div>
@@ -344,9 +277,7 @@
               @click="switchLanguage(lang.code)"
               :class="[
                 'w-1/2 py-2 text-center font-semibold rounded-full transition-colors duration-300',
-                locale === lang.code
-                  ? 'bg-[#C0392B] text-white shadow'
-                  : 'text-gray-600 hover:bg-gray-200',
+                locale === lang.code ? 'bg-[#C0392B] text-white shadow' : 'text-gray-600 hover:bg-gray-200',
               ]"
             >
               {{ lang.name }}
@@ -359,7 +290,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onUnmounted, onMounted } from 'vue'
+import { ref, computed, watch, onUnmounted, onMounted } from 'vue';
 import {
   MagnifyingGlassIcon,
   ShoppingCartIcon,
@@ -368,23 +299,23 @@ import {
   ArrowLeftOnRectangleIcon,
   GlobeAltIcon,
   ChevronDownIcon,
-} from '@heroicons/vue/24/outline'
-import { useI18n } from 'vue-i18n'
-import { useRoute, useRouter } from 'vue-router'
-import { useScroll, useScrollDirection } from '@/composables/useScroll'
-import { useAuthStore } from '@/stores/auth.store'
+} from '@heroicons/vue/24/outline';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useScroll, useScrollDirection } from '@/composables/useScroll';
+import { useAuthStore } from '@/stores/auth.store';
 
-const { t, locale } = useI18n()
-const route = useRoute()
-const authStore = useAuthStore()
+const { t, locale } = useI18n();
+const route = useRoute();
+const authStore = useAuthStore();
 
-const { isScrolled } = useScroll(50)
-const { isScrollingDown } = useScrollDirection()
-const mobileMenuOpen = ref(false)
-const isUserMenuOpen = ref(false)
-const isLangMenuOpen = ref(false)
-const userMenuContainer = ref<HTMLElement | null>(null)
-const langMenuContainer = ref<HTMLElement | null>(null)
+const { isScrolled } = useScroll(50);
+const { isScrollingDown } = useScrollDirection();
+const mobileMenuOpen = ref(false);
+const isUserMenuOpen = ref(false);
+const isLangMenuOpen = ref(false);
+const userMenuContainer = ref<HTMLElement | null>(null);
+const langMenuContainer = ref<HTMLElement | null>(null);
 
 const navItems = [
   { label: 'navbar.home', path: '/' },
@@ -399,131 +330,114 @@ const navItems = [
       { label: 'navbar.survey', path: '/survey-page' },
     ],
   },
-]
+];
 
 const userMenuItems = [
   { name: 'navbar.profile', path: '/profile', icon: UserCircleIcon },
   { name: 'navbar.orders', path: '/orders', icon: ArchiveBoxIcon },
-]
+];
 
 // Default avatar image URL
-const defaultAvatar = '/images/avatar/dafault.jpeg'
+const defaultAvatar = '/images/avatar/dafault.jpeg';
 
 const userAvatar = computed(() =>
-  authStore.user?.avatarUrl && authStore.user.avatarUrl.trim() !== ''
-    ? authStore.user.avatarUrl
-    : defaultAvatar,
-)
+  authStore.user?.avatarUrl && authStore.user.avatarUrl.trim() !== '' ? authStore.user.avatarUrl : defaultAvatar
+);
 
 const availableLanguages = [
   { code: 'en', name: 'English' },
   { code: 'zh', name: '中文' },
-]
+];
 
-const isHomePage = computed(() => route.path === '/')
-const activePath = computed(() => route.path)
-const isLight = computed(() => isHomePage.value && !isScrolled.value)
+const isHomePage = computed(() => route.path === '/');
+const activePath = computed(() => route.path);
+const isLight = computed(() => isHomePage.value && !isScrolled.value);
 
-const headerClass = computed(() =>
-  isLight.value ? 'h-28 bg-transparent' : 'h-20 bg-white/80 backdrop-blur-lg shadow-md',
-)
-const logoColorClass = computed(() => (isLight.value ? 'text-white' : 'text-[#C0392B]'))
-const logoTextColorClass = computed(() =>
-  isLight.value ? 'text-3xl text-white' : 'text-2xl text-gray-800',
-)
-const linkTextColorClass = computed(() =>
-  isLight.value ? 'text-white hover:text-white/80' : 'text-gray-700 hover:text-[#C0392B]',
-)
-const underlineColorClass = computed(() => (isLight.value ? 'bg-white' : 'bg-[#C0392B]'))
-const iconColorClass = computed(() =>
-  isLight.value ? 'text-white' : 'text-gray-700 hover:text-[#C0392B]',
-)
+const headerClass = computed(() => (isLight.value ? 'h-28 bg-transparent' : 'h-20 bg-white/80 backdrop-blur-lg shadow-md'));
+const logoColorClass = computed(() => (isLight.value ? 'text-white' : 'text-[#C0392B]'));
+const logoTextColorClass = computed(() => (isLight.value ? 'text-3xl text-white' : 'text-2xl text-gray-800'));
+const linkTextColorClass = computed(() => (isLight.value ? 'text-white hover:text-white/80' : 'text-gray-700 hover:text-[#C0392B]'));
+const underlineColorClass = computed(() => (isLight.value ? 'bg-white' : 'bg-[#C0392B]'));
+const iconColorClass = computed(() => (isLight.value ? 'text-white' : 'text-gray-700 hover:text-[#C0392B]'));
 const loginLinkClass = computed(() => [
   'flex items-center font-semibold text-sm transition-colors duration-300',
   isLight.value ? 'text-white hover:text-white/80' : 'text-gray-700 hover:text-[#C0392B]',
-])
+]);
 
 // NEW: Computed classes for dropdown menu styling
 const dropdownPanelClass = computed(() =>
-  isLight.value
-    ? 'bg-black/30 backdrop-blur-md ring-1 ring-white/20'
-    : 'bg-white ring-1 ring-black ring-opacity-5 shadow-lg',
-)
+  isLight.value ? 'bg-black/30 backdrop-blur-md ring-1 ring-white/20' : 'bg-white ring-1 ring-black ring-opacity-5 shadow-lg'
+);
 
 const dropdownLinkClass = computed(() =>
-  isLight.value
-    ? 'text-white hover:bg-white/10'
-    : 'text-gray-700 hover:bg-gray-100 hover:text-[#C0392B]',
-)
+  isLight.value ? 'text-white hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100 hover:text-[#C0392B]'
+);
 
 const logout = () => {
-  isUserMenuOpen.value = false
-  authStore.logout()
-}
+  isUserMenuOpen.value = false;
+  authStore.logout();
+};
 
 const switchLanguage = (langCode: string) => {
-  locale.value = langCode
-  isLangMenuOpen.value = false
-  mobileMenuOpen.value = false // Also close mobile menu if open
-}
+  locale.value = langCode;
+  isLangMenuOpen.value = false;
+  mobileMenuOpen.value = false; // Also close mobile menu if open
+};
 
 // --- Dropdown Click-outside Logic ---
-const createClickOutsideHandler = (
-  menuState: typeof isUserMenuOpen,
-  container: typeof userMenuContainer,
-) => {
+const createClickOutsideHandler = (menuState: typeof isUserMenuOpen, container: typeof userMenuContainer) => {
   return (event: MouseEvent) => {
     if (container.value && !container.value.contains(event.target as Node)) {
-      menuState.value = false
+      menuState.value = false;
     }
-  }
-}
+  };
+};
 
-const userMenuClickOutsideHandler = createClickOutsideHandler(isUserMenuOpen, userMenuContainer)
-const langMenuClickOutsideHandler = createClickOutsideHandler(isLangMenuOpen, langMenuContainer)
+const userMenuClickOutsideHandler = createClickOutsideHandler(isUserMenuOpen, userMenuContainer);
+const langMenuClickOutsideHandler = createClickOutsideHandler(isLangMenuOpen, langMenuContainer);
 
-watch(isUserMenuOpen, (isOpen) => {
+watch(isUserMenuOpen, isOpen => {
   if (isOpen) {
-    document.addEventListener('click', userMenuClickOutsideHandler)
+    document.addEventListener('click', userMenuClickOutsideHandler);
   } else {
-    document.removeEventListener('click', userMenuClickOutsideHandler)
+    document.removeEventListener('click', userMenuClickOutsideHandler);
   }
-})
+});
 
-watch(isLangMenuOpen, (isOpen) => {
+watch(isLangMenuOpen, isOpen => {
   if (isOpen) {
-    document.addEventListener('click', langMenuClickOutsideHandler)
+    document.addEventListener('click', langMenuClickOutsideHandler);
   } else {
-    document.removeEventListener('click', langMenuClickOutsideHandler)
+    document.removeEventListener('click', langMenuClickOutsideHandler);
   }
-})
+});
 
 // --- Body Overflow & Language Persistence ---
-watch(mobileMenuOpen, (newValue) => {
+watch(mobileMenuOpen, newValue => {
   if (newValue) {
-    document.body.classList.add('overflow-hidden')
+    document.body.classList.add('overflow-hidden');
   } else {
-    document.body.classList.remove('overflow-hidden')
+    document.body.classList.remove('overflow-hidden');
   }
-})
+});
 
-watch(locale, (newLocale) => {
-  localStorage.setItem('user-lang', newLocale)
-  document.documentElement.lang = newLocale
-})
+watch(locale, newLocale => {
+  localStorage.setItem('user-lang', newLocale);
+  document.documentElement.lang = newLocale;
+});
 
 onMounted(() => {
-  const savedLang = localStorage.getItem('user-lang')
+  const savedLang = localStorage.getItem('user-lang');
   if (savedLang && ['en', 'zh'].includes(savedLang)) {
-    locale.value = savedLang
+    locale.value = savedLang;
   }
-})
+});
 
 onUnmounted(() => {
-  document.body.classList.remove('overflow-hidden')
-  document.removeEventListener('click', userMenuClickOutsideHandler)
-  document.removeEventListener('click', langMenuClickOutsideHandler)
-})
+  document.body.classList.remove('overflow-hidden');
+  document.removeEventListener('click', userMenuClickOutsideHandler);
+  document.removeEventListener('click', langMenuClickOutsideHandler);
+});
 </script>
 
 <style>
