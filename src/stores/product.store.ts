@@ -21,10 +21,11 @@ export const useProductStore = defineStore('product', () => {
    */
   async function fetchAllProducts(
     filters: {
-      category?: string
-      subcategory?: string
+      categoryId?: number
+      subcategoryId?: number
       page?: number
       limit?: number
+      sort?: string
     } = {},
   ): Promise<PaginatedResult<Product>> {
     loading.value = true
