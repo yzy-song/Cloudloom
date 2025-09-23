@@ -379,6 +379,43 @@
     "moments": "Wonderful Moments",
     "description": "Through the lens, the beauty of Hanfu is captured forever. Every photo tells a story of elegance and romance."
   },
+  "profile": {
+    "tabs": {
+      "profile": "Profile",
+      "orders": "My Orders",
+      "settings": "Account Settings"
+    },
+    "edit": {
+      "title": "Edit Profile",
+      "nameLabel": "Nickname",
+      "namePlaceholder": "Enter your nickname",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "phoneLabel": "Phone",
+      "phonePlaceholder": "Enter your phone number",
+      "bioLabel": "Bio",
+      "bioPlaceholder": "Tell us about yourself",
+      "saveChanges": "Save Changes",
+      "saving": "Saving...",
+      "updateSuccess": "Profile updated successfully!",
+      "updateFailed": "Profile update failed: {error}"
+    },
+    "orders": {
+      "title": "My Orders",
+      "emptyText": "No orders yet",
+      "browseLink": "Start Browsing"
+    },
+    "settings": {
+      "title": "Account Settings",
+      "changePasswordTitle": "Change Password",
+      "changePasswordDesc": "Regularly changing your password improves account security.",
+      "changePasswordBtn": "Change Password",
+      "deleteAccountTitle": "Delete Account",
+      "deleteAccountDesc": "After deletion, all your information will be permanently removed and cannot be recovered.",
+      "deleteAccountBtn": "Delete Account"
+    },
+    "avatarAlt": "User Avatar"
+  },
   "survey": {
     "recognition": {
       "q1_title": "Question 1.1: Can you identify which of the following is Hanfu (the traditional dress of the Han Chinese people)?",

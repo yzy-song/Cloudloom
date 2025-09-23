@@ -382,6 +382,43 @@
     "moments":"精彩瞬间",
     "description":"镜头下，汉服之美被永久定格。每一张照片，都是一个关于风雅与浪漫的故事。"
   },
+  "profile": {
+    "tabs": {
+      "profile": "个人资料",
+      "orders": "我的订单",
+      "settings": "账户设置"
+    },
+    "edit": {
+      "title": "编辑个人资料",
+      "nameLabel": "昵称",
+      "namePlaceholder": "请输入昵称",
+      "emailLabel": "邮箱",
+      "emailPlaceholder": "请输入邮箱",
+      "phoneLabel": "手机号",
+      "phonePlaceholder": "请输入手机号",
+      "bioLabel": "个人简介",
+      "bioPlaceholder": "介绍一下自己吧",
+      "saveChanges": "保存修改",
+      "saving": "保存中...",
+      "updateSuccess": "资料更新成功！",
+      "updateFailed": "资料更新失败：{error}"
+    },
+    "orders": {
+      "title": "我的订单",
+      "emptyText": "暂无订单",
+      "browseLink": "去逛逛"
+    },
+    "settings": {
+      "title": "账户设置",
+      "changePasswordTitle": "修改密码",
+      "changePasswordDesc": "定期修改密码可以提升账户安全。",
+      "changePasswordBtn": "修改密码",
+      "deleteAccountTitle": "注销账户",
+      "deleteAccountDesc": "注销后，您的所有信息将被永久删除，无法恢复。",
+      "deleteAccountBtn": "注销账户"
+    },
+    "avatarAlt": "用户头像"
+  },
   "survey": {
     "recognition": {
       "q1_title": "问题 1.1: 您能认出以下哪些是汉服（中国汉族的传统服饰）吗？",
