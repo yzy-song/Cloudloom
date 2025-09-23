@@ -24,7 +24,7 @@
           <svg width="22" height="22" fill="none">
             <path d="M3 6h16M6 12h12M10 18h8" stroke="#222" stroke-width="2" stroke-linecap="round" />
           </svg>
-          <span>{{ t('gallery.filter') || 'Filter' }}</span>
+          <span>Filter</span>
         </button>
         <div class="flex gap-2">
           <button
@@ -67,11 +67,11 @@
     <div v-if="drawerOpen" class="filter-drawer" @click.self="drawerOpen = false">
       <div class="drawer-panel">
         <div class="flex items-center justify-between font-semibold mb-2">
-          <span>{{ t('gallery.filter') || 'Filter' }}</span>
+          <span></span>
           <button class="text-2xl text-gray-500" @click="drawerOpen = false">&times;</button>
         </div>
         <div>
-          <h3 class="font-bold mb-2">{{ t('gallery.category') || 'Category' }}</h3>
+          <h3 class="font-bold mb-2">Category</h3>
 
           <div class="flex flex-wrap gap-2">
             <button
@@ -93,7 +93,7 @@
           </div>
         </div>
         <div v-if="subcategories.length > 0">
-          <h3 class="font-bold mb-2">{{ t('gallery.subcategory') || 'Subcategory' }}</h3>
+          <h3 class="font-bold mb-2">Subcategory</h3>
           <div class="flex flex-wrap gap-2">
             <button
               @click="handleSubcategorySelect(null)"
