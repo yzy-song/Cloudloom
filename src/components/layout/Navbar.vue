@@ -210,7 +210,7 @@
           <img
             v-if="authStore.isAuthenticated && authStore.user"
             class="h-12 w-12 rounded-full object-cover mr-3 border-2 border-gray-300"
-            :src="authStore.user.avatarUrl || 'https://source.unsplash.com/100x100/?portrait'"
+            :src="authStore.user.avatarUrl || defaultAvatar"
             :alt="t('navbar.userAvatar')"
           />
           <div>
@@ -364,7 +364,7 @@ const userMenuItems = [
 ];
 
 // Default avatar image URL
-const defaultAvatar = '/images/avatar/dafault.jpeg';
+const defaultAvatar = '/images/avatar/panda.png';
 
 const userAvatar = computed(() =>
   authStore.user?.avatarUrl && authStore.user.avatarUrl.trim() !== '' ? authStore.user.avatarUrl : defaultAvatar
