@@ -1,47 +1,47 @@
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
-import { GoogleAuthProvider } from 'firebase/auth'
-import { useI18n } from 'vue-i18n'
-import type { LoginUserDto, RegisterUserDto } from '@/types/dto'
-import { useAuthStore } from '@/stores/auth.store'
-const { t } = useI18n()
-const authStore = useAuthStore()
-const isLoginMode = ref(true)
+import { ref, reactive, computed } from 'vue';
+import { GoogleAuthProvider } from 'firebase/auth';
+import { useI18n } from 'vue-i18n';
+import type { LoginUserDto, RegisterUserDto } from '@/types/dto';
+import { useAuthStore } from '@/stores/auth.store';
+const { t } = useI18n();
+const authStore = useAuthStore();
+const isLoginMode = ref(true);
 
 const loginData = reactive<LoginUserDto>({
   identifier: '',
   password: '',
-})
+});
 
 const registerData = reactive<RegisterUserDto>({
   username: '',
   email: '',
   password: '',
   confirmPassword: '',
-})
+});
 
-const errorMessage = computed(() => authStore.error)
+const errorMessage = computed(() => authStore.error);
 
 const handleLogin = async () => {
-  await authStore.login(loginData)
-}
+  await authStore.login(loginData);
+};
 
 const handleRegister = async () => {
   if (registerData.password !== registerData.confirmPassword) {
-    authStore.error = t('login.passwordMismatch')
-    return
+    authStore.error = t('login.passwordMismatch');
+    return;
   }
-  await authStore.register(registerData)
-}
+  await authStore.register(registerData);
+};
 
 const handleGoogleSignIn = async () => {
-  await authStore.loginWithOAuth(new GoogleAuthProvider())
-}
+  await authStore.loginWithOAuth(new GoogleAuthProvider());
+};
 
 const toggleMode = () => {
-  isLoginMode.value = !isLoginMode.value
-  authStore.error = null // 清除错误信息
-}
+  isLoginMode.value = !isLoginMode.value;
+  authStore.error = null; // 清除错误信息
+};
 </script>
 
 <template>
@@ -108,7 +108,7 @@ const toggleMode = () => {
             :disabled="authStore.loading"
             class="relative flex justify-center w-full px-4 py-3 text-sm font-medium text-white bg-[#C0392B] border border-transparent rounded-md shadow-sm group hover:bg-[#a53125] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C0392B] disabled:bg-red-300 disabled:cursor-not-allowed"
           >
-            {{ authStore.loading ? t('login.processing') : t('login.loginButton') }}
+            {{ authStore.loading ? t('login.processing') : t('login.loginBtn') }}
           </button>
         </div>
       </form>
@@ -208,12 +208,8 @@ const toggleMode = () => {
           :disabled="authStore.loading"
           class="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C0392B]"
         >
-          <img
-            class="w-5 h-5"
-            src="https://www.svgrepo.com/show/475656/google-color.svg"
-            alt="Google icon"
-          />
-          <span class="ml-2">{{ t('login.googleSignIn') }}</span>
+          <img class="w-5 h-5" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google icon" />
+          <span class="ml-2">{{ t('login.google') }}</span>
         </button>
       </div>
     </div>
