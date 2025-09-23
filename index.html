@@ -2,23 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="/images/logo/logo1.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>汉服体验馆 | 云织</title>
 
     <!-- 在Vue应用加载前，根据浏览器语言快速设置初始标题，防止闪烁 -->
     <script>
-      ;(function () {
+      (function () {
         try {
-          const userLang = navigator.language || navigator.userLanguage
+          const userLang = navigator.language || navigator.userLanguage;
           // 如果浏览器语言不是以 'zh' 开头 (即不是中文), 则将标题设置为英文
           if (!userLang.toLowerCase().startsWith('zh')) {
-            document.title = 'Hanfu Experience | Cloudloom'
+            document.title = 'Hanfu Experience | Cloudloom';
           }
         } catch (e) {
           // 在某些环境下 navigator.language 可能不可用，忽略错误
         }
-      })()
+      })();
     </script>
 
     <!-- 添加字体 -->
