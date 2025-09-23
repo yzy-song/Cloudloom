@@ -299,6 +299,7 @@ import {
   ArrowLeftOnRectangleIcon,
   GlobeAltIcon,
   ChevronDownIcon,
+  HeartIcon,
 } from '@heroicons/vue/24/outline';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
@@ -334,6 +335,7 @@ const navItems = [
 
 const userMenuItems = [
   { name: 'navbar.profile', path: '/profile', icon: UserCircleIcon },
+  { name: 'navbar.favorites', path: '/favorites', icon: HeartIcon },
   { name: 'navbar.orders', path: '/orders', icon: ArchiveBoxIcon },
 ];
 

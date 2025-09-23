@@ -257,9 +257,8 @@
   },
   "favorites": {
     "title": "My Favorites",
-    "emptyTitle": "No Favorites Yet",
-    "emptyDesc": "You haven't added any items to your favorites.",
-    "browse": "Start Browsing"
+    "empty": "Your favorites list is empty.",
+    "goBrowse": "Go explore and add your favorite Hanfu!"
   },
   "knowledge": {
     "header": {
@@ -382,6 +381,7 @@
   "profile": {
     "tabs": {
       "profile": "Profile",
+      "favorites": "Favorites",
       "orders": "My Orders",
       "settings": "Account Settings"
     },
