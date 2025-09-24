@@ -31,3 +31,5 @@ output/
 *.sw?
 
 *.tsbuildinfo
+.env
+.env.production
