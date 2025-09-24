@@ -385,7 +385,6 @@
     "description": "Through the lens, the beauty of Hanfu is captured forever. Every photo tells a story of elegance and romance.",
     "uploadBtn": "Upload Photo",
     "loginToUpload": "Sign in to upload photos",
-    "uploadModalTitle": "Upload Photo",
     "uploadModalDesc": "Supports multiple images, description optional",
     "chooseImages": "Click to select images",
     "selectedImages": "{count} images selected",

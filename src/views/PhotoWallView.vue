@@ -110,7 +110,7 @@
                 <path d="M21 15l-5-5-4 4-2-2-4 4" />
               </svg>
             </div>
-            <h2 class="text-2xl font-display font-bold text-hanfu-dark mb-1">{{ t('photowall.uploadModalTitle') }}</h2>
+            <h2 class="text-2xl font-display font-bold text-hanfu-dark mb-1">{{ t('photowall.uploadBtn') }}</h2>
             <p class="text-sm text-hanfu-blue">{{ t('photowall.uploadModalDesc') }}</p>
           </div>
           <form @submit.prevent="handlePhotoUpload" class="w-full">
