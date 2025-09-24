@@ -382,8 +382,19 @@
   },
   "photowall": {
     "title": "Photo Wall",
-    "moments": "Wonderful Moments",
-    "description": "Through the lens, the beauty of Hanfu is captured forever. Every photo tells a story of elegance and romance."
+    "description": "Through the lens, the beauty of Hanfu is captured forever. Every photo tells a story of elegance and romance.",
+    "uploadBtn": "Upload Photo",
+    "loginToUpload": "Sign in to upload photos",
+    "uploadModalTitle": "Upload Photo",
+    "uploadModalDesc": "Supports multiple images, description optional",
+    "chooseImages": "Click to select images",
+    "selectedImages": "{count} images selected",
+    "altPlaceholder": "Photo {index} description (optional)",
+    "remove": "Remove",
+    "uploading": "Uploading...",
+    "upload": "Upload",
+    "uploadError": "Upload failed, please try again",
+    "selectFileError": "Please select image files"
   },
   "profile": {
     "tabs": {
