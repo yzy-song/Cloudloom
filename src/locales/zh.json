@@ -385,7 +385,6 @@
     "description": "镜头下，汉服之美被永久定格。每一张照片，都是一个关于风雅与浪漫的故事。",
     "uploadBtn": "上传照片",
     "loginToUpload": "登录后上传照片",
-    "uploadModalTitle": "上传照片",
     "uploadModalDesc": "支持多张图片，描述可选",
     "chooseImages": "点击选择图片",
     "selectedImages": "已选择 {count} 张图片",
