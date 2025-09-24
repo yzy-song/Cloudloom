@@ -33,3 +33,6 @@ output/
 *.tsbuildinfo
 .env
 .env.production
+.env.local
+.env.*.local
+.env.development
