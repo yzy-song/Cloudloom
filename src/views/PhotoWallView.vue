@@ -12,8 +12,10 @@
           </p>
         </div>
         <div class="mt-6 md:mt-0">
-          <button class="btn btn-primary" @click="showUploadModal = true" v-if="authStore.isAuthenticated">上传照片</button>
-          <button class="btn btn-outline" @click="router.push('/login')" v-else>登录后上传照片</button>
+          <button class="btn btn-primary" @click="showUploadModal = true" v-if="authStore.isAuthenticated">
+            {{ t('photowall.uploadBtn') }}
+          </button>
+          <button class="btn btn-outline" @click="router.push('/login')" v-else>{{ t('photowall.loginToUpload') }}</button>
         </div>
       </div>
     </section>
@@ -108,8 +110,8 @@
                 <path d="M21 15l-5-5-4 4-2-2-4 4" />
               </svg>
             </div>
-            <h2 class="text-2xl font-display font-bold text-hanfu-dark mb-1">上传照片</h2>
-            <p class="text-sm text-hanfu-blue">支持多张图片，描述可选</p>
+            <h2 class="text-2xl font-display font-bold text-hanfu-dark mb-1">{{ t('photowall.uploadModalTitle') }}</h2>
+            <p class="text-sm text-hanfu-blue">{{ t('photowall.uploadModalDesc') }}</p>
           </div>
           <form @submit.prevent="handlePhotoUpload" class="w-full">
             <label class="block mb-4 cursor-pointer">
@@ -122,7 +124,7 @@
                   <rect x="4" y="4" width="16" height="16" rx="4" />
                 </svg>
                 <span class="text-hanfu-dark font-medium">
-                  {{ uploadFiles.length ? `已选择 ${uploadFiles.length} 张图片` : '点击选择图片' }}
+                  {{ uploadFiles.length ? t('photowall.selectedImages', { count: uploadFiles.length }) : t('photowall.chooseImages') }}
                 </span>
               </div>
             </label>
@@ -137,7 +139,7 @@
                 <input
                   type="text"
                   v-model="uploadAlts[idx]"
-                  :placeholder="`照片${idx + 1}描述（可选）`"
+                  :placeholder="t('photowall.altPlaceholder', { index: idx + 1 })"
                   class="ml-2 w-40 border border-hanfu-gold rounded px-2 py-1 focus:border-hanfu-red focus:outline-none transition font-body text-hanfu-dark bg-white"
                 />
                 <button
@@ -153,11 +155,12 @@
                     <rect x="5" y="6" width="14" height="14" rx="2" />
                     <path d="M10 11v6M14 11v6" />
                   </svg>
+                  <span class="sr-only">{{ t('photowall.remove') }}</span>
                 </button>
               </div>
             </div>
             <button type="submit" class="mt-6 w-full btn-primary text-lg rounded-full shadow-hanfu font-display" :disabled="uploading">
-              {{ uploading ? '上传中...' : '上传' }}
+              {{ uploading ? t('photowall.uploading') : t('photowall.upload') }}
             </button>
           </form>
           <div v-if="uploadError" class="text-hanfu-red mt-4 text-center font-medium">{{ uploadError }}</div>
@@ -225,7 +228,7 @@ const onFilesChange = (e: Event) => {
 };
 const handlePhotoUpload = async () => {
   if (!uploadFiles.value.length) {
-    uploadError.value = '请选择图片文件';
+    uploadError.value = t('photowall.selectFileError');
     return;
   }
   uploading.value = true;
@@ -240,7 +243,7 @@ const handlePhotoUpload = async () => {
     uploadAlts.value = [];
     photoStore.fetchPhotos();
   } catch (err) {
-    uploadError.value = '上传失败，请重试';
+    uploadError.value = t('photowall.uploadError');
   } finally {
     uploading.value = false;
     uploadProgress.value = 0;
