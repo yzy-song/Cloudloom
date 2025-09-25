@@ -65,7 +65,6 @@ export const useFavoriteStore = defineStore('favorite', {
           await api.delete(`/user-favorites/${product.id}`);
           this.favorites = this.favorites.filter(p => p.id !== product.id);
           toast.info(`Removed from favorites ${product.title || ''}`);
-          console.log('Removed from favorites:', product.id);
         } catch (err: any) {
           this.error = err.response?.data?.message || 'You need to sign in to remove favorites.';
           toast.error(this.error);
@@ -76,7 +75,6 @@ export const useFavoriteStore = defineStore('favorite', {
           await api.post('/user-favorites', { productId: product.id });
           this.favorites.push(product);
           toast.info(`Added to favorites ${product.title || ''}`);
-          console.log('Added to favorites:', product.id);
         } catch (err: any) {
           this.error = err.response?.data?.message || 'You need to sign in to add favorites.';
           toast.error(this.error);
