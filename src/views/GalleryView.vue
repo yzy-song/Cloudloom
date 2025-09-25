@@ -169,7 +169,8 @@ const { t } = useI18n();
 const productStore = useProductStore();
 const categoryStore = useCategoriesStore();
 
-const categories = ref<Category[]>([]);
+const categories = ref(categoryStore.categories);
+
 const subcategories = ref<Subcategory[]>([]);
 const currentCategoryId = ref<number | null>(null);
 const currentSubcategoryId = ref<number | null>(null);
@@ -188,16 +189,6 @@ const layout = ref<'grid' | 'list'>('grid');
 const sort = ref('az');
 
 const route = useRoute();
-
-// 获取分类并初始化
-// const fetchCategories = async () => {
-//   try {
-//     await categoryStore.fetchAllCategories();
-//     categories.value = categoryStore.categories;
-//     currentCategoryId.value = null; // 不选中任何分类
-//     updateSubcategories();
-//   } catch (error) {}
-// };
 
 // 根据当前分类更新子分类
 const updateSubcategories = () => {
@@ -270,7 +261,6 @@ watch([() => route.query.categoryId, currentCategoryId, currentSubcategoryId, cu
   fetchProducts();
 });
 onMounted(async () => {
-  // await fetchCategories();
   await fetchProducts(); // 主动请求一次所有商品
   startBannerRotation();
 });
