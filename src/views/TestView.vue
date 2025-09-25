@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 
-import { Toaster, toast } from 'vue-sonner'
+import { Toaster, toast } from 'vue-sonner';
 // 假设的商品数据，实际项目中可以从后端 API 获取
 const products = ref([
   {
@@ -28,18 +28,17 @@ const products = ref([
     description: '灼灼桃花，绚烂夺目，带来春日般的生机。',
     imageUrl: 'https://placehold.co/800x600/E8E8E8/4F5E68?text=Product+4',
   },
-])
+]);
 
-const loading = ref(true)
+const loading = ref(true);
 
 onMounted(() => {
-  console.log('TestView mounted')
   // 模拟数据加载
   setTimeout(() => {
-    loading.value = false
-  }, 1000)
-  toast.success('Toast 初始化测试', { duration: 3000 })
-})
+    loading.value = false;
+  }, 1000);
+  toast.success('Toast 初始化测试', { duration: 3000 });
+});
 
 // 使用 Vue Composition API 和 Tailwind CSS 构建组件
 
@@ -65,7 +64,7 @@ const Navbar = {
       </nav>
     </header>
   `,
-}
+};
 
 // Footer 组件
 const Footer = {
@@ -81,7 +80,7 @@ const Footer = {
       </div>
     </footer>
   `,
-}
+};
 
 // Loading Spinner 组件
 const LoadingSpinner = {
@@ -91,7 +90,7 @@ const LoadingSpinner = {
     </div>
   `,
   props: ['loading'],
-}
+};
 
 // Product Card 组件
 const ProductCard = {
@@ -108,7 +107,7 @@ const ProductCard = {
     </div>
   `,
   props: ['product'],
-}
+};
 </script>
 
 <template>
