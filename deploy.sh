@@ -42,6 +42,7 @@ git archive --format=tar main | tar -xf - -C "${RELEASE_PATH}"
 echo -e "${GREEN}Switching to release path and building the project...${NC}"
 cd "${RELEASE_PATH}"
 cp /var/www/cloudloom/.env.production "${RELEASE_PATH}/.env.production"
+echo -e "${GREEN} .env.production copied to release path.${NC}"
 
 npm install
 
