@@ -75,7 +75,7 @@
 
           <div class="flex flex-wrap gap-2">
             <button
-              @click="handleCategorySelect(null)"
+              @click="selectCategory(null)"
               class="btn-outline px-4 py-2 rounded-full"
               :class="{ 'bg-hanfu-blue text-white': currentCategoryId === null }"
             >
@@ -84,7 +84,7 @@
             <button
               v-for="category in categories"
               :key="category.id"
-              @click="handleCategorySelect(category.id)"
+              @click="selectCategory(category.id)"
               class="btn-outline px-4 py-2 rounded-full"
               :class="{ 'bg-hanfu-blue text-white': currentCategoryId === category.id }"
             >
@@ -96,7 +96,7 @@
           <h3 class="font-bold mb-2">Subcategory</h3>
           <div class="flex flex-wrap gap-2">
             <button
-              @click="handleSubcategorySelect(null)"
+              @click="selectSubcategory(null)"
               class="btn-outline px-4 py-2 rounded-full"
               :class="{ 'bg-hanfu-blue text-white': currentSubcategoryId === null }"
             >
@@ -105,7 +105,7 @@
             <button
               v-for="subcategory in subcategories"
               :key="subcategory.id"
-              @click="handleSubcategorySelect(subcategory.id)"
+              @click="selectSubcategory(subcategory.id)"
               class="btn-outline px-4 py-2 rounded-full"
               :class="{ 'bg-hanfu-blue text-white': currentSubcategoryId === subcategory.id }"
             >
@@ -156,8 +156,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 import type { Category, Subcategory } from '@/types';
 import BaseLoading from '@/components/ui/BaseLoading.vue';
 import BasePagination from '@/components/ui/BasePagination.vue';
@@ -166,15 +167,19 @@ import { useCategoriesStore } from '@/stores/categories.store';
 import { useProductStore } from '@/stores/product.store';
 
 const { t } = useI18n();
+const route = useRoute();
 const productStore = useProductStore();
 const categoryStore = useCategoriesStore();
 
-const categories = ref(categoryStore.categories);
-
+const categories = computed(() => categoryStore.categories);
 const subcategories = ref<Subcategory[]>([]);
 const currentCategoryId = ref<number | null>(null);
 const currentSubcategoryId = ref<number | null>(null);
 const currentPage = ref(1);
+const layout = ref<'grid' | 'list'>('grid');
+const sort = ref('az');
+const drawerOpen = ref(false);
+
 // Banner
 const bannerImages = ref([
   '/images/gallery-banner/slide1.png',
@@ -184,13 +189,7 @@ const bannerImages = ref([
 ]);
 const currentBannerIndex = ref(0);
 const bannerInterval = ref();
-const drawerOpen = ref(false);
-const layout = ref<'grid' | 'list'>('grid');
-const sort = ref('az');
 
-const route = useRoute();
-
-// 根据当前分类更新子分类
 const updateSubcategories = () => {
   if (currentCategoryId.value === null) {
     subcategories.value = [];
@@ -202,7 +201,6 @@ const updateSubcategories = () => {
   }
 };
 
-// 获取产品
 const fetchProducts = async () => {
   await productStore.fetchAllProducts({
     categoryId: currentCategoryId.value ?? undefined,
@@ -218,17 +216,20 @@ const selectCategory = (categoryId: number | null) => {
   currentCategoryId.value = categoryId;
   currentPage.value = 1;
   updateSubcategories();
+  fetchProducts();
 };
 
 // 子分类选择
 const selectSubcategory = (subcategoryId: number | null) => {
   currentSubcategoryId.value = subcategoryId;
   currentPage.value = 1;
+  fetchProducts();
 };
 
 // 分页
 const handlePageChange = (page: number) => {
   currentPage.value = page;
+  fetchProducts();
 };
 
 // 收藏操作
@@ -238,6 +239,11 @@ const handleCategorySelect = (id: number | null) => {
   selectCategory(id);
   // drawerOpen.value = false;
 };
+// 排序
+watch(sort, () => {
+  currentPage.value = 1;
+  fetchProducts();
+});
 
 // 轮播
 const startBannerRotation = () => {
@@ -247,21 +253,14 @@ const startBannerRotation = () => {
   }, 5000);
 };
 
-const handleSubcategorySelect = (id: number | null) => {
-  selectSubcategory(id);
-  // drawerOpen.value = false;
-};
-
-// 自动刷新产品
-watch([() => route.query.categoryId, currentCategoryId, currentSubcategoryId, currentPage, sort], ([categoryId]) => {
-  // 路由参数变化时，切换分类
-  if (categoryId !== undefined) {
-    selectCategory(categoryId ? Number(categoryId) : null);
-  }
-  fetchProducts();
-});
+// 路由参数初始化
 onMounted(async () => {
-  await fetchProducts(); // 主动请求一次所有商品
+  // 初始化分类
+  if (route.query.categoryId) {
+    selectCategory(Number(route.query.categoryId));
+  } else {
+    await fetchProducts();
+  }
   startBannerRotation();
 });
 </script>
