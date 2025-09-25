@@ -9,7 +9,7 @@ import { toast } from 'vue-sonner';
 import { useAuthStore } from '@/stores/auth.store';
 
 const isMockEnabled = import.meta.env.VITE_ENABLE_MOCK === 'true';
-const baseURL = isMockEnabled ? '/api' : import.meta.env.VITE_API_BASE_URL;
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
   baseURL,
